@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <include layout="@layout/include_toolbar"
+        android:id="@+id/toolbar" />
+
+    <com.app.agriculturalproducts.view.NoSrollViewPager
+        android:id="@+id/id_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_above="@+id/rg_tab">
+    </com.app.agriculturalproducts.view.NoSrollViewPager>
+
+    <RadioGroup
+        android:id="@+id/rg_tab"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/shape_layout_top">
+
+    <RadioButton
+        style="@style/MyRadionButton"
+        android:id="@+id/work_RadioButton"
+        android:drawableTop="@drawable/bottombar_workimg_selector"
+        android:drawablePadding="0dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/work_name" />
+
+    <RadioButton
+        style="@style/MyRadionButton"
+        android:id="@+id/data_RadioButton"
+        android:drawableTop="@drawable/bottombar_dataimg_selector"
+        android:drawablePadding="0dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/data_name" />
+
+    <RadioButton
+        style="@style/MyRadionButton"
+        android:id="@+id/mine_RadioButton"
+        android:drawableTop="@drawable/bottombar_mineimg_selector"
+        android:drawablePadding="0dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/mine_name" />
+    </RadioGroup>
+</RelativeLayout>
