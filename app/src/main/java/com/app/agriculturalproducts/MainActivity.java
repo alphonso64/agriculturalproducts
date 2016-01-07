@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
@@ -11,38 +12,88 @@ import com.app.agriculturalproducts.fragment.DataFragment;
 import com.app.agriculturalproducts.fragment.MineFragment;
 import com.app.agriculturalproducts.fragment.WorkFragment;
 import com.app.agriculturalproducts.view.NoSrollViewPager;
+import com.litesuits.http.HttpConfig;
+import com.litesuits.http.LiteHttp;
+import com.litesuits.http.listener.HttpListener;
+import com.litesuits.http.request.StringRequest;
+import com.litesuits.http.response.Response;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnCheckedChanged;
+
 public class MainActivity extends BaseActivity {
 
+    @InjectView(R.id.id_viewpager)
+    NoSrollViewPager mViewPager;
+    @InjectView(R.id.rg_tab)
+    RadioGroup radiogroup;
+    @InjectView(R.id.work_RadioButton)
+    RadioButton workButton;
+    @InjectView(R.id.data_RadioButton)
+    RadioButton dataButton;
+    @InjectView(R.id.mine_RadioButton)
+    RadioButton mineButton;
+    @InjectView(R.id.toolbar)
+    Toolbar toolbar;
 
-    private NoSrollViewPager mViewPager;
+    private RadioGroup.OnCheckedChangeListener listener;
     private FragmentPagerAdapter mAdapter;
     private List<Fragment> mFragments;
-    private RadioGroup radiogroup;
-    private RadioButton workButton;
-    private RadioButton dataButton;
-    private RadioButton mineButton;
-    private RadioGroup.OnCheckedChangeListener listener;
-    private  Toolbar toolbar;
+
+    LiteHttp liteHttp;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mViewPager = (NoSrollViewPager)findViewById(R.id.id_viewpager);
-        radiogroup = (RadioGroup)findViewById(R.id.rg_tab);
-        workButton = (RadioButton)findViewById(R.id.work_RadioButton);
-        dataButton = (RadioButton)findViewById(R.id.data_RadioButton);
-        mineButton = (RadioButton)findViewById(R.id.mine_RadioButton);
-        workButton.setChecked(true);
+        ButterKnife.inject(this);
         initView();
         radiogroup.setOnCheckedChangeListener(listener);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        workButton.setChecked(true);
         toolbar.setTitle(R.string.work_name);
         setSupportActionBar(toolbar);//toolbar支持
 
+        HttpConfig config = new HttpConfig(this) // configuration quickly
+                .setDebugged(true)                   // log output when debugged
+                .setDetectNetwork(true)              // detect network before connect
+                .setDoStatistics(true)               // statistics of time and traffic
+                .setUserAgent("Mozilla/5.0 (...)")   // set custom User-Agent
+                .setTimeOut(10000, 10000);
+        liteHttp = LiteHttp.newApacheHttpClient(config);
+        // 主线程处理，注意HttpListener默认是在主线程回调
+            // get data in listener,  handle result on UI thread
+        if(liteHttp == null){
+            Log.e("testbb", "hah");
+        }
+        Log.e("testbb", "hehe");
+
+        liteHttp.executeAsync(new StringRequest("http://139.196.11.207/app/v1/login").setHttpListener(
+                new HttpListener<String>() {
+                    @Override
+                    public void onSuccess(String data, Response<String> response) {
+                        Log.e("testbb", data);
+                    }
+                }
+        ));
+       // new Thread(runnable).start();
+
     }
+
+    Runnable runnable = new Runnable(){
+        @Override
+        public void run() {
+            liteHttp.executeAsync(new StringRequest("http://139.196.11.207/app/v1/login").setHttpListener(
+                    new HttpListener<String>() {
+                        @Override
+                        public void onSuccess(String data, Response<String> response) {
+                            Log.e("testbb", data);
+                        }
+                    }
+            ));
+        }
+    };
 
     private void  initView(){
         mFragments = new ArrayList<Fragment>();

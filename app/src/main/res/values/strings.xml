@@ -5,4 +5,5 @@
     <string name="work_name">工作</string>
     <string name="data_name">数据</string>
     <string name="mine_name">我的</string>
+    <string name="task_title">最新任务</string>
 </resources>
