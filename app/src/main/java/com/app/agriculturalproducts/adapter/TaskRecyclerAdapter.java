@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.app.agriculturalproducts.R;
+import com.app.agriculturalproducts.bean.Task;
 
 import java.util.List;
 

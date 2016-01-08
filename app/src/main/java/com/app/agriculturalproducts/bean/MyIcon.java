@@ -1,4 +1,4 @@
-package com.app.agriculturalproducts.adapter;
+package com.app.agriculturalproducts.bean;
 
 /**
  * Created by ALPHONSO on 2016/1/5.

@@ -8,6 +8,7 @@ import android.util.Log;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import com.app.agriculturalproducts.app.AppApplication;
 import com.app.agriculturalproducts.fragment.DataFragment;
 import com.app.agriculturalproducts.fragment.MineFragment;
 import com.app.agriculturalproducts.fragment.WorkFragment;
@@ -21,23 +22,22 @@ import com.litesuits.http.response.Response;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
-import butterknife.OnCheckedChanged;
 
 public class MainActivity extends BaseActivity {
 
-    @InjectView(R.id.id_viewpager)
+    @Bind(R.id.id_viewpager)
     NoSrollViewPager mViewPager;
-    @InjectView(R.id.rg_tab)
+    @Bind(R.id.rg_tab)
     RadioGroup radiogroup;
-    @InjectView(R.id.work_RadioButton)
+    @Bind(R.id.work_RadioButton)
     RadioButton workButton;
-    @InjectView(R.id.data_RadioButton)
+    @Bind(R.id.data_RadioButton)
     RadioButton dataButton;
-    @InjectView(R.id.mine_RadioButton)
+    @Bind(R.id.mine_RadioButton)
     RadioButton mineButton;
-    @InjectView(R.id.toolbar)
+    @Bind(R.id.toolbar)
     Toolbar toolbar;
 
     private RadioGroup.OnCheckedChangeListener listener;
@@ -48,52 +48,13 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         initView();
         radiogroup.setOnCheckedChangeListener(listener);
         workButton.setChecked(true);
         toolbar.setTitle(R.string.work_name);
         setSupportActionBar(toolbar);//toolbar支持
-
-        HttpConfig config = new HttpConfig(this) // configuration quickly
-                .setDebugged(true)                   // log output when debugged
-                .setDetectNetwork(true)              // detect network before connect
-                .setDoStatistics(true)               // statistics of time and traffic
-                .setUserAgent("Mozilla/5.0 (...)")   // set custom User-Agent
-                .setTimeOut(10000, 10000);
-        liteHttp = LiteHttp.newApacheHttpClient(config);
-        // 主线程处理，注意HttpListener默认是在主线程回调
-            // get data in listener,  handle result on UI thread
-        if(liteHttp == null){
-            Log.e("testbb", "hah");
-        }
-        Log.e("testbb", "hehe");
-
-        liteHttp.executeAsync(new StringRequest("http://139.196.11.207/app/v1/login").setHttpListener(
-                new HttpListener<String>() {
-                    @Override
-                    public void onSuccess(String data, Response<String> response) {
-                        Log.e("testbb", data);
-                    }
-                }
-        ));
-       // new Thread(runnable).start();
-
     }
-
-    Runnable runnable = new Runnable(){
-        @Override
-        public void run() {
-            liteHttp.executeAsync(new StringRequest("http://139.196.11.207/app/v1/login").setHttpListener(
-                    new HttpListener<String>() {
-                        @Override
-                        public void onSuccess(String data, Response<String> response) {
-                            Log.e("testbb", data);
-                        }
-                    }
-            ));
-        }
-    };
 
     private void  initView(){
         mFragments = new ArrayList<Fragment>();

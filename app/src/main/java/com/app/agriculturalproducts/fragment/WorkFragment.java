@@ -1,41 +1,61 @@
 package com.app.agriculturalproducts.fragment;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
+import android.support.v4.media.IMediaBrowserServiceCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import com.app.agriculturalproducts.R;
 import com.app.agriculturalproducts.TaskActivity;
 import com.app.agriculturalproducts.adapter.BasicIconRecyclerAdapter;
-import com.app.agriculturalproducts.adapter.MyIcon;
-import com.app.agriculturalproducts.adapter.Task;
-import com.app.agriculturalproducts.adapter.TaskRecyclerAdapter;
+import com.app.agriculturalproducts.adapter.TaskCursorAdapter;
+import com.app.agriculturalproducts.app.AppApplication;
+import com.app.agriculturalproducts.bean.MyIcon;
+import com.app.agriculturalproducts.bean.Task;
+import com.app.agriculturalproducts.db.TaskDataHelper;
 import com.app.agriculturalproducts.view.NoScrollGridLayoutManager;
+import com.litesuits.http.listener.HttpListener;
+import com.litesuits.http.request.StringRequest;
+import com.litesuits.http.response.Response;
 
 import java.util.ArrayList;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * Created by ALPHONSO on 2016/1/5.
  */
-public class WorkFragment extends Fragment {
+public class WorkFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
 
-    private RecyclerView mRecyclerView;
-    private RecyclerView mTaskRecyclerView;
+    @Bind(R.id.mrecyclerview)
+    RecyclerView mRecyclerView;
+    @Bind(R.id.task_recyclerview)
+    RecyclerView mTaskRecyclerView;
+    @Bind(R.id.task_update)
+    ImageButton update_btn;
+    @Bind(R.id.task_more)
+    ImageButton more_btn;
+
     private ArrayList<MyIcon> mDatas;
-    private ArrayList<Task> mTaskDatas;
-    private int [] iconlist = {R.drawable.icon_a,R.drawable.icon_b,R.drawable.icon_c,R.drawable.icon_d,R.drawable.icon_e,R.drawable.icon_f,R.drawable.icon_g,R.drawable.icon_h};
-    private int [] tasklist = {R.drawable.t_a,R.drawable.tb,R.drawable.tc,R.drawable.t_a,R.drawable.tc,R.drawable.tb,R.drawable.t_a,R.drawable.tb};
-    private String [] titlelist  = {"农药","化肥","土壤","种植物","生产","其他","采摘","..."};
+    private TaskDataHelper mDataHelper;
+    private TaskCursorAdapter mAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mDataHelper = new TaskDataHelper(getActivity());
     }
 
     @Nullable
@@ -43,17 +63,25 @@ public class WorkFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View contextView = inflater.inflate(R.layout.fragment_work,
                 container, false);
+        ButterKnife.bind(this, contextView);
+
         initData();
-        mRecyclerView = (RecyclerView) contextView.findViewById(R.id.mrecyclerview);
+
+
+        return contextView;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
         mRecyclerView.setLayoutManager(new NoScrollGridLayoutManager(getActivity(), 4));
-//        mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(4,
-//                StaggeredGridLayoutManager.VERTICAL));
         BasicIconRecyclerAdapter ba = new BasicIconRecyclerAdapter(mDatas,getActivity());
         ba.setOnItemClickListener(new BasicIconRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View v, int p) {
                 Bundle bl = new Bundle();
-                bl.putString("title", titlelist[p]);
+                bl.putString("title", "haha");
                 Intent intent = new Intent(getActivity(), TaskActivity.class);
                 intent.putExtras(bl);
                 startActivity(intent);
@@ -61,43 +89,88 @@ public class WorkFragment extends Fragment {
         });
         mRecyclerView.setAdapter(ba);
 
-        mTaskRecyclerView = (RecyclerView) contextView.findViewById(R.id.task_recyclerview);
         mTaskRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        TaskRecyclerAdapter ta =  new TaskRecyclerAdapter(mTaskDatas,getActivity());
-        ta.setOnItemClickListener(new TaskRecyclerAdapter.OnItemClickListener() {
+        mAdapter = new TaskCursorAdapter(getActivity());
+        mTaskRecyclerView.setAdapter(mAdapter);
+
+        update_btn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemClick(View v, int p) {
-                Bundle bl = new Bundle();
-                bl.putString("title", "task "+titlelist[p]+" "+p);
-                Intent intent = new Intent(getActivity(), TaskActivity.class);
-                intent.putExtras(bl);
-                startActivity(intent);
+            public void onClick(View v) {
+            AppApplication.getLiteHttp().executeAsync(new StringRequest("http://139.196.11.207/app/v1/login").setHttpListener(
+                    new HttpListener<String>() {
+                        @Override
+                        public void onSuccess(String data, Response<String> response) {
+                            Log.e("testbb", data);
+                            Task icon = new Task();
+                            icon.setTitle("任务");
+                            icon.setIconID(R.drawable.t_a);
+                            icon.setDetail(data);
+                            mDataHelper.insert_(icon);
+                        }
+                    }
+            ));
             }
         });
-        mTaskRecyclerView.setAdapter(ta);
-        return contextView;
+        more_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDataHelper.delete_("title=?", new String[]{"..."});
+            }
+        });
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        getLoaderManager().initLoader(0, null, this);
     }
 
     protected void initData()
     {
-        mDatas = new ArrayList<MyIcon>();
+        String[] title_list = getActivity().getResources().getStringArray(R.array.titles);
+        String[] iconlist = getActivity().getResources().getStringArray(R.array.icons);
+        mDatas = new ArrayList<>();
         for (int i = 0; i < 8; i++)
         {
             MyIcon icon = new MyIcon();
-            icon.setTitle(titlelist[i]);
-            icon.setIconID(iconlist[i]);
+            icon.setTitle(title_list[i]);
+            int resId = getResources().getIdentifier(iconlist[i], "drawable" , getActivity().getPackageName());
+            icon.setIconID(resId);
             mDatas.add(i,icon);
-        }
-
-        mTaskDatas = new ArrayList<Task>();
-        for (int i = 0; i < 8; i++)
-        {
-            Task icon = new Task();
-            icon.setTitle(titlelist[i]);
-            icon.setIconID(tasklist[i]);
-            icon.setDetail("zhe sshi yige hhhh 我我我我我我我");
-            mTaskDatas.add(i, icon);
         }
     }
 
+    private void loadItems() {
+//        ArrayList<Task> mTaskDatas = new ArrayList<>();
+//        for (int i = 0; i < 8; i++)
+//        {
+//            Task icon = new Task();
+//            icon.setTitle(titlelist[i]);
+//            icon.setIconID(tasklist[i]);
+//            icon.setDetail("zhe sshi yige hhhh 我我我我我我我");
+//            mTaskDatas.add(i, icon);
+//        }
+//        mDataHelper.bulkInsert(mTaskDatas);
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return mDataHelper.getCursorLoader();
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        mAdapter.changeCursor(cursor);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mAdapter.changeCursor(null);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
+    }
 }
