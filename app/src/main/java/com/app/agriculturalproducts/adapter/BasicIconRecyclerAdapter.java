@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.app.agriculturalproducts.R;
@@ -56,22 +57,24 @@ public class BasicIconRecyclerAdapter extends RecyclerView.Adapter<BasicIconRecy
     }
 
     static class BasicViewHolder extends RecyclerView.ViewHolder{
-        @Bind(R.id.icon_title)
         TextView title;
-        @Bind(R.id.icon_img)
         ImageView icon;
         BasicIconRecyclerAdapter mAdapter;
 
         public BasicViewHolder(View itemView,BasicIconRecyclerAdapter adapter) {
             super(itemView);
-            ButterKnife.bind(this, itemView);
+            title = (TextView) itemView.findViewById(R.id.icon_title);
+            icon = (ImageView) itemView.findViewById(R.id.icon_img);
+            RelativeLayout rl = (RelativeLayout) itemView.findViewById(R.id.icon_view);
+            rl.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(mAdapter.onItemClickListener!=null){
+                        mAdapter.onItemClickListener.onItemClick(String.valueOf(title.getText()),getAdapterPosition());
+                    }
+                }
+            });
             mAdapter = adapter;
-        }
-        @OnClick(R.id.icon_view)
-        void onItemClick(){
-            if(mAdapter.onItemClickListener!=null){
-                mAdapter.onItemClickListener.onItemClick(String.valueOf(title.getText()),getAdapterPosition());
-            }
         }
     }
 }

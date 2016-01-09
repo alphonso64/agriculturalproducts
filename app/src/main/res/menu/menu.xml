@@ -5,13 +5,20 @@
     tools:context=".MainActivity" >
 
     <item
-        android:id="@+id/action_share"
+        android:id="@+id/action_save"
+        android:orderInCategory="80"
+        android:title="action_save"
+        android:icon="@drawable/ic_save_white_24dp"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/action_upload"
         android:orderInCategory="90"
         android:title="action_share"
         android:icon="@drawable/ic_backup_white_24dp"
         app:showAsAction="ifRoom"/>
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/action_history"
         android:orderInCategory="100"
         android:title="action_settings"
         android:icon="@drawable/ic_history_white_24dp"

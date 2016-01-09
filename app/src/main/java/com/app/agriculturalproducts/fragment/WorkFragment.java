@@ -61,7 +61,7 @@ public class WorkFragment extends Fragment implements LoaderManager.LoaderCallba
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mDataHelper = new TaskDataHelper(getActivity());
+        mDataHelper = new TaskDataHelper(getActivity().getApplicationContext());
     }
 
     @Nullable

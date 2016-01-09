@@ -16,6 +16,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.app.agriculturalproducts.app.AppApplication;
+import com.app.agriculturalproducts.bean.PersticidesUsage;
 import com.app.agriculturalproducts.bean.Task;
 
 import static nl.qbusict.cupboard.CupboardFactory.cupboard;
@@ -26,12 +27,16 @@ public class DataProvider extends ContentProvider {
     public static final String SCHEME = "content://";
 
     private static final int TASK_TABLE = 0;//Demo列表
+    private static final int PUSAGE_TABLE  = 1;//Demo列表
 
     public static final String PATH_TASK_TABLE = "/task";//Demo列表
+    public static final String PATH_PUSAGE_TABLE = "/persticidesusage";//Demo列表
 
     public static final Uri TASK_TABLE_CONTENT_URI = Uri.parse(SCHEME + AUTHORITY + PATH_TASK_TABLE);//Demo列表
+    public static final Uri PUSAGE_TABLE_CONTENT_URI = Uri.parse(SCHEME + AUTHORITY + PATH_PUSAGE_TABLE);//Demo列表
 
     public static final String TASK_TABLE_CONTENT_TYPE = "vnd.android.cursor.dir/vnd.frankzhu.all.items";//Demo列表
+    public static final String PUSAGE_TABLE_CONTENT_TYPE = "vnd.android.cursor.dir/vnd.frankzhu.all.pusage";//Demo列表
 
     private static DBHelper mDBHelper;
 
@@ -62,19 +67,36 @@ public class DataProvider extends ContentProvider {
 //                    null,
 //                    null,
 //                    sortOrder);
+            Cursor cursor;
             SQLiteDatabase db = getDBHelper().getReadableDatabase();
-            Cursor cursor =  cupboard().withDatabase(db).query(Task.class).
-                    withProjection(projection).
-                    withSelection(selection, selectionArgs).
-                    orderBy(sortOrder).
-                    getCursor();
-            cursor.setNotificationUri(getContext().getContentResolver(), uri);
+            Log.e("testbb","query");
+            switch (sUriMATCHER.match(uri)) {
+                case TASK_TABLE://Demo列表
+                    cursor =  cupboard().withDatabase(db).query(Task.class).
+                            withProjection(projection).
+                            withSelection(selection, selectionArgs).
+                            orderBy(sortOrder).
+                            getCursor();
+                    cursor.setNotificationUri(getContext().getContentResolver(), uri);
+                    break;
+                case PUSAGE_TABLE:
+                    cursor=  cupboard().withDatabase(db).query(PersticidesUsage.class).
+                            withProjection(projection).
+                            withSelection(selection, selectionArgs).
+                            orderBy("time DESC").
+                            getCursor();
+                    cursor.setNotificationUri(getContext().getContentResolver(), uri);
+                    break;
+                default:
+                    throw new IllegalArgumentException("Unknown Uri" + uri);
+            }
             return cursor;
         }
     }
 
     private static final UriMatcher sUriMATCHER = new UriMatcher(UriMatcher.NO_MATCH) {{
         addURI(AUTHORITY, "task", TASK_TABLE);//Demo列表
+        addURI(AUTHORITY,"persticidesusage",PUSAGE_TABLE);
 
     }};
 
@@ -82,7 +104,10 @@ public class DataProvider extends ContentProvider {
         String table;
         switch (sUriMATCHER.match(uri)) {
             case TASK_TABLE://Demo列表
-                table = TaskDataHelper.ItemsDBInfo.TABLE_NAME;
+                table = TaskDataHelper.TABLE_NAME;
+                break;
+            case PUSAGE_TABLE:
+                table = PersticidesUsageDataHelper.TABLE_NAME;
                 break;
             default:
                 throw new IllegalArgumentException("Unknown Uri" + uri);
@@ -182,7 +207,7 @@ public class DataProvider extends ContentProvider {
         synchronized (DataProvider.obj) {
             DBHelper mDBHelper = DataProvider.getDBHelper();
             SQLiteDatabase db = mDBHelper.getWritableDatabase();
-            db.delete(TaskDataHelper.ItemsDBInfo.TABLE_NAME, null, null);
+            db.delete(TaskDataHelper.TABLE_NAME, null, null);
         }
     }
 }

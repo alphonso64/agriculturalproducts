@@ -2,15 +2,14 @@ package com.app.agriculturalproducts.db;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
-import android.provider.BaseColumns;
 import android.support.v4.content.CursorLoader;
 
+import com.app.agriculturalproducts.bean.PersticidesUsage;
 import com.app.agriculturalproducts.bean.Task;
-import com.app.agriculturalproducts.db.database.Column;
-import com.app.agriculturalproducts.db.database.SQLiteTable;
+import com.app.agriculturalproducts.db.BaseDataHelper;
+import com.app.agriculturalproducts.db.DBInterface;
+import com.app.agriculturalproducts.db.DataProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,16 +17,16 @@ import java.util.List;
 import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 
 
-public class TaskDataHelper extends BaseDataHelper implements DBInterface<Task> {
+public class PersticidesUsageDataHelper extends BaseDataHelper implements DBInterface<PersticidesUsage> {
 
-    public TaskDataHelper(Context context) {
+    public PersticidesUsageDataHelper(Context context) {
         super(context);
     }
 
-    public static final String TABLE_NAME = "task";
+    public static final String TABLE_NAME = "PersticidesUsage";
     @Override
     protected Uri getContentUri() {
-        return DataProvider.TASK_TABLE_CONTENT_URI;
+        return DataProvider.PUSAGE_TABLE_CONTENT_URI;
     }
 
     @Override
@@ -36,9 +35,9 @@ public class TaskDataHelper extends BaseDataHelper implements DBInterface<Task> 
     }
 
     @Override
-    public void bulkInsert(List<Task> listData) {
+    public void bulkInsert(List<PersticidesUsage> listData) {
         ArrayList<ContentValues> contentValues = new ArrayList<>();
-        for (Task item : listData) {
+        for (PersticidesUsage item : listData) {
             ContentValues values = getContentValues(item);
             contentValues.add(values);
         }
@@ -47,12 +46,8 @@ public class TaskDataHelper extends BaseDataHelper implements DBInterface<Task> 
     }
 
     @Override
-    public ContentValues getContentValues(Task data) {
-//        ContentValues values = new ContentValues();
-//        values.put(ItemsDBInfo.ID, data.getIconID());
-//        values.put(ItemsDBInfo.TITLE, data.getTitle());
-//        values.put(ItemsDBInfo.DETAIL, data.getDetail());
-        ContentValues values = cupboard().withEntity(Task.class).toContentValues(data);
+    public ContentValues getContentValues(PersticidesUsage data) {
+        ContentValues values = cupboard().withEntity(PersticidesUsage.class).toContentValues(data);
         return values;
     }
 
@@ -60,8 +55,8 @@ public class TaskDataHelper extends BaseDataHelper implements DBInterface<Task> 
         delete(where,selectionArgs);
     }
 
-    public void insert_(Task data){
-        ContentValues values = cupboard().withEntity(Task.class).toContentValues(data);
+    public void insert_(PersticidesUsage data){
+        ContentValues values = cupboard().withEntity(PersticidesUsage.class).toContentValues(data);
         insert(values);
     }
 

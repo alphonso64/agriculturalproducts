@@ -2,6 +2,7 @@ package com.app.agriculturalproducts.adapter;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,10 +14,6 @@ import android.widget.TextView;
 import com.app.agriculturalproducts.R;
 import com.app.agriculturalproducts.bean.Task;
 
-import java.util.List;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 
@@ -52,28 +49,27 @@ public class TaskCursorAdapter extends BaseAbstractRecycleCursorAdapter<Recycler
     }
 
     public static class TaskViewHolder extends RecyclerView.ViewHolder {
-        @Bind(R.id.task_title_2)
         TextView detail;
-        @Bind(R.id.task_title_1)
         TextView title;
-        @Bind(R.id.task_img)
         ImageView icon;
         TaskCursorAdapter mAdapter;
-
-
         public TaskViewHolder(View itemView,TaskCursorAdapter adapter) {
             super(itemView);
-            ButterKnife.bind(this, itemView);
+            detail = (TextView) itemView.findViewById( R.id.task_title_2);
+            title = (TextView) itemView.findViewById(R.id.task_title_1);
+            icon = (ImageView) itemView.findViewById(R.id.task_img);
             mAdapter = adapter;
+            CardView cv = (CardView) itemView.findViewById(R.id.cv_task);
+            cv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Task task = Task.fromCursor((Cursor) mAdapter.getItem(getAdapterPosition()));
+                    Log.d("testbb", "onClick--> position = " + getAdapterPosition() + task.getTitle());
+                    if(mAdapter.onItemClickListener!=null){
+                        mAdapter.onItemClickListener.onItemClick(task,getAdapterPosition());
+                    }
+                }
+            });
         }
-        @OnClick(R.id.cv_task)
-        void onItemClick() {
-            Task task = Task.fromCursor((Cursor) mAdapter.getItem(getAdapterPosition()));
-            Log.d("testbb", "onClick--> position = " + getAdapterPosition() + task.getTitle());
-            if(mAdapter.onItemClickListener!=null){
-                mAdapter.onItemClickListener.onItemClick(task,getAdapterPosition());
-            }
-        }
-
     }
 }

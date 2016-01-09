@@ -6,4 +6,8 @@
     <string name="data_name">数据</string>
     <string name="mine_name">我的</string>
     <string name="task_title">最新任务</string>
+    <string name="place">种植地块</string>
+    <string name="persticides_name">农药名称</string>
+    <string name="usage">用量情况</string>
+    <string name="remarks">使用备注</string>
 </resources>
