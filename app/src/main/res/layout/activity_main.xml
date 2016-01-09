@@ -4,8 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android">
-    <include layout="@layout/include_toolbar"
-        android:id="@+id/toolbar" />
+    <include layout="@layout/include_toolbar"/>
 
     <com.app.agriculturalproducts.view.NoSrollViewPager
         android:id="@+id/id_viewpager"

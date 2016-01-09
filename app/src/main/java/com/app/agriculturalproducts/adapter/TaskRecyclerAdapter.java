@@ -21,11 +21,9 @@ public class TaskRecyclerAdapter extends RecyclerView.Adapter<TaskRecyclerAdapte
     private List<Task> mData;
     private Context context;
 
-    private OnItemClickListener onItemClickListener = null;
-    public interface OnItemClickListener {
-        void onItemClick(View v, int p);
-    }
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+    private OnAdpaterItemClickListener onItemClickListener = null;
+
+    public void setOnItemClickListener(OnAdpaterItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
     }
 
@@ -48,7 +46,7 @@ public class TaskRecyclerAdapter extends RecyclerView.Adapter<TaskRecyclerAdapte
             @Override
             public void onClick(View v) {
                 if(onItemClickListener!=null){
-                    onItemClickListener.onItemClick(v,position);
+                    onItemClickListener.onItemClick((Object)v,position);
                 }
             }
         });

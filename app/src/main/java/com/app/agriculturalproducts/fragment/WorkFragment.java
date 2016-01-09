@@ -16,9 +16,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.app.agriculturalproducts.PesticidesActivity;
 import com.app.agriculturalproducts.R;
 import com.app.agriculturalproducts.TaskActivity;
 import com.app.agriculturalproducts.adapter.BasicIconRecyclerAdapter;
+import com.app.agriculturalproducts.adapter.OnAdpaterItemClickListener;
 import com.app.agriculturalproducts.adapter.TaskCursorAdapter;
 import com.app.agriculturalproducts.app.AppApplication;
 import com.app.agriculturalproducts.bean.MyIcon;
@@ -30,6 +33,8 @@ import com.litesuits.http.request.StringRequest;
 import com.litesuits.http.response.Response;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -51,6 +56,7 @@ public class WorkFragment extends Fragment implements LoaderManager.LoaderCallba
     private ArrayList<MyIcon> mDatas;
     private TaskDataHelper mDataHelper;
     private TaskCursorAdapter mAdapter;
+    private List<String> title_list;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,10 +70,7 @@ public class WorkFragment extends Fragment implements LoaderManager.LoaderCallba
         View contextView = inflater.inflate(R.layout.fragment_work,
                 container, false);
         ButterKnife.bind(this, contextView);
-
         initData();
-
-
         return contextView;
     }
 
@@ -77,44 +80,53 @@ public class WorkFragment extends Fragment implements LoaderManager.LoaderCallba
 
         mRecyclerView.setLayoutManager(new NoScrollGridLayoutManager(getActivity(), 4));
         BasicIconRecyclerAdapter ba = new BasicIconRecyclerAdapter(mDatas,getActivity());
-        ba.setOnItemClickListener(new BasicIconRecyclerAdapter.OnItemClickListener() {
+        ba.setOnItemClickListener(new OnAdpaterItemClickListener() {
             @Override
-            public void onItemClick(View v, int p) {
-                Bundle bl = new Bundle();
-                bl.putString("title", "haha");
-                Intent intent = new Intent(getActivity(), TaskActivity.class);
-                intent.putExtras(bl);
-                startActivity(intent);
+            public void onItemClick(Object obj, int p) {
+                activityJump((String)obj);
             }
         });
         mRecyclerView.setAdapter(ba);
 
         mTaskRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mAdapter = new TaskCursorAdapter(getActivity());
+        mAdapter.setOnItemClickListener(new OnAdpaterItemClickListener() {
+            @Override
+            public void onItemClick(Object obj, int p) {
+                new MaterialDialog.Builder(getActivity())
+                        .title(((Task) obj).getTitle())
+                        .content(((Task) obj).getDetail())
+                        .positiveText("接受")
+                        .negativeText("暂不")
+                        .positiveColorRes(R.color.colorPrimary)
+                        .negativeColorRes(R.color.colorPrimary)
+                        .show();
+            }
+        });
         mTaskRecyclerView.setAdapter(mAdapter);
 
         update_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            AppApplication.getLiteHttp().executeAsync(new StringRequest("http://139.196.11.207/app/v1/login").setHttpListener(
-                    new HttpListener<String>() {
-                        @Override
-                        public void onSuccess(String data, Response<String> response) {
-                            Log.e("testbb", data);
-                            Task icon = new Task();
-                            icon.setTitle("任务");
-                            icon.setIconID(R.drawable.t_a);
-                            icon.setDetail(data);
-                            mDataHelper.insert_(icon);
+                AppApplication.getLiteHttp().executeAsync(new StringRequest("http://139.196.11.207/app/v1/login").setHttpListener(
+                        new HttpListener<String>() {
+                            @Override
+                            public void onSuccess(String data, Response<String> response) {
+                                Log.e("testbb", data);
+                                Task icon = new Task();
+                                icon.setTitle("任务");
+                                icon.setIconID(R.drawable.t_a);
+                                icon.setDetail(data);
+                                mDataHelper.insert_(icon);
+                            }
                         }
-                    }
-            ));
+                ));
             }
         });
         more_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mDataHelper.delete_("title=?", new String[]{"..."});
+                mDataHelper.delete_("title=?", new String[]{"任务"});
             }
         });
     }
@@ -127,30 +139,34 @@ public class WorkFragment extends Fragment implements LoaderManager.LoaderCallba
 
     protected void initData()
     {
-        String[] title_list = getActivity().getResources().getStringArray(R.array.titles);
+        String[] titles = getActivity().getResources().getStringArray(R.array.titles);
+        title_list = Arrays.asList(titles);
         String[] iconlist = getActivity().getResources().getStringArray(R.array.icons);
         mDatas = new ArrayList<>();
         for (int i = 0; i < 8; i++)
         {
             MyIcon icon = new MyIcon();
-            icon.setTitle(title_list[i]);
+            icon.setTitle(titles[i]);
             int resId = getResources().getIdentifier(iconlist[i], "drawable" , getActivity().getPackageName());
             icon.setIconID(resId);
             mDatas.add(i,icon);
         }
     }
 
-    private void loadItems() {
-//        ArrayList<Task> mTaskDatas = new ArrayList<>();
-//        for (int i = 0; i < 8; i++)
-//        {
-//            Task icon = new Task();
-//            icon.setTitle(titlelist[i]);
-//            icon.setIconID(tasklist[i]);
-//            icon.setDetail("zhe sshi yige hhhh 我我我我我我我");
-//            mTaskDatas.add(i, icon);
-//        }
-//        mDataHelper.bulkInsert(mTaskDatas);
+    private void activityJump(String title){
+        if(title.equals("农药")){
+            Intent intent = new Intent(getActivity(), PesticidesActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("title",title);
+            intent.putExtras(bundle);
+            startActivity(intent);
+        }else{
+            Intent intent = new Intent(getActivity(), TaskActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("title",title);
+            intent.putExtras(bundle);
+            startActivity(intent);
+        }
     }
 
     @Override

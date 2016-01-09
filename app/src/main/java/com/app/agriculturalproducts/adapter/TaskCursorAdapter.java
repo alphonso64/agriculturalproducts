@@ -1,9 +1,7 @@
 package com.app.agriculturalproducts.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,6 +28,12 @@ public class TaskCursorAdapter extends BaseAbstractRecycleCursorAdapter<Recycler
         this.context = context;
     }
 
+    private OnAdpaterItemClickListener onItemClickListener = null;
+
+    public void setOnItemClickListener(OnAdpaterItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
+
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, Cursor cursor) {
         Task task = Task.fromCursor(cursor);
@@ -43,7 +47,7 @@ public class TaskCursorAdapter extends BaseAbstractRecycleCursorAdapter<Recycler
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v= LayoutInflater.from(context).inflate(R.layout.task_item,parent,false);
-        TaskViewHolder bvh=new TaskViewHolder(v);
+        TaskViewHolder bvh=new TaskViewHolder(v,this);
         return bvh;
     }
 
@@ -54,13 +58,21 @@ public class TaskCursorAdapter extends BaseAbstractRecycleCursorAdapter<Recycler
         TextView title;
         @Bind(R.id.task_img)
         ImageView icon;
-        public TaskViewHolder(View itemView) {
+        TaskCursorAdapter mAdapter;
+
+
+        public TaskViewHolder(View itemView,TaskCursorAdapter adapter) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            mAdapter = adapter;
         }
         @OnClick(R.id.cv_task)
         void onItemClick() {
-            Log.d("testbb", "onClick--> position = " + getAdapterPosition());
+            Task task = Task.fromCursor((Cursor) mAdapter.getItem(getAdapterPosition()));
+            Log.d("testbb", "onClick--> position = " + getAdapterPosition() + task.getTitle());
+            if(mAdapter.onItemClickListener!=null){
+                mAdapter.onItemClickListener.onItemClick(task,getAdapterPosition());
+            }
         }
 
     }

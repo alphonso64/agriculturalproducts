@@ -3,21 +3,14 @@ package com.app.agriculturalproducts;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-
-import com.app.agriculturalproducts.app.AppApplication;
 import com.app.agriculturalproducts.fragment.DataFragment;
 import com.app.agriculturalproducts.fragment.MineFragment;
 import com.app.agriculturalproducts.fragment.WorkFragment;
 import com.app.agriculturalproducts.view.NoSrollViewPager;
-import com.litesuits.http.HttpConfig;
-import com.litesuits.http.LiteHttp;
-import com.litesuits.http.listener.HttpListener;
-import com.litesuits.http.request.StringRequest;
-import com.litesuits.http.response.Response;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +37,7 @@ public class MainActivity extends BaseActivity {
     private FragmentPagerAdapter mAdapter;
     private List<Fragment> mFragments;
 
-    LiteHttp liteHttp;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

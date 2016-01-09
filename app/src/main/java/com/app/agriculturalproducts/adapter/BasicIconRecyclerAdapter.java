@@ -2,6 +2,7 @@ package com.app.agriculturalproducts.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,10 @@ import com.app.agriculturalproducts.bean.MyIcon;
 
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 /**
  * Created by ALPHONSO on 2016/1/5.
  */
@@ -21,13 +26,9 @@ public class BasicIconRecyclerAdapter extends RecyclerView.Adapter<BasicIconRecy
     private List<MyIcon> mData;
     private Context context;
 
-    private OnItemClickListener onItemClickListener = null;
+    private OnAdpaterItemClickListener onItemClickListener = null;
 
-    public interface OnItemClickListener {
-        void onItemClick(View v, int p);
-    }
-
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+    public void setOnItemClickListener(OnAdpaterItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
     }
 
@@ -39,21 +40,12 @@ public class BasicIconRecyclerAdapter extends RecyclerView.Adapter<BasicIconRecy
     @Override
     public BasicViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v= LayoutInflater.from(context).inflate(R.layout.icon_item,parent,false);
-        BasicViewHolder bvh=new BasicViewHolder(v);
+        BasicViewHolder bvh=new BasicViewHolder(v,this);
         return bvh;
     }
 
     @Override
     public void onBindViewHolder(BasicViewHolder holder, final int position) {
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                if(onItemClickListener!=null){
-                    onItemClickListener.onItemClick(v,position);
-                }
-            }
-        });
         holder.title.setText(mData.get(position).getTitle());
         holder.icon.setImageResource(mData.get(position).getIconID());
     }
@@ -64,12 +56,22 @@ public class BasicIconRecyclerAdapter extends RecyclerView.Adapter<BasicIconRecy
     }
 
     static class BasicViewHolder extends RecyclerView.ViewHolder{
+        @Bind(R.id.icon_title)
         TextView title;
+        @Bind(R.id.icon_img)
         ImageView icon;
-        public BasicViewHolder(View itemView) {
+        BasicIconRecyclerAdapter mAdapter;
+
+        public BasicViewHolder(View itemView,BasicIconRecyclerAdapter adapter) {
             super(itemView);
-            title = (TextView)itemView.findViewById(R.id.icon_title);
-            icon = (ImageView)itemView.findViewById(R.id.icon_img);
+            ButterKnife.bind(this, itemView);
+            mAdapter = adapter;
+        }
+        @OnClick(R.id.icon_view)
+        void onItemClick(){
+            if(mAdapter.onItemClickListener!=null){
+                mAdapter.onItemClickListener.onItemClick(String.valueOf(title.getText()),getAdapterPosition());
+            }
         }
     }
 }
