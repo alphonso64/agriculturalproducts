@@ -3,6 +3,7 @@ package com.app.agriculturalproducts.app;
 import android.app.Application;
 import android.content.Context;
 
+import com.baidu.mapapi.SDKInitializer;
 import com.litesuits.http.LiteHttp;
 
 /**
@@ -16,6 +17,7 @@ public class AppApplication extends Application {
         super.onCreate();
         sContext = getApplicationContext();
         liteHttp = LiteHttp.newApacheHttpClient(null);
+        SDKInitializer.initialize(this);
     }
 
     public static Context getContext() {

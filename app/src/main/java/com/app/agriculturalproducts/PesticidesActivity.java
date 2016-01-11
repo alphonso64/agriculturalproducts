@@ -30,10 +30,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class PesticidesActivity extends BaseUploadActivity {
-    PerticidesFragment perticidesFragment;
-    PerticidesHistoryFragment dataFragment;
-    Fragment currentFragment;
-    boolean hasSaved;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,85 +42,18 @@ public class PesticidesActivity extends BaseUploadActivity {
 //            getSupportFragmentManager().beginTransaction().add(R.id.frame_view,perticidesFragment).commit();
 //        }
 
-        perticidesFragment = new PerticidesFragment();
+        editFragment = new PerticidesFragment();
         dataFragment = new PerticidesHistoryFragment();
-        currentFragment = perticidesFragment;
-        getSupportFragmentManager().beginTransaction().add(R.id.frame_view,perticidesFragment).commit();
-        toolbar.setOnMenuItemClickListener(itemClick);
+        currentFragment = editFragment;
+        getSupportFragmentManager().beginTransaction().add(R.id.frame_view,editFragment).commit();
 
-        hasSaved = false;
     }
 
-    private Toolbar.OnMenuItemClickListener itemClick = new Toolbar.OnMenuItemClickListener() {
-        @Override
-        public boolean onMenuItemClick(MenuItem item) {
-            if (item.getItemId() == R.id.action_upload) {
-                new MaterialDialog.Builder(PesticidesActivity.this)
-                        .title("暂不支持上传")
-                        .positiveText("好的")
-                        .show();
-            }else if(item.getItemId()==R.id.action_history){
-                if(currentFragment == perticidesFragment){
-                    FragmentTransaction transaction = getSupportFragmentManager()
-                            .beginTransaction();
-                    transaction.remove(perticidesFragment);
-                    if(dataFragment ==null){
-                        dataFragment = new PerticidesHistoryFragment();
-                    }
-                    transaction.add(R.id.frame_view, dataFragment).commit();
-                    currentFragment = dataFragment;
-                }
-                toolbar.getMenu().clear();
-                toolbar.inflateMenu(R.menu.menu_his);
-            }else if(item.getItemId()==R.id.action_back){
-                if(currentFragment == dataFragment){
-                    FragmentTransaction transaction = getSupportFragmentManager()
-                            .beginTransaction();
-                    transaction.remove(dataFragment);
-                    if(perticidesFragment ==null){
-                        perticidesFragment = new PerticidesFragment();
-                    }
-                    transaction.add(R.id.frame_view, perticidesFragment).commit();
-                    currentFragment = perticidesFragment;
-                }else {
-                    perticidesFragment.upload();
-                }
-                toolbar.getMenu().clear();
-                toolbar.inflateMenu(R.menu.menu);
-            }else if(item.getItemId()==R.id.action_save){
-                if(currentFragment == perticidesFragment){
-                    int val = perticidesFragment.upload();
-                    if(val == InputType.INPUT_EMPTY){
-                        new MaterialDialog.Builder(PesticidesActivity.this)
-                                .title("内容不能为空！")
-                                .positiveText("好的")
-                                .show();
-                    }else if(val == InputType.INPUT_SAVE_OK){
-                        new MaterialDialog.Builder(PesticidesActivity.this)
-                                .title("保存成功！")
-                                .positiveText("好的")
-                                .show();
-                        hasSaved = true;
-                    }else if(val == InputType.INPUT_SAVE_ALREADY){
-                        new MaterialDialog.Builder(PesticidesActivity.this)
-                                .title("已经保存！")
-                                .positiveText("好的")
-                                .show();
-                    }
-                }
-            }
-            return true;
-        }
-    };
 
     @Override
     protected int getContentView() {
         return R.layout.activity_pesticides;
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
-        return true;
-    }
+
 }

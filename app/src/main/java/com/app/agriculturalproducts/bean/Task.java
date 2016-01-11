@@ -13,7 +13,6 @@ public class Task {
     private String title;
     private String detail;
     private int iconID;
-
     public String getTitle() {
         return title;
     }
@@ -49,4 +48,6 @@ public class Task {
         Task task = cupboard().withCursor(cursor).get(Task.class);
         return task;
     }
+
+
 }

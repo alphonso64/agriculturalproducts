@@ -41,7 +41,7 @@ public class PusageCursorAdapter extends BaseAbstractRecycleCursorAdapter<Recycl
         String ISO_FORMAT = "HH:mm:ss";
         SimpleDateFormat sdf = new SimpleDateFormat(ISO_FORMAT);
         ((PusageViewHolder) holder).title_2.setText(sdf.format(time));
-        ((PusageViewHolder) holder).title_3.setText(pu.getUsage());
+        ((PusageViewHolder) holder).title_3.setText(pu.getLocation());
     }
 
     @Override
