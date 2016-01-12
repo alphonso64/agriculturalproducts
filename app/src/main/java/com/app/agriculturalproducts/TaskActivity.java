@@ -8,7 +8,7 @@ import android.view.View;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class TaskActivity extends BaseUploadActivity {
+public class TaskActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

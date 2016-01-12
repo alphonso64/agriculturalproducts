@@ -12,6 +12,10 @@ public class PersticidesUsage {
     private String usage;
     private String remarks;
     private long time;
+    private String longtitude;
+    private String latitude;
+    private String location;
+
 
     public static PersticidesUsage fromCursor(Cursor cursor) {
 
@@ -49,5 +53,29 @@ public class PersticidesUsage {
 
     public void setTime(long time) {
         this.time = time;
+    }
+
+    public String getLongtitude() {
+        return longtitude;
+    }
+
+    public void setLongtitude(String longtitude) {
+        this.longtitude = longtitude;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 }

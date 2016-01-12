@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.net.Uri;
 import android.support.v4.content.CursorLoader;
+import android.util.Log;
 
 import com.app.agriculturalproducts.bean.PersticidesUsage;
 import com.app.agriculturalproducts.bean.Task;
@@ -56,6 +57,7 @@ public class PersticidesUsageDataHelper extends BaseDataHelper implements DBInte
     }
 
     public void insert_(PersticidesUsage data){
+        Log.e("tetstbb", "insert_");
         ContentValues values = cupboard().withEntity(PersticidesUsage.class).toContentValues(data);
         insert(values);
     }

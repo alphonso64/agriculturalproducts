@@ -1,16 +1,25 @@
 package com.app.agriculturalproducts;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
+
 import com.app.agriculturalproducts.fragment.DataFragment;
 import com.app.agriculturalproducts.fragment.MineFragment;
 import com.app.agriculturalproducts.fragment.WorkFragment;
 import com.app.agriculturalproducts.view.NoSrollViewPager;
+import com.baidu.mapapi.SDKInitializer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +46,6 @@ public class MainActivity extends BaseActivity {
     private FragmentPagerAdapter mAdapter;
     private List<Fragment> mFragments;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +55,7 @@ public class MainActivity extends BaseActivity {
         workButton.setChecked(true);
         toolbar.setTitle(R.string.work_name);
         setSupportActionBar(toolbar);//toolbar支持
+
     }
 
     private void  initView(){
@@ -80,5 +89,15 @@ public class MainActivity extends BaseActivity {
                 }
             }
         };
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }
