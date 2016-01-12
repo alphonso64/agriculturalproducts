@@ -1,13 +1,8 @@
 package com.app.agriculturalproducts.fragment;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.LayoutTransition;
-import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,32 +13,14 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.app.agriculturalproducts.R;
-import com.app.agriculturalproducts.bean.PersticidesUsage;
-import com.app.agriculturalproducts.db.PersticidesUsageDataHelper;
+import com.app.agriculturalproducts.bean.FertilizerUsage;
+import com.app.agriculturalproducts.bean.PlantSpecies;
+import com.app.agriculturalproducts.db.FertilizerUsageDataHelper;
+import com.app.agriculturalproducts.db.PlantSpeciesDataHelper;
 import com.app.agriculturalproducts.util.InputType;
-import com.baidu.location.BDLocation;
-import com.baidu.location.BDLocationListener;
-import com.baidu.location.LocationClient;
-import com.baidu.location.LocationClientOption;
-import com.baidu.mapapi.map.BaiduMap;
-import com.baidu.mapapi.map.BitmapDescriptor;
-import com.baidu.mapapi.map.MapStatusUpdate;
-import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
-import com.baidu.mapapi.map.MyLocationConfiguration;
-import com.baidu.mapapi.map.MyLocationData;
-import com.baidu.mapapi.model.LatLng;
-import com.baidu.mapapi.search.core.SearchResult;
-import com.baidu.mapapi.search.geocode.GeoCodeResult;
-import com.baidu.mapapi.search.geocode.GeoCoder;
-import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
-import com.baidu.mapapi.search.geocode.ReverseGeoCodeOption;
-import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -55,13 +32,16 @@ import butterknife.ButterKnife;
 /**
  * Created by ALPHONSO on 2016/1/5.
  */
-public class PerticidesFragment extends BaseMapFragment {
-    @Bind(R.id.persticides_name_text)
-    EditText name;
-    @Bind(R.id.usage_text)
-    EditText usage;
-    @Bind(R.id.remarks_text)
-    EditText remark;
+public class PlantFragment extends BaseMapFragment {
+    @Bind(R.id.plant_text)
+    EditText plant;
+    @Bind(R.id.plot_text)
+    EditText plot;
+    @Bind(R.id.producer_text)
+    EditText producer;
+    @Bind(R.id.seed_text)
+    EditText seed;
+
     @Bind(R.id.bmapView)
     MapView mMapView;
     @Bind(R.id.location__text)
@@ -76,7 +56,7 @@ public class PerticidesFragment extends BaseMapFragment {
     ImageView mapbtn;
 
     boolean flag;
-    PersticidesUsageDataHelper mDataHelper;
+    PlantSpeciesDataHelper mDataHelper;
     List<EditText> ls;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -87,7 +67,7 @@ public class PerticidesFragment extends BaseMapFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View contextView = inflater.inflate(R.layout.fragment_persticides,
+        View contextView = inflater.inflate(R.layout.fragment_plantspecies,
                 container, false);
         ButterKnife.bind(this, contextView);
         setMpView(mMapView);
@@ -97,9 +77,10 @@ public class PerticidesFragment extends BaseMapFragment {
         setMapLy(mapLy);
         setMap_imgview(mapbtn);
         ls = new ArrayList<>();
-        ls.add(name);
-        ls.add(usage);
-        ls.add(remark);
+        ls.add(seed);
+        ls.add(producer);
+        ls.add(plot);
+        ls.add(plant);
         return contextView;
 
     }
@@ -107,7 +88,7 @@ public class PerticidesFragment extends BaseMapFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mDataHelper = new PersticidesUsageDataHelper(getActivity());
+        mDataHelper = new PlantSpeciesDataHelper(getActivity());
         if(flag){
             disableEditText(ls);
         }
@@ -154,15 +135,16 @@ public class PerticidesFragment extends BaseMapFragment {
             return InputType.INPUT_SAVE_ALREADY;
         }
         if(!isEditEmpty(ls)){
-            PersticidesUsage pu = new PersticidesUsage();
-            pu.setName(name.getText().toString());
-            pu.setRemarks(remark.getText().toString());
-            pu.setUsage(usage.getText().toString());
-            pu.setTime(Calendar.getInstance().getTimeInMillis());
-            pu.setLatitude(latitude);
-            pu.setLongtitude(longtitude);
-            pu.setLocation(location);
-            mDataHelper.insert_(pu);
+            PlantSpecies ps = new PlantSpecies();
+            ps.setPlant(plant.getText().toString());
+            ps.setPlantingPlots(plot.getText().toString());
+            ps.setProducer(producer.getText().toString());
+            ps.setSeed(seed.getText().toString());
+            ps.setTime(Calendar.getInstance().getTimeInMillis());
+            ps.setLatitude(latitude);
+            ps.setLongtitude(longtitude);
+            ps.setLocation(location);
+            mDataHelper.insert_(ps);
             disableEditText(ls);
             InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
             inputMethodManager.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);

@@ -28,7 +28,6 @@
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
     <!-- 允许应用读取低级别的系统日志文件 -->
     <uses-permission android:name="android.permission.READ_LOGS" />
-
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
@@ -41,6 +40,7 @@
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="pEmb6jGAgd5fG4NvXPZVlEXT" />
+
         <activity android:name=".MainActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -48,7 +48,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity android:name=".TaskActivity" >
         </activity>
 
@@ -68,6 +67,10 @@
             android:process=":remote" >
         </service>
 
+        <activity android:name=".FertilizerActivity" >
+        </activity>
+        <activity android:name=".PlantActivity" >
+        </activity>
     </application>
 
 </manifest>

@@ -17,7 +17,9 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.app.agriculturalproducts.FertilizerActivity;
 import com.app.agriculturalproducts.PesticidesActivity;
+import com.app.agriculturalproducts.PlantActivity;
 import com.app.agriculturalproducts.R;
 import com.app.agriculturalproducts.TaskActivity;
 import com.app.agriculturalproducts.adapter.BasicIconRecyclerAdapter;
@@ -160,7 +162,20 @@ public class WorkFragment extends Fragment implements LoaderManager.LoaderCallba
             bundle.putString("title",title);
             intent.putExtras(bundle);
             startActivity(intent);
-        }else{
+        }else if(title.equals("化肥")){
+            Intent intent = new Intent(getActivity(), FertilizerActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("title",title);
+            intent.putExtras(bundle);
+            startActivity(intent);
+        }else if(title.equals("种植")){
+            Intent intent = new Intent(getActivity(), PlantActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("title",title);
+            intent.putExtras(bundle);
+            startActivity(intent);
+        }
+        else{
             Intent intent = new Intent(getActivity(), TaskActivity.class);
             Bundle bundle = new Bundle();
             bundle.putString("title",title);

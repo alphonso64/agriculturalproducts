@@ -8,9 +8,14 @@
     <string name="task_title">最新任务</string>
     <string name="place">种植地块</string>
     <string name="persticides_name">农药名称</string>
+    <string name="fertilizer_name">化肥名称</string>
     <string name="location">位置:</string>
     <string name="usage">用量情况</string>
     <string name="remarks">使用备注</string>
     <string name="latitude">纬度:</string>
     <string name="longtitude">经度:</string>
+    <string name="plot">种植地块</string>
+    <string name="plant">种植名称</string>
+    <string name="seed">种子名称</string>
+    <string name="producer">生产厂商</string>
 </resources>

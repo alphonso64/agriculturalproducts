@@ -7,10 +7,7 @@ import android.support.v4.content.CursorLoader;
 import android.util.Log;
 
 import com.app.agriculturalproducts.bean.PersticidesUsage;
-import com.app.agriculturalproducts.bean.Task;
-import com.app.agriculturalproducts.db.BaseDataHelper;
-import com.app.agriculturalproducts.db.DBInterface;
-import com.app.agriculturalproducts.db.DataProvider;
+import com.app.agriculturalproducts.bean.PlantSpecies;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,16 +15,16 @@ import java.util.List;
 import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 
 
-public class PersticidesUsageDataHelper extends BaseDataHelper implements DBInterface<PersticidesUsage> {
+public class PlantSpeciesDataHelper extends BaseDataHelper implements DBInterface<PlantSpecies> {
 
-    public PersticidesUsageDataHelper(Context context) {
+    public PlantSpeciesDataHelper(Context context) {
         super(context);
     }
 
-    public static final String TABLE_NAME = "PersticidesUsage";
+    public static final String TABLE_NAME = "PlantSpecies";
     @Override
     protected Uri getContentUri() {
-        return DataProvider.PUSAGE_TABLE_CONTENT_URI;
+        return DataProvider.PLANT_TABLE_CONTENT_URI;
     }
 
     @Override
@@ -36,9 +33,9 @@ public class PersticidesUsageDataHelper extends BaseDataHelper implements DBInte
     }
 
     @Override
-    public void bulkInsert(List<PersticidesUsage> listData) {
+    public void bulkInsert(List<PlantSpecies> listData) {
         ArrayList<ContentValues> contentValues = new ArrayList<>();
-        for (PersticidesUsage item : listData) {
+        for (PlantSpecies item : listData) {
             ContentValues values = getContentValues(item);
             contentValues.add(values);
         }
@@ -47,8 +44,8 @@ public class PersticidesUsageDataHelper extends BaseDataHelper implements DBInte
     }
 
     @Override
-    public ContentValues getContentValues(PersticidesUsage data) {
-        ContentValues values = cupboard().withEntity(PersticidesUsage.class).toContentValues(data);
+    public ContentValues getContentValues(PlantSpecies data) {
+        ContentValues values = cupboard().withEntity(PlantSpecies.class).toContentValues(data);
         return values;
     }
 
@@ -56,9 +53,9 @@ public class PersticidesUsageDataHelper extends BaseDataHelper implements DBInte
         delete(where,selectionArgs);
     }
 
-    public void insert_(PersticidesUsage data){
+    public void insert_(PlantSpecies data){
         Log.e("tetstbb", "insert_");
-        ContentValues values = cupboard().withEntity(PersticidesUsage.class).toContentValues(data);
+        ContentValues values = cupboard().withEntity(PlantSpecies.class).toContentValues(data);
         insert(values);
     }
 

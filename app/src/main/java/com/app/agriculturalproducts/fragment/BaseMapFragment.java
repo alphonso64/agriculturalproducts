@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -61,9 +63,11 @@ public class BaseMapFragment extends Fragment {
     String latitude;
     String location;
 
-    TextView latTextView;
-    TextView longTextView;
-    TextView locTextView;
+    private TextView latTextView;
+    private TextView longTextView;
+    private TextView locTextView;
+    private LinearLayout mapLy;
+    private ImageView map_imgview;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -102,6 +106,20 @@ public class BaseMapFragment extends Fragment {
             mSearch = GeoCoder.newInstance();
             mSearch.setOnGetGeoCodeResultListener(new MyOnGetGeoCoderResultListener());
         }
+        if(mapLy!=null){
+            mapLy.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(mMapView.getVisibility() == View.GONE){
+                        mMapView.setVisibility(View.VISIBLE);
+                        map_imgview.setImageResource(R.drawable.ic_expand_more_white_24dp);
+                    }else if(mMapView.getVisibility() == View.VISIBLE){
+                        mMapView.setVisibility(View.GONE);
+                        map_imgview.setImageResource(R.drawable.ic_expand_less_white_24dp);
+                    }
+                }
+            });
+        }
     }
 
     @Override
@@ -109,6 +127,7 @@ public class BaseMapFragment extends Fragment {
         super.onResume();
         if(mMapView!=null){
             mMapView.onResume();
+            mLocClient.start();
         }
     }
 
@@ -117,6 +136,7 @@ public class BaseMapFragment extends Fragment {
         super.onPause();
         if(mMapView!=null){
             mMapView.onPause();
+            mLocClient.stop();
         }
     }
 
@@ -146,10 +166,18 @@ public class BaseMapFragment extends Fragment {
     protected void setLongTextView(TextView tx){
         longTextView = tx;
     }
+    public void setMapLy(LinearLayout mapLy) {
+        this.mapLy = mapLy;
+    }
 
     public int upload(){
         return InputType.INPUT_SAVE_OK;
     }
+
+    public void setMap_imgview(ImageView map_imgview) {
+        this.map_imgview = map_imgview;
+    }
+
 
     /**
      * 定位SDK监听函数
@@ -176,8 +204,13 @@ public class BaseMapFragment extends Fragment {
                 MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(ll);
                 mBaiduMap.animateMapStatus(u);
             }
-            latitude = String.valueOf(location.getLatitude());
-            longtitude = String.valueOf(location.getLongitude());
+            String latTmp = String.valueOf(location.getLatitude());
+            String longTMp = String.valueOf(location.getLongitude());
+            if(latTmp.equals(latitude) && longTMp.equals(longtitude) ){
+                return;
+            }
+            latitude =latTmp;
+            longtitude = longTMp;
             if(latTextView!=null){
                 latTextView.setText(latitude);
             }
@@ -188,6 +221,7 @@ public class BaseMapFragment extends Fragment {
             // 反Geo搜索
             mSearch.reverseGeoCode(new ReverseGeoCodeOption()
                     .location(ptCenter));
+
         }
 
         public void onReceivePoi(BDLocation poiLocation) {
