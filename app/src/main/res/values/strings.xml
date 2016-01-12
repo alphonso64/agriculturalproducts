@@ -18,4 +18,8 @@
     <string name="plant">种植名称</string>
     <string name="seed">种子名称</string>
     <string name="producer">生产厂商</string>
+    <string name="picking">采摘情况</string>
+    <string name="situation">发生情况</string>
+    <string name="handle">处理办法</string>
+    <string name="recorder">记录人员</string>
 </resources>

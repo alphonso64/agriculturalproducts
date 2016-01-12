@@ -5,7 +5,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.app.agriculturalproducts.bean.FertilizerUsage;
+import com.app.agriculturalproducts.bean.OtherInfo;
 import com.app.agriculturalproducts.bean.PersticidesUsage;
+import com.app.agriculturalproducts.bean.Picking;
 import com.app.agriculturalproducts.bean.PlantSpecies;
 import com.app.agriculturalproducts.bean.Task;
 
@@ -29,6 +31,8 @@ public class DBHelper extends SQLiteOpenHelper {
         cupboard().register(PersticidesUsage.class);
         cupboard().register(FertilizerUsage.class);
         cupboard().register(PlantSpecies.class);
+        cupboard().register(Picking.class);
+        cupboard().register(OtherInfo.class);
     }
 
         @Override
