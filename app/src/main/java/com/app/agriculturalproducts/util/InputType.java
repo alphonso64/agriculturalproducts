@@ -11,6 +11,7 @@ public class InputType {
     public final static int INPUT_SAVE_ALREADY = 4;
 
     public static final String INPUT_CHECK_OK = "OK";
+    public static final String INPUT_CHECK_ERR = "ERR";
 
     public static final String loginInfoDB = "LOGIN";
 }

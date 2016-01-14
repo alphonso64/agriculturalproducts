@@ -43,6 +43,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        checkLogin();
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
@@ -75,6 +76,16 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    private void checkLogin() {
+        SharedPreferences sp = getSharedPreferences(InputType.loginInfoDB,
+                Activity.MODE_PRIVATE);
+        if(InputType.INPUT_CHECK_OK.equals(sp.getString("isLogin",null))){
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
+    }
+
     @OnClick(R.id.loginbutton)
     void login(){
 
@@ -89,6 +100,7 @@ public class LoginActivity extends AppCompatActivity {
         }
         SharedPreferences sp = getSharedPreferences(InputType.loginInfoDB,
                 Activity.MODE_PRIVATE);
+        SharedPreferences.Editor ed = sp.edit();
         String nameSave= sp.getString("name", null);
         String pwdSave= sp.getString("pwd", null);
         if(!name.equals(nameSave)|| !pwd.equals(pwdSave)){
@@ -98,6 +110,8 @@ public class LoginActivity extends AppCompatActivity {
             toast.show();
             return;
         }
+        ed.putString("isLogin",InputType.INPUT_CHECK_OK);
+        ed.commit();
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();
