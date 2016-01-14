@@ -30,6 +30,13 @@
     <uses-permission android:name="android.permission.READ_LOGS" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
+
+
     <application
         android:name=".app.AppApplication"
         android:allowBackup="true"
@@ -42,11 +49,6 @@
             android:value="pEmb6jGAgd5fG4NvXPZVlEXT" />
 
         <activity android:name=".MainActivity" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".TaskActivity" >
         </activity>
@@ -74,6 +76,16 @@
         <activity android:name=".PickingActivity" >
         </activity>
         <activity android:name=".OtherInfoActivity" >
+        </activity>
+        <activity android:name=".SignActivity" >
+        </activity>
+        <activity
+            android:name=".LoginActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 

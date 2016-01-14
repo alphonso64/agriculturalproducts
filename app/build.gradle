@@ -31,5 +31,6 @@ dependencies {
     compile('com.github.afollestad.material-dialogs:core:0.8.5.3@aar') {
         transitive = true
     }
+    compile 'de.hdodenhof:circleimageview:2.0.0'
     compile files('libs/BaiduLBS_Android.jar')
 }
