@@ -1,25 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="titles">
-        <item>种植</item>
-        <item>农药</item>
-        <item>化肥</item>
-        <item>采摘</item>
-        <item>其他</item>
-        <item>土壤</item>
-        <item>生产</item>
-        <item>...</item>
+        <item>种植录入</item>
+        <item>农药使用</item>
+        <item>化肥使用</item>
+        <item>采摘记录</item>
+        <item>其他记录</item>
+        <item>土壤信息</item>
+        <item>生产信息</item>
+        <item>......</item>
     </string-array>
 
     <string-array name="icons">
-        <item>icon_a</item>
-        <item>icon_b</item>
-        <item>icon_c</item>
-        <item>icon_d</item>
-        <item>icon_e</item>
-        <item>icon_f</item>
-        <item>icon_g</item>
-        <item>icon_h</item>
+        <item>icon_aa</item>
+        <item>icon_ab</item>
+        <item>icon_ac</item>
+        <item>icon_ad</item>
+        <item>icon_ae</item>
+        <item>icon_af</item>
+        <item>icon_ag</item>
+        <item>icon_ah</item>
     </string-array>
 
+    <string-array name="class_name">
+        <item>com.app.agriculturalproducts.PlantActivity</item>
+        <item>com.app.agriculturalproducts.PesticidesActivity</item>
+        <item>com.app.agriculturalproducts.FertilizerActivity</item>
+        <item>com.app.agriculturalproducts.PickingActivity</item>
+        <item>com.app.agriculturalproducts.OtherInfoActivity</item>
+        <item>com.app.agriculturalproducts.TaskActivity</item>
+        <item>com.app.agriculturalproducts.TaskActivity</item>
+        <item>com.app.agriculturalproducts.TaskActivity</item>
+    </string-array>
 </resources>

@@ -6,7 +6,7 @@ package com.app.agriculturalproducts.bean;
 public class MyIcon {
     private String title;
     private int iconID;
-
+    private String className;
 
     public String getTitle() {
         return title;
@@ -22,5 +22,13 @@ public class MyIcon {
 
     public void setIconID(int iconID) {
         this.iconID = iconID;
+    }
+
+    public String getClassName() {
+        return className;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
     }
 }

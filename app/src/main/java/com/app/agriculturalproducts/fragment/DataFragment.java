@@ -25,7 +25,7 @@ public class DataFragment extends Fragment {
         View contextView = inflater.inflate(R.layout.fragment_data,
                 container, false);
         TextView text = (TextView) contextView.findViewById(R.id.textView);
-        text.setText("MM");
+        text.setText("待定");
         return contextView;
     }
 }

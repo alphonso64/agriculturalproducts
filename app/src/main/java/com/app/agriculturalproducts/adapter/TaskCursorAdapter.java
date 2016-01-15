@@ -13,6 +13,9 @@ import android.widget.TextView;
 
 import com.app.agriculturalproducts.R;
 import com.app.agriculturalproducts.bean.Task;
+import com.app.agriculturalproducts.util.StringUtil;
+
+import java.text.SimpleDateFormat;
 
 import butterknife.OnClick;
 
@@ -37,8 +40,7 @@ public class TaskCursorAdapter extends BaseAbstractRecycleCursorAdapter<Recycler
         ((TaskViewHolder) holder).title.setText(task.getTitle());
         ((TaskViewHolder) holder).detail.setText(task.getDetail());
         ((TaskViewHolder) holder).icon.setImageResource(task.getIconID());
-
-
+        ((TaskViewHolder) holder).time.setText(StringUtil.getTimeFormatStr(task.getTime()));
     }
 
     @Override
@@ -51,12 +53,14 @@ public class TaskCursorAdapter extends BaseAbstractRecycleCursorAdapter<Recycler
     public static class TaskViewHolder extends RecyclerView.ViewHolder {
         TextView detail;
         TextView title;
+        TextView time;
         ImageView icon;
         TaskCursorAdapter mAdapter;
         public TaskViewHolder(View itemView,TaskCursorAdapter adapter) {
             super(itemView);
             detail = (TextView) itemView.findViewById( R.id.task_title_2);
             title = (TextView) itemView.findViewById(R.id.task_title_1);
+            time = (TextView) itemView.findViewById(R.id.task_title_3);
             icon = (ImageView) itemView.findViewById(R.id.task_img);
             mAdapter = adapter;
             CardView cv = (CardView) itemView.findViewById(R.id.cv_task);

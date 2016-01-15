@@ -13,6 +13,8 @@ public class Task {
     private String title;
     private String detail;
     private int iconID;
+    private long time;
+
     public String getTitle() {
         return title;
     }
@@ -20,8 +22,6 @@ public class Task {
     public void setTitle(String title) {
         this.title = title;
     }
-
-
 
     public int getIconID() {
         return iconID;
@@ -50,4 +50,11 @@ public class Task {
     }
 
 
+    public long getTime() {
+        return time;
+    }
+
+    public void setTime(long time) {
+        this.time = time;
+    }
 }

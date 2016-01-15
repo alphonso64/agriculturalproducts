@@ -35,8 +35,6 @@
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
-
-
     <application
         android:name=".app.AppApplication"
         android:allowBackup="true"
@@ -48,9 +46,13 @@
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="pEmb6jGAgd5fG4NvXPZVlEXT" />
 
-        <activity android:name=".MainActivity" >
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait" >
         </activity>
-        <activity android:name=".TaskActivity" >
+        <activity
+            android:name=".TaskActivity"
+            android:screenOrientation="portrait" >
         </activity>
 
         <provider
@@ -60,7 +62,9 @@
             android:exported="false" >
         </provider>
 
-        <activity android:name=".PesticidesActivity" >
+        <activity
+            android:name=".PesticidesActivity"
+            android:screenOrientation="portrait" >
         </activity>
 
         <service
@@ -69,23 +73,37 @@
             android:process=":remote" >
         </service>
 
-        <activity android:name=".FertilizerActivity" >
-        </activity>
-        <activity android:name=".PlantActivity" >
-        </activity>
-        <activity android:name=".PickingActivity" >
-        </activity>
-        <activity android:name=".OtherInfoActivity" >
-        </activity>
-        <activity android:name=".SignActivity" >
+        <activity
+            android:name=".FertilizerActivity"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".LoginActivity" >
+            android:name=".PlantActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".PickingActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".OtherInfoActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".SignActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".LoginActivity"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".PersonInfoActivity"
+            android:screenOrientation="portrait">
         </activity>
     </application>
 

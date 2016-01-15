@@ -43,6 +43,15 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/task_title_3"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:textSize="10sp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:id="@+id/task_title_2"
                 android:layout_toRightOf="@+id/task_img"
                 android:layout_below="@+id/task_title_1"

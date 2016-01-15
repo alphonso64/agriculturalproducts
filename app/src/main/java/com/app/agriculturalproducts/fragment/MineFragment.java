@@ -1,6 +1,7 @@
 package com.app.agriculturalproducts.fragment;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -8,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,7 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.app.agriculturalproducts.PersonInfoActivity;
 import com.app.agriculturalproducts.R;
 import com.app.agriculturalproducts.util.InputType;
 
@@ -46,8 +49,16 @@ public class MineFragment extends Fragment {
         View contextView = inflater.inflate(R.layout.fragment_mine,
                 container, false);
         ButterKnife.bind(this, contextView);
-        setPersonINfo();
+
+        Log.e("testbbb", "Mine onCreateView");
         return contextView;
+    }
+
+    @Override
+    public void onResume() {
+        Log.e("testbbb", "Mine resume");
+        setPersonINfo();
+        super.onResume();
     }
 
     @Override
@@ -72,6 +83,12 @@ public class MineFragment extends Fragment {
                 getActivity().finish();
             }
         }).show();
+    }
+
+    @OnClick(R.id.person_info_layout)
+    void infoClick(){
+        Intent intent = new Intent(getActivity(), PersonInfoActivity.class);
+        startActivity(intent);
     }
 
     void  setPersonINfo(){

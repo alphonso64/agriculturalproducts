@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.support.v4.media.IMediaBrowserServiceCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -17,19 +16,12 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.app.agriculturalproducts.FertilizerActivity;
-import com.app.agriculturalproducts.OtherInfoActivity;
-import com.app.agriculturalproducts.PesticidesActivity;
-import com.app.agriculturalproducts.PickingActivity;
-import com.app.agriculturalproducts.PlantActivity;
 import com.app.agriculturalproducts.R;
-import com.app.agriculturalproducts.TaskActivity;
 import com.app.agriculturalproducts.adapter.BasicIconRecyclerAdapter;
 import com.app.agriculturalproducts.adapter.OnAdpaterItemClickListener;
 import com.app.agriculturalproducts.adapter.TaskCursorAdapter;
 import com.app.agriculturalproducts.app.AppApplication;
 import com.app.agriculturalproducts.bean.MyIcon;
-import com.app.agriculturalproducts.bean.OtherInfo;
 import com.app.agriculturalproducts.bean.Task;
 import com.app.agriculturalproducts.db.TaskDataHelper;
 import com.app.agriculturalproducts.view.NoScrollGridLayoutManager;
@@ -38,7 +30,7 @@ import com.litesuits.http.request.StringRequest;
 import com.litesuits.http.response.Response;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
 import butterknife.Bind;
@@ -61,7 +53,6 @@ public class WorkFragment extends Fragment implements LoaderManager.LoaderCallba
     private ArrayList<MyIcon> mDatas;
     private TaskDataHelper mDataHelper;
     private TaskCursorAdapter mAdapter;
-    private List<String> title_list;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -88,7 +79,11 @@ public class WorkFragment extends Fragment implements LoaderManager.LoaderCallba
         ba.setOnItemClickListener(new OnAdpaterItemClickListener() {
             @Override
             public void onItemClick(Object obj, int p) {
-                activityJump((String)obj);
+                try {
+                    activityJump((String)obj);
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         });
         mRecyclerView.setAdapter(ba);
@@ -122,6 +117,7 @@ public class WorkFragment extends Fragment implements LoaderManager.LoaderCallba
                                 icon.setTitle("任务");
                                 icon.setIconID(R.drawable.t_a);
                                 icon.setDetail(data);
+                                icon.setTime(Calendar.getInstance().getTimeInMillis());
                                 mDataHelper.insert_(icon);
                             }
                         }
@@ -145,58 +141,68 @@ public class WorkFragment extends Fragment implements LoaderManager.LoaderCallba
     protected void initData()
     {
         String[] titles = getActivity().getResources().getStringArray(R.array.titles);
-        title_list = Arrays.asList(titles);
         String[] iconlist = getActivity().getResources().getStringArray(R.array.icons);
+        String[] className = getActivity().getResources().getStringArray(R.array.class_name);
         mDatas = new ArrayList<>();
-        for (int i = 0; i < 8; i++)
+        for (int i = 0; i < titles.length; i++)
         {
             MyIcon icon = new MyIcon();
             icon.setTitle(titles[i]);
             int resId = getResources().getIdentifier(iconlist[i], "drawable" , getActivity().getPackageName());
             icon.setIconID(resId);
+            icon.setClassName(className[i]);
             mDatas.add(i,icon);
         }
     }
 
-    private void activityJump(String title){
-        if(title.equals("农药")){
-            Intent intent = new Intent(getActivity(), PesticidesActivity.class);
+    private void activityJump(String title) throws ClassNotFoundException {
+        for(MyIcon ai:mDatas){
+            if(title.equals(ai.getTitle())){
+            Intent intent = new Intent(getActivity(), Class.forName(ai.getClassName()));
             Bundle bundle = new Bundle();
-            bundle.putString("title",title);
+            bundle.putString("title", title);
             intent.putExtras(bundle);
             startActivity(intent);
-        }else if(title.equals("化肥")){
-            Intent intent = new Intent(getActivity(), FertilizerActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putString("title",title);
-            intent.putExtras(bundle);
-            startActivity(intent);
-        }else if(title.equals("种植")){
-            Intent intent = new Intent(getActivity(), PlantActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putString("title",title);
-            intent.putExtras(bundle);
-            startActivity(intent);
-        }else if(title.equals("采摘")){
-            Intent intent = new Intent(getActivity(), PickingActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putString("title",title);
-            intent.putExtras(bundle);
-            startActivity(intent);
-        }else if(title.equals("其他")){
-            Intent intent = new Intent(getActivity(), OtherInfoActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putString("title",title);
-            intent.putExtras(bundle);
-            startActivity(intent);
+            }
         }
-        else{
-            Intent intent = new Intent(getActivity(), TaskActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putString("title",title);
-            intent.putExtras(bundle);
-            startActivity(intent);
-        }
+//        if(title.equals("农药")){
+//            Intent intent = new Intent(getActivity(), PesticidesActivity.class);
+//            Bundle bundle = new Bundle();
+//            bundle.putString("title",title);
+//            intent.putExtras(bundle);
+//            startActivity(intent);
+//        }else if(title.equals("化肥")){
+//            Intent intent = new Intent(getActivity(), FertilizerActivity.class);
+//            Bundle bundle = new Bundle();
+//            bundle.putString("title",title);
+//            intent.putExtras(bundle);
+//            startActivity(intent);
+//        }else if(title.equals("种植录入")){
+//            Intent intent = new Intent(getActivity(), Class.forName("com.app.agriculturalproducts.PlantActivity"));
+//            Bundle bundle = new Bundle();
+//            bundle.putString("title", title);
+//            intent.putExtras(bundle);
+//            startActivity(intent);
+//        }else if(title.equals("采摘")){
+//            Intent intent = new Intent(getActivity(), PickingActivity.class);
+//            Bundle bundle = new Bundle();
+//            bundle.putString("title",title);
+//            intent.putExtras(bundle);
+//            startActivity(intent);
+//        }else if(title.equals("其他")){
+//            Intent intent = new Intent(getActivity(), OtherInfoActivity.class);
+//            Bundle bundle = new Bundle();
+//            bundle.putString("title",title);
+//            intent.putExtras(bundle);
+//            startActivity(intent);
+//        }
+//        else{
+//            Intent intent = new Intent(getActivity(), TaskActivity.class);
+//            Bundle bundle = new Bundle();
+//            bundle.putString("title",title);
+//            intent.putExtras(bundle);
+//            startActivity(intent);
+//        }
     }
 
     @Override

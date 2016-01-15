@@ -95,7 +95,7 @@ public class DataProvider extends ContentProvider {
                     cursor =  cupboard().withDatabase(db).query(Task.class).
                             withProjection(projection).
                             withSelection(selection, selectionArgs).
-                            orderBy(sortOrder).
+                            orderBy("time DESC").
                             getCursor();
                     cursor.setNotificationUri(getContext().getContentResolver(), uri);
                     break;

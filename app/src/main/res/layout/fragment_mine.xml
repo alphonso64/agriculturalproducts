@@ -11,6 +11,7 @@
         android:layout_marginTop="10dp"
         android:clickable="true"
         android:focusable="true"
+        android:id="@+id/person_info_layout"
         android:background="@drawable/layout_selector"
         >
 
@@ -22,7 +23,7 @@
             android:layout_gravity="center"
             android:id="@+id/personImgView"
             app:civ_border_width="1dp"
-            app:civ_border_color="#343434"/>
+            app:civ_border_color="@color/colorPrimary"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -56,11 +57,12 @@
         android:background="@drawable/layout_selector"
         >
         <ImageView
+            android:layout_marginLeft="16dp"
             android:layout_centerVertical="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:id="@+id/set_img_view"
-            android:src="@drawable/icon_a"/>
+            android:src="@drawable/ic_settings_white_24dp"/>
         <TextView
             android:layout_centerVertical="true"
             android:layout_width="wrap_content"
@@ -82,11 +84,12 @@
         android:background="@drawable/layout_selector"
         >
         <ImageView
+            android:layout_marginLeft="16dp"
             android:layout_centerVertical="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:id="@+id/adout_img_view"
-            android:src="@drawable/icon_a"/>
+            android:src="@drawable/ic_info_outline_white_24dp"/>
         <TextView
             android:layout_centerVertical="true"
             android:layout_width="wrap_content"

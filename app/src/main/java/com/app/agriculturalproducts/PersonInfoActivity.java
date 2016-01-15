@@ -1,79 +1,49 @@
 package com.app.agriculturalproducts;
 
-
 import android.app.Activity;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ResolveInfo;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
-import android.graphics.Rect;
-import android.media.ExifInterface;
 import android.net.Uri;
-import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.v4.content.CursorLoader;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
+import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.AutoCompleteTextView;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.Toast;
+import android.widget.TextView;
 
-
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
-import com.app.agriculturalproducts.bean.Task;
-import com.app.agriculturalproducts.util.EditTextUtil;
 import com.app.agriculturalproducts.util.IMGUtil;
 import com.app.agriculturalproducts.util.InputType;
+import com.app.agriculturalproducts.util.StringUtil;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.text.ParseException;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-
-/**
- * A login screen that offers login via email/password.
- */
-public class SignActivity extends AppCompatActivity {
-    @Bind(R.id.signImgView)
+public class PersonInfoActivity extends BaseActivity {
+    @Bind(R.id.toolbar)
+    Toolbar toolbar;
+    @Bind(R.id.personInfoImgView)
     CircleImageView imgView;
-    @Bind(R.id.signNameText)
-    EditText name;
-    @Bind(R.id.signPhoneText)
-    EditText phone;
-    @Bind(R.id.signIDText)
-    EditText id;
-    @Bind(R.id.signCOOPText)
-    EditText coop;
-    @Bind(R.id.signPWDText)
-    EditText pwd;
-    @Bind(R.id.signPWDAGText)
-    EditText pwdAG;
-    String nameStr,phoneStr,IDStr,coopStr,pwdStr,path;
+    @Bind(R.id.personInfoNameText)
+    TextView nameText;
+    @Bind(R.id.personInfoPhoneText)
+    TextView phoneText;
+    @Bind(R.id.personInfoIDText)
+    TextView idText;
+    @Bind(R.id.personInfoCOOPText)
+    TextView coopText;
+
     Uri imgUri;
     Bitmap photo;
     private AlertDialog dialog;
@@ -83,18 +53,20 @@ public class SignActivity extends AppCompatActivity {
     private static final int CODE_GALLERY_REQUEST  = 0xa0;
     private static final int CODE_CAMERA_REQUEST = 0xa1;
     private static final int CODE_RESULT_REQUEST = 0xa2;
-
+    private String path;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign);
         ButterKnife.bind(this);
+        setToolBar(toolbar, getResources().getString(R.string.person_info));
+        setPersonInfo();
         imgView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (dialog == null) {
-                    dialog = new AlertDialog.Builder(SignActivity.this).setItems(new String[]{"相机", "相册"}, new DialogInterface.OnClickListener() {
+                    dialog = new AlertDialog.Builder(PersonInfoActivity.this).setTitle("更换头像")
+                            .setItems(new String[]{"相机", "相册"}, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             if (which == 0) {
@@ -119,41 +91,29 @@ public class SignActivity extends AppCompatActivity {
         });
     }
 
-    @OnClick(R.id.sign_enter_button)
-    void sign(){
-        String val = checkInput();
-        if(InputType.INPUT_CHECK_OK.equals(val)){
-            saveImg();
-            saveInfo();
-            new MaterialDialog.Builder(this)
-                    .title("注册成功")
-                    .positiveText("好的").onPositive(new MaterialDialog.SingleButtonCallback() {
-                @Override
-                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                    finish();
-                }
-            }).show();
-            return;
-        }
-        new MaterialDialog.Builder(this)
-                .title("填写出错")
-                .content(val)
-                .positiveText("好的")
-                .show();
+    @Override
+    protected int getContentView() {
+        return R.layout.activity_person_info;
     }
 
-    private void saveInfo() {
-        SharedPreferences sp = getSharedPreferences(InputType.loginInfoDB,
-                Activity.MODE_PRIVATE);
-        // 获取Editor对象
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putString("name",nameStr);
-        editor.putString("phone",phoneStr);
-        editor.putString("id",IDStr);
-        editor.putString("coop",coopStr);
-        editor.putString("pwd",pwdStr);
-        editor.putString("path",path);
-        editor.commit();
+    private void setPersonInfo(){
+        SharedPreferences sp = getSharedPreferences(InputType.loginInfoDB, Activity.MODE_PRIVATE);
+        nameText.setText(sp.getString("name","无"));
+        coopText.setText(sp.getString("coop","无"));
+        {
+            String phone = sp.getString("phone",null);
+            phoneText.setText(StringUtil.getMaskedStr(phone,4,'*'));
+        }
+        {
+            String id =  sp.getString("id", null);
+            idText.setText(StringUtil.getMaskedStr(id,8,'*'));
+        }
+
+        String path = sp.getString("path", null);
+        if(path!=null){
+            Bitmap picture = BitmapFactory.decodeFile(path);
+            imgView.setImageBitmap(picture);
+        }
     }
 
     @Override
@@ -169,6 +129,8 @@ public class SignActivity extends AppCompatActivity {
                 break;
             case CODE_RESULT_REQUEST:
                 setImgeView(data);
+                saveImg();
+                saveInfo();
                 break;
             case CODE_CAMERA_REQUEST:
                 doCrop();
@@ -242,47 +204,16 @@ public class SignActivity extends AppCompatActivity {
             cache.mkdirs();
         }
         path = cache.getAbsolutePath()+ "/"+System.currentTimeMillis() + ".jpg";
-        Log.e("testbb", path);
         IMGUtil.saveBmpToPath(photo, path);
     }
 
-    private String checkInput() {
-        nameStr = name.getEditableText().toString();
-        if(TextUtils.isEmpty(nameStr)){
-            return "用户名不能为空！";
-        }
-        phoneStr = phone.getEditableText().toString();
-        if(!EditTextUtil.isPhoneNumber(phoneStr)){
-            return "手机号不对！";
-        }
-        IDStr = id.getEditableText().toString();
-        try {
-            if(!InputType.INPUT_CHECK_OK.equals(EditTextUtil.IDCardValidate(IDStr))){
-                Log.e("testbb",EditTextUtil.IDCardValidate(IDStr)+" "+id+" "+id.length());
-                return "身份证号不对！";
-            }
-        } catch (ParseException e) {
-            return "身份证号不对！";
-        }
-       coopStr = coop.getEditableText().toString();
-        if(TextUtils.isEmpty(coopStr)){
-            return "合作社不能为空！";
-        }
-        pwdStr = pwd.getEditableText().toString();
-        String pwdAGStr = pwdAG.getEditableText().toString();
-        if(TextUtils.isEmpty(pwdStr)){
-            return "密码不能为空";
-        }
-        Log.e("testbb",pwdAGStr+" "+pwdStr);
-        if(!pwdAGStr.equals(pwdStr)){
-            return "密码不相同";
-        }
-        if(photo==null){
-            return "请选择头像";
-        }
-        return InputType.INPUT_CHECK_OK;
-
+    private void saveInfo() {
+        SharedPreferences sp = getSharedPreferences(InputType.loginInfoDB,
+                Activity.MODE_PRIVATE);
+        // 获取Editor对象
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString("path",path);
+        editor.commit();
     }
 
 }
-
