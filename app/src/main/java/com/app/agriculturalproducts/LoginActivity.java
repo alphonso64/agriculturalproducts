@@ -80,7 +80,7 @@ public class LoginActivity extends AppCompatActivity {
         SharedPreferences sp = getSharedPreferences(InputType.loginInfoDB,
                 Activity.MODE_PRIVATE);
         if(InputType.INPUT_CHECK_OK.equals(sp.getString("isLogin",null))){
-            Intent intent = new Intent(this, MainActivity.class);
+            Intent intent = new Intent(this, MainDrawlayoutActivity.class);
             startActivity(intent);
             finish();
         }

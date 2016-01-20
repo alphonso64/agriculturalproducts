@@ -38,9 +38,12 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.app.agriculturalproducts.bean.Task;
+import com.app.agriculturalproducts.bean.UserInfo;
+import com.app.agriculturalproducts.presenter.UserInfoPresenter;
 import com.app.agriculturalproducts.util.EditTextUtil;
 import com.app.agriculturalproducts.util.IMGUtil;
 import com.app.agriculturalproducts.util.InputType;
+import com.app.agriculturalproducts.view.UserInfoSimpleView;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -58,7 +61,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 /**
  * A login screen that offers login via email/password.
  */
-public class SignActivity extends AppCompatActivity {
+public class SignActivity extends AppCompatActivity implements UserInfoSimpleView{
     @Bind(R.id.signImgView)
     CircleImageView imgView;
     @Bind(R.id.signNameText)
@@ -73,7 +76,8 @@ public class SignActivity extends AppCompatActivity {
     EditText pwd;
     @Bind(R.id.signPWDAGText)
     EditText pwdAG;
-    String nameStr,phoneStr,IDStr,coopStr,pwdStr,path;
+    UserInfo userinfo;
+    UserInfoPresenter mUserInfoPresenter;
     Uri imgUri;
     Bitmap photo;
     private AlertDialog dialog;
@@ -117,6 +121,7 @@ public class SignActivity extends AppCompatActivity {
                 }
             }
         });
+        mUserInfoPresenter = new UserInfoPresenter(getApplicationContext(),this);
     }
 
     @OnClick(R.id.sign_enter_button)
@@ -124,7 +129,7 @@ public class SignActivity extends AppCompatActivity {
         String val = checkInput();
         if(InputType.INPUT_CHECK_OK.equals(val)){
             saveImg();
-            saveInfo();
+            mUserInfoPresenter.setUserInfo(userinfo);
             new MaterialDialog.Builder(this)
                     .title("注册成功")
                     .positiveText("好的").onPositive(new MaterialDialog.SingleButtonCallback() {
@@ -140,20 +145,6 @@ public class SignActivity extends AppCompatActivity {
                 .content(val)
                 .positiveText("好的")
                 .show();
-    }
-
-    private void saveInfo() {
-        SharedPreferences sp = getSharedPreferences(InputType.loginInfoDB,
-                Activity.MODE_PRIVATE);
-        // 获取Editor对象
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putString("name",nameStr);
-        editor.putString("phone",phoneStr);
-        editor.putString("id",IDStr);
-        editor.putString("coop",coopStr);
-        editor.putString("pwd",pwdStr);
-        editor.putString("path",path);
-        editor.commit();
     }
 
     @Override
@@ -241,21 +232,22 @@ public class SignActivity extends AppCompatActivity {
         if(!cache.exists()){
             cache.mkdirs();
         }
-        path = cache.getAbsolutePath()+ "/"+System.currentTimeMillis() + ".jpg";
-        Log.e("testbb", path);
+        String path = cache.getAbsolutePath()+ "/"+System.currentTimeMillis() + ".jpg";
+        userinfo.setPath(path);
         IMGUtil.saveBmpToPath(photo, path);
     }
 
     private String checkInput() {
-        nameStr = name.getEditableText().toString();
+        userinfo = new UserInfo();
+        String nameStr = name.getEditableText().toString();
         if(TextUtils.isEmpty(nameStr)){
             return "用户名不能为空！";
         }
-        phoneStr = phone.getEditableText().toString();
+        String phoneStr = phone.getEditableText().toString();
         if(!EditTextUtil.isPhoneNumber(phoneStr)){
             return "手机号不对！";
         }
-        IDStr = id.getEditableText().toString();
+        String IDStr = id.getEditableText().toString();
         try {
             if(!InputType.INPUT_CHECK_OK.equals(EditTextUtil.IDCardValidate(IDStr))){
                 Log.e("testbb",EditTextUtil.IDCardValidate(IDStr)+" "+id+" "+id.length());
@@ -264,11 +256,11 @@ public class SignActivity extends AppCompatActivity {
         } catch (ParseException e) {
             return "身份证号不对！";
         }
-       coopStr = coop.getEditableText().toString();
+        String coopStr = coop.getEditableText().toString();
         if(TextUtils.isEmpty(coopStr)){
             return "合作社不能为空！";
         }
-        pwdStr = pwd.getEditableText().toString();
+        String pwdStr = pwd.getEditableText().toString();
         String pwdAGStr = pwdAG.getEditableText().toString();
         if(TextUtils.isEmpty(pwdStr)){
             return "密码不能为空";
@@ -280,9 +272,38 @@ public class SignActivity extends AppCompatActivity {
         if(photo==null){
             return "请选择头像";
         }
+        userinfo.setName(nameStr);
+        userinfo.setPhone(phoneStr);
+        userinfo.setId(IDStr);
+        userinfo.setCoop(coopStr);
+        userinfo.setPwd(pwdStr);
         return InputType.INPUT_CHECK_OK;
 
     }
 
+    @Override
+    public void setName(String name) {
+
+    }
+
+    @Override
+    public void setImg(String path) {
+
+    }
+
+    @Override
+    public void setPhone(String phone) {
+
+    }
+
+    @Override
+    public void setCoop(String coop) {
+
+    }
+
+    @Override
+    public void setId(String id) {
+
+    }
 }
 

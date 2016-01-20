@@ -36,6 +36,9 @@
     <string name="img_path">MyappCache</string>
     <string name="quit">退出登录</string>
     <string name="set">设置</string>
+    <string name="mainPage">首页</string>
+    <string name="map">地图</string>
     <string name="about">关于</string>
     <string name="person_info">个人信息</string>
+
 </resources>
