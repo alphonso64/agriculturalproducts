@@ -36,10 +36,10 @@ public class PlantCursorAdapter extends BaseAbstractRecycleCursorAdapter<Recycle
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, Cursor cursor) {
-        FieldInfo ps = FieldInfo.fromCursor(cursor);
+        PlantSpecies ps = PlantSpecies.fromCursor(cursor);
         ((PusageViewHolder) holder).title_1.setText(ps.getFiled());
-        ((PusageViewHolder) holder).title_2.setText(ps.getSeed());
-        ((PusageViewHolder) holder).title_3.setText(ps.getSpec());
+        ((PusageViewHolder) holder).title_2.setText(ps.getDate());
+        ((PusageViewHolder) holder).title_3.setText(ps.getPlant_num());
     }
 
     @Override

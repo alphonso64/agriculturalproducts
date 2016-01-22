@@ -16,12 +16,6 @@ public class PlantSpecies {
     private String latitude;
     private String location;
 
-    public PlantSpecies(String filed, String plant_num) {
-        this.filed = filed;
-        this.plant_num = plant_num;
-    }
-
-
     public static PlantSpecies fromCursor(Cursor cursor) {
 
         PlantSpecies fertilizerUsage = cupboard().withCursor(cursor).get(PlantSpecies.class);

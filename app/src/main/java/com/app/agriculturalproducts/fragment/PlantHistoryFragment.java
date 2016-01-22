@@ -30,7 +30,7 @@ public class PlantHistoryFragment extends Fragment implements LoaderManager.Load
 
     @Bind(R.id.pu_recyclerview)
     RecyclerView mRecyclerView;
-    private FieldDataHelper mDataHelper;
+    private PlantSpeciesDataHelper mDataHelper;
     private PlantCursorAdapter mAdapter;
 
     @Override
@@ -51,7 +51,7 @@ public class PlantHistoryFragment extends Fragment implements LoaderManager.Load
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mDataHelper = new FieldDataHelper(getActivity());
+        mDataHelper = new PlantSpeciesDataHelper(getActivity());
         mAdapter = new PlantCursorAdapter(getActivity());
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(mAdapter);
