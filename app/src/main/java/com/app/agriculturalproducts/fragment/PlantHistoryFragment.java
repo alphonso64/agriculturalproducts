@@ -15,6 +15,8 @@ import android.view.ViewGroup;
 import com.app.agriculturalproducts.R;
 import com.app.agriculturalproducts.adapter.PlantCursorAdapter;
 import com.app.agriculturalproducts.adapter.PusageCursorAdapter;
+import com.app.agriculturalproducts.bean.FieldInfo;
+import com.app.agriculturalproducts.db.FieldDataHelper;
 import com.app.agriculturalproducts.db.PersticidesUsageDataHelper;
 import com.app.agriculturalproducts.db.PlantSpeciesDataHelper;
 
@@ -28,7 +30,7 @@ public class PlantHistoryFragment extends Fragment implements LoaderManager.Load
 
     @Bind(R.id.pu_recyclerview)
     RecyclerView mRecyclerView;
-    private PlantSpeciesDataHelper mDataHelper;
+    private FieldDataHelper mDataHelper;
     private PlantCursorAdapter mAdapter;
 
     @Override
@@ -49,7 +51,7 @@ public class PlantHistoryFragment extends Fragment implements LoaderManager.Load
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mDataHelper = new PlantSpeciesDataHelper(getActivity());
+        mDataHelper = new FieldDataHelper(getActivity());
         mAdapter = new PlantCursorAdapter(getActivity());
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(mAdapter);

@@ -10,6 +10,7 @@ import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.app.agriculturalproducts.fragment.BaseMapFragment;
+import com.app.agriculturalproducts.fragment.BaseUploadFragment;
 import com.app.agriculturalproducts.fragment.PerticidesHistoryFragment;
 import com.app.agriculturalproducts.util.InputType;
 
@@ -20,7 +21,7 @@ public class BaseUploadActivity extends BaseActivity {
     @Bind(R.id.toolbar)
     Toolbar toolbar;
     Fragment currentFragment;
-    BaseMapFragment editFragment;
+    BaseUploadFragment editFragment;
     Fragment dataFragment;
     boolean hasSaved;
 

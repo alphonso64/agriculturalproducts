@@ -22,6 +22,7 @@ import com.app.agriculturalproducts.db.PersticidesUsageDataHelper;
 import com.app.agriculturalproducts.fragment.DataFragment;
 import com.app.agriculturalproducts.fragment.PerticidesFragment;
 import com.app.agriculturalproducts.fragment.PerticidesHistoryFragment;
+import com.app.agriculturalproducts.fragment.PlantFragment;
 import com.app.agriculturalproducts.util.InputType;
 
 import java.util.List;
@@ -42,7 +43,7 @@ public class PesticidesActivity extends BaseUploadActivity {
 //            getSupportFragmentManager().beginTransaction().add(R.id.frame_view,perticidesFragment).commit();
 //        }
 
-        editFragment = new PerticidesFragment();
+        editFragment = new PlantFragment();
         dataFragment = new PerticidesHistoryFragment();
         currentFragment = editFragment;
         getSupportFragmentManager().beginTransaction().add(R.id.frame_view,editFragment).commit();

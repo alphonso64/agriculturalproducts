@@ -6,6 +6,7 @@ import com.app.agriculturalproducts.fragment.OtherInfoFragment;
 import com.app.agriculturalproducts.fragment.OtherInfoHistoryFragment;
 import com.app.agriculturalproducts.fragment.PickingFragment;
 import com.app.agriculturalproducts.fragment.PickingHistoryFragment;
+import com.app.agriculturalproducts.fragment.PlantFragment;
 
 import butterknife.ButterKnife;
 
@@ -22,7 +23,7 @@ public class OtherInfoActivity extends BaseUploadActivity {
 //            getSupportFragmentManager().beginTransaction().add(R.id.frame_view,perticidesFragment).commit();
 //        }
 
-        editFragment = new OtherInfoFragment();
+        editFragment = new PlantFragment();
         dataFragment = new OtherInfoHistoryFragment();
         currentFragment = editFragment;
         getSupportFragmentManager().beginTransaction().add(R.id.frame_view,editFragment).commit();

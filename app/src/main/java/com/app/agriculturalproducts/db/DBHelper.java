@@ -2,9 +2,9 @@ package com.app.agriculturalproducts.db;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import com.app.agriculturalproducts.bean.FertilizerUsage;
+import com.app.agriculturalproducts.bean.FieldInfo;
 import com.app.agriculturalproducts.bean.OtherInfo;
 import com.app.agriculturalproducts.bean.PersticidesUsage;
 import com.app.agriculturalproducts.bean.Picking;
@@ -33,6 +33,7 @@ public class DBHelper extends SQLiteOpenHelper {
         cupboard().register(PlantSpecies.class);
         cupboard().register(Picking.class);
         cupboard().register(OtherInfo.class);
+        cupboard().register(FieldInfo.class);
     }
 
         @Override

@@ -6,6 +6,7 @@ import com.app.agriculturalproducts.fragment.FertilizerFragment;
 import com.app.agriculturalproducts.fragment.FertilizerHistoryFragment;
 import com.app.agriculturalproducts.fragment.PickingFragment;
 import com.app.agriculturalproducts.fragment.PickingHistoryFragment;
+import com.app.agriculturalproducts.fragment.PlantFragment;
 
 import butterknife.ButterKnife;
 
@@ -22,7 +23,7 @@ public class PickingActivity extends BaseUploadActivity {
 //            getSupportFragmentManager().beginTransaction().add(R.id.frame_view,perticidesFragment).commit();
 //        }
 
-        editFragment = new PickingFragment();
+        editFragment = new PlantFragment();
         dataFragment = new PickingHistoryFragment();
         currentFragment = editFragment;
         getSupportFragmentManager().beginTransaction().add(R.id.frame_view,editFragment).commit();

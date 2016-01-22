@@ -5,18 +5,19 @@ import android.graphics.BitmapFactory;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.app.agriculturalproducts.bean.FieldInfo;
+import com.app.agriculturalproducts.db.FieldDataHelper;
 import com.app.agriculturalproducts.fragment.DataFragment;
 import com.app.agriculturalproducts.fragment.MineFragment;
 import com.app.agriculturalproducts.fragment.WorkFragment;
-import com.app.agriculturalproducts.model.UserInfoModel;
 import com.app.agriculturalproducts.presenter.UserInfoPresenter;
 import com.app.agriculturalproducts.view.UserInfoSimpleView;
 
@@ -28,6 +29,7 @@ public class MainDrawlayoutActivity extends BaseActivity implements UserInfoSimp
     CircleImageView mImgView;
     TextView mNameText;
     TextView mCOOPText;
+    private FieldDataHelper filedDataHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,6 +83,33 @@ public class MainDrawlayoutActivity extends BaseActivity implements UserInfoSimp
         mCOOPText = (TextView)header.findViewById(R.id.headCOOPText);
         mUserInfoPresenter = new UserInfoPresenter(getApplicationContext(),this);
         mUserInfoPresenter.loadUserInfo();
+
+        filedDataHelper = new FieldDataHelper(getApplicationContext());
+
+        mToolbar.setOnMenuItemClickListener(itemClick);
+    }
+
+    private Toolbar.OnMenuItemClickListener itemClick = new Toolbar.OnMenuItemClickListener() {
+        @Override
+        public boolean onMenuItemClick(MenuItem item) {
+            if(item.getItemId()==R.id.action_back){
+                insertFiled();
+            }
+            return true;
+        }
+    };
+
+    private void insertFiled(){
+        FieldInfo filed = new FieldInfo();
+        long val = System.currentTimeMillis();
+        filed.setFiled("地块"+val);
+        filed.setInfo("地块详细信息"+val);
+        filed.setSeed("种子信息"+val);
+        filed.setSource("来源"+val);
+        filed.setSpec("归资格信息"+val);
+        filed.setSpecies("种植种类信息"+val);
+        filedDataHelper.insert_(filed);
+
     }
 
     @Override
@@ -114,5 +143,11 @@ public class MainDrawlayoutActivity extends BaseActivity implements UserInfoSimp
     @Override
     public void setId(String id) {
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_his, menu);
+        return true;
     }
 }

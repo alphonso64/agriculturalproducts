@@ -3,13 +3,10 @@ package com.app.agriculturalproducts.db;
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.provider.BaseColumns;
 import android.support.annotation.NonNull;
@@ -17,6 +14,7 @@ import android.util.Log;
 
 import com.app.agriculturalproducts.app.AppApplication;
 import com.app.agriculturalproducts.bean.FertilizerUsage;
+import com.app.agriculturalproducts.bean.FieldInfo;
 import com.app.agriculturalproducts.bean.OtherInfo;
 import com.app.agriculturalproducts.bean.PersticidesUsage;
 import com.app.agriculturalproducts.bean.Picking;
@@ -36,6 +34,7 @@ public class DataProvider extends ContentProvider {
     private static final int PLANT_TABLE = 3;
     private static final int PICK_TABLE = 4;
     private static final int OTHERINFO_TABLE = 5;
+    private static final int FIELD_TABLE = 6;
 
     public static final String PATH_TASK_TABLE = "/task";
     public static final String PATH_PUSAGE_TABLE = "/persticidesusage";
@@ -43,6 +42,7 @@ public class DataProvider extends ContentProvider {
     public static final String PATH_PLANT_TABLE =  "/plantspecies";
     public static final String PATH_PICK_TABLE = "/picking";
     public static final String PATH_OTHER_TABLE =  "/otherinfo";
+    public static final String PATH_FIELD_TABLE =  "/fieldinfo";
 
     public static final Uri TASK_TABLE_CONTENT_URI = Uri.parse(SCHEME + AUTHORITY + PATH_TASK_TABLE);
     public static final Uri PUSAGE_TABLE_CONTENT_URI = Uri.parse(SCHEME + AUTHORITY + PATH_PUSAGE_TABLE);
@@ -50,6 +50,7 @@ public class DataProvider extends ContentProvider {
     public static final Uri PLANT_TABLE_CONTENT_URI = Uri.parse(SCHEME + AUTHORITY + PATH_PLANT_TABLE);
     public static final Uri PICK_TABLE_CONTENT_URI = Uri.parse(SCHEME + AUTHORITY + PATH_PICK_TABLE);
     public static final Uri OTHER_TABLE_CONTENT_URI = Uri.parse(SCHEME + AUTHORITY + PATH_OTHER_TABLE);
+    public static final Uri FILED_TABLE_CONTENT_URI = Uri.parse(SCHEME + AUTHORITY + PATH_FIELD_TABLE);
 
     public static final String TASK_TABLE_CONTENT_TYPE = "com.task";
     public static final String PUSAGE_TABLE_CONTENT_TYPE = "com.pusage";
@@ -57,6 +58,7 @@ public class DataProvider extends ContentProvider {
     public static final String PLANT_TABLE_CONTENT_TYPE = "com.plant";
     public static final String PICK_TABLE_CONTENT_TYPE = "com.pick";
     public static final String OTHER_TABLE_CONTENT_TYPE = "com.other";
+    public static final String FIELD_TABLE_CONTENT_TYPE = "com.fieldinfo";
 
     private static DBHelper mDBHelper;
 
@@ -76,17 +78,6 @@ public class DataProvider extends ContentProvider {
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
 
         synchronized (obj) {
-//            SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
-//            queryBuilder.setTables(matchTable(uri));
-//
-//            SQLiteDatabase db = getDBHelper().getReadableDatabase();
-//            Cursor cursor = queryBuilder.query(db,
-//                    projection,
-//                    selection,
-//                    selectionArgs,
-//                    null,
-//                    null,
-//                    sortOrder);
             Cursor cursor;
             SQLiteDatabase db = getDBHelper().getReadableDatabase();
             Log.e("testbb","query + "+uri);
@@ -139,6 +130,14 @@ public class DataProvider extends ContentProvider {
                             getCursor();
                     cursor.setNotificationUri(getContext().getContentResolver(), uri);
                     break;
+                case FIELD_TABLE:
+                    cursor=  cupboard().withDatabase(db).query(FieldInfo.class).
+                            withProjection(projection).
+                            withSelection(selection, selectionArgs).
+                            orderBy(sortOrder).
+                            getCursor();
+                    cursor.setNotificationUri(getContext().getContentResolver(), uri);
+                    break;
                 default:
                     throw new IllegalArgumentException("Unknown Uri" + uri);
             }
@@ -153,6 +152,7 @@ public class DataProvider extends ContentProvider {
         addURI(AUTHORITY,"plantspecies",PLANT_TABLE);
         addURI(AUTHORITY,"picking",PICK_TABLE);
         addURI(AUTHORITY,"otherinfo",OTHERINFO_TABLE);
+        addURI(AUTHORITY,"fieldinfo",FIELD_TABLE);
     }};
 
     private String matchTable(Uri uri) {
@@ -176,6 +176,9 @@ public class DataProvider extends ContentProvider {
             case OTHERINFO_TABLE:
                 table = OtherInfoDataHelper.TABLE_NAME;
                 break;
+            case FIELD_TABLE:
+                table = FieldDataHelper.TABLE_NAME;
+                break;
             default:
                 throw new IllegalArgumentException("Unknown Uri" + uri);
         }
@@ -197,6 +200,8 @@ public class DataProvider extends ContentProvider {
                 return PICK_TABLE_CONTENT_TYPE;
             case OTHERINFO_TABLE://Demo列表
                 return OTHER_TABLE_CONTENT_TYPE;
+            case FIELD_TABLE://Demo列表
+                return FIELD_TABLE_CONTENT_TYPE;
             default:
                 throw new IllegalArgumentException("Unknown Uri" + uri);
         }

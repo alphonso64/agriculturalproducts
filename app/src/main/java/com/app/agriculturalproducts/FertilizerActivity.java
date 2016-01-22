@@ -7,6 +7,7 @@ import com.app.agriculturalproducts.fragment.FertilizerFragment;
 import com.app.agriculturalproducts.fragment.FertilizerHistoryFragment;
 import com.app.agriculturalproducts.fragment.PerticidesFragment;
 import com.app.agriculturalproducts.fragment.PerticidesHistoryFragment;
+import com.app.agriculturalproducts.fragment.PlantFragment;
 
 import butterknife.ButterKnife;
 
@@ -23,7 +24,7 @@ public class FertilizerActivity extends BaseUploadActivity {
 //            getSupportFragmentManager().beginTransaction().add(R.id.frame_view,perticidesFragment).commit();
 //        }
 
-        editFragment = new FertilizerFragment();
+        editFragment = new PlantFragment();
         dataFragment = new FertilizerHistoryFragment();
         currentFragment = editFragment;
         getSupportFragmentManager().beginTransaction().add(R.id.frame_view,editFragment).commit();
