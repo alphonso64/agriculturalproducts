@@ -75,19 +75,35 @@ public class PlantFragment extends BaseUploadFragment {
     @Bind(R.id.num_text)
     EditText num_text;
 
-
+    boolean flag = false;
+    boolean textInput = false;
     MaterialDialog dialog;
     Cursor cursor;
     ListAdapter adapter;
     @Override
     public int upload() {
-       PlantSpecies plantSpecies = new PlantSpecies();
-        plantSpecies.setFiled(field_text.getText().toString());
-        plantSpecies.setPlant_num(num_text.getText().toString());
-        plantSpecies.setDate(date_text.getText().toString());
-        plantSpeciesDataHelper.insert_(plantSpecies);
-        return InputType.INPUT_SAVE_OK;
+        if(flag){
+            return InputType.INPUT_SAVE_ALREADY;
+        }
+        if(!isEmpty() && textInput){
+            PlantSpecies plantSpecies = new PlantSpecies();
+            plantSpecies.setFiled(field_text.getText().toString());
+            plantSpecies.setPlant_num(num_text.getText().toString());
+            plantSpecies.setDate(date_text.getText().toString());
+            plantSpeciesDataHelper.insert_(plantSpecies);
+            flag = true;
+            disableWidget();
+            return InputType.INPUT_SAVE_OK;
+        }
+        return InputType.INPUT_EMPTY;
     }
+
+    private void disableWidget(){
+        num_text.setFocusable(false);
+        fieldImg.setVisibility(View.INVISIBLE);
+        dateImg.setVisibility(View.INVISIBLE);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -98,6 +114,17 @@ public class PlantFragment extends BaseUploadFragment {
         return contextView;
 
     }
+
+    boolean isEmpty(){
+        if(TextUtils.isEmpty(num_text.getText().toString().trim())){
+            return true;
+        }
+        if(TextUtils.isEmpty(date_text.getText().toString().trim())){
+            return true;
+        }
+        return  false;
+    }
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -126,6 +153,7 @@ public class PlantFragment extends BaseUploadFragment {
                     source_text.setText(fieldInfo.getSource());
                     plot_info_text.setText(fieldInfo.getInfo());
                     field_text.setText(fieldInfo.getFiled());
+                    textInput = true;
                     dialog.cancel();
                 }
             }).alwaysCallSingleChoiceCallback().build();
