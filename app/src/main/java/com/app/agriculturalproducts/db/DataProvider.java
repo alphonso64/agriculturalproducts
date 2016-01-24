@@ -29,6 +29,8 @@ public class DataProvider extends ContentProvider {
     public static final String SCHEME = "content://";
 
     private static final int TASK_TABLE = 0;
+    private static final int TASK_Detail_TABLE = 100;
+    private static final int TASK_Done_TABLE = 101;
     private static final int PUSAGE_TABLE  = 1;
     private static final int FUSAGE_TABLE  = 2;
     private static final int PLANT_TABLE = 3;
@@ -37,6 +39,8 @@ public class DataProvider extends ContentProvider {
     private static final int FIELD_TABLE = 6;
 
     public static final String PATH_TASK_TABLE = "/task";
+    public static final String PATH_TASK_DETAIL_TABLE = "/taskd";
+    public static final String PATH_TASK_DONE_TABLE = "/taskud";
     public static final String PATH_PUSAGE_TABLE = "/persticidesusage";
     public static final String PATH_FUSAGE_TABLE = "/fertilizerusage";
     public static final String PATH_PLANT_TABLE =  "/plantspecies";
@@ -45,6 +49,8 @@ public class DataProvider extends ContentProvider {
     public static final String PATH_FIELD_TABLE =  "/fieldinfo";
 
     public static final Uri TASK_TABLE_CONTENT_URI = Uri.parse(SCHEME + AUTHORITY + PATH_TASK_TABLE);
+    public static final Uri TASK_DETAIL_CONTENT_URI = Uri.parse(SCHEME + AUTHORITY + PATH_TASK_DETAIL_TABLE);
+    public static final Uri TASK_DONE_CONTENT_URI = Uri.parse(SCHEME + AUTHORITY + PATH_TASK_DONE_TABLE);
     public static final Uri PUSAGE_TABLE_CONTENT_URI = Uri.parse(SCHEME + AUTHORITY + PATH_PUSAGE_TABLE);
     public static final Uri FUSAGE_TABLE_CONTENT_URI = Uri.parse(SCHEME + AUTHORITY + PATH_FUSAGE_TABLE);
     public static final Uri PLANT_TABLE_CONTENT_URI = Uri.parse(SCHEME + AUTHORITY + PATH_PLANT_TABLE);
@@ -52,13 +58,17 @@ public class DataProvider extends ContentProvider {
     public static final Uri OTHER_TABLE_CONTENT_URI = Uri.parse(SCHEME + AUTHORITY + PATH_OTHER_TABLE);
     public static final Uri FILED_TABLE_CONTENT_URI = Uri.parse(SCHEME + AUTHORITY + PATH_FIELD_TABLE);
 
+
     public static final String TASK_TABLE_CONTENT_TYPE = "com.task";
+    public static final String TASK_DETAIL_TABLE_CONTENT_TYPE = "com.task.detail";
+    public static final String TASK_DONE_TABLE_CONTENT_TYPE = "com.task.done";
     public static final String PUSAGE_TABLE_CONTENT_TYPE = "com.pusage";
     public static final String FUSAGE_TABLE_CONTENT_TYPE = "com.fusage";
     public static final String PLANT_TABLE_CONTENT_TYPE = "com.plant";
     public static final String PICK_TABLE_CONTENT_TYPE = "com.pick";
     public static final String OTHER_TABLE_CONTENT_TYPE = "com.other";
     public static final String FIELD_TABLE_CONTENT_TYPE = "com.fieldinfo";
+
 
     private static DBHelper mDBHelper;
 
@@ -85,8 +95,24 @@ public class DataProvider extends ContentProvider {
                 case TASK_TABLE://Demo列表
                     cursor =  cupboard().withDatabase(db).query(Task.class).
                             withProjection(projection).
-                            withSelection(selection, selectionArgs).
-                            orderBy("time DESC").
+                            withSelection("isDone = ?", "false").
+                            orderBy("_id DESC").
+                            getCursor();
+                    cursor.setNotificationUri(getContext().getContentResolver(), uri);
+                    break;
+                case TASK_Detail_TABLE://Demo列表
+                    cursor =  cupboard().withDatabase(db).query(Task.class).
+                            withProjection(projection).
+                            withSelection(selection).
+                            orderBy("_id DESC").
+                            getCursor();
+                    cursor.setNotificationUri(getContext().getContentResolver(), uri);
+                    break;
+                case TASK_Done_TABLE://Demo列表
+                    cursor =  cupboard().withDatabase(db).query(Task.class).
+                            withProjection(projection).
+                            withSelection("isDone = ?", "true").
+                            orderBy("_id DESC").
                             getCursor();
                     cursor.setNotificationUri(getContext().getContentResolver(), uri);
                     break;
@@ -153,12 +179,20 @@ public class DataProvider extends ContentProvider {
         addURI(AUTHORITY,"picking",PICK_TABLE);
         addURI(AUTHORITY,"otherinfo",OTHERINFO_TABLE);
         addURI(AUTHORITY,"fieldinfo",FIELD_TABLE);
+        addURI(AUTHORITY,"taskd",TASK_Detail_TABLE);
+        addURI(AUTHORITY,"taskud",TASK_Done_TABLE);
     }};
 
     private String matchTable(Uri uri) {
         String table;
         switch (sUriMATCHER.match(uri)) {
             case TASK_TABLE://Demo列表
+                table = TaskDataHelper.TABLE_NAME;
+                break;
+            case TASK_Detail_TABLE://Demo列表
+                table = TaskDataHelper.TABLE_NAME;
+                break;
+            case TASK_Done_TABLE://Demo列表
                 table = TaskDataHelper.TABLE_NAME;
                 break;
             case PUSAGE_TABLE:
@@ -202,6 +236,10 @@ public class DataProvider extends ContentProvider {
                 return OTHER_TABLE_CONTENT_TYPE;
             case FIELD_TABLE://Demo列表
                 return FIELD_TABLE_CONTENT_TYPE;
+            case TASK_Detail_TABLE://Demo列表
+                return TASK_DETAIL_TABLE_CONTENT_TYPE;
+            case TASK_Done_TABLE://Demo列表
+                return TASK_DONE_TABLE_CONTENT_TYPE;
             default:
                 throw new IllegalArgumentException("Unknown Uri" + uri);
         }

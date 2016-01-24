@@ -9,6 +9,12 @@ import static nl.qbusict.cupboard.CupboardFactory.cupboard;
  */
 public class Picking {
     private String pick;
+    private String field;
+    private String species;
+    private String area;
+    private String date;
+    private String person;
+
     private long time;
     private String longtitude;
     private String latitude;
@@ -59,5 +65,45 @@ public class Picking {
 
     public void setPick(String pick) {
         this.pick = pick;
+    }
+
+    public String getField() {
+        return field;
+    }
+
+    public void setField(String field) {
+        this.field = field;
+    }
+
+    public String getSpecies() {
+        return species;
+    }
+
+    public void setSpecies(String species) {
+        this.species = species;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getPerson() {
+        return person;
+    }
+
+    public void setPerson(String person) {
+        this.person = person;
     }
 }

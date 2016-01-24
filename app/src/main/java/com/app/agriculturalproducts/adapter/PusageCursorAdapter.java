@@ -36,12 +36,9 @@ public class PusageCursorAdapter extends BaseAbstractRecycleCursorAdapter<Recycl
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, Cursor cursor) {
         PersticidesUsage pu = PersticidesUsage.fromCursor(cursor);
-        ((PusageViewHolder) holder).title_1.setText(pu.getName());
-        long time = pu.getTime();
-        String ISO_FORMAT = "HH:mm:ss";
-        SimpleDateFormat sdf = new SimpleDateFormat(ISO_FORMAT);
-        ((PusageViewHolder) holder).title_2.setText(sdf.format(time));
-        ((PusageViewHolder) holder).title_3.setText(pu.getLocation());
+        ((PusageViewHolder) holder).title_1.setText(pu.getField());
+        ((PusageViewHolder) holder).title_3.setText(pu.getName());
+        ((PusageViewHolder) holder).title_2.setText(pu.getDate());
     }
 
     @Override

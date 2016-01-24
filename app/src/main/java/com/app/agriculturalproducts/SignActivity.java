@@ -41,6 +41,7 @@ import com.app.agriculturalproducts.bean.Task;
 import com.app.agriculturalproducts.bean.UserInfo;
 import com.app.agriculturalproducts.presenter.UserInfoPresenter;
 import com.app.agriculturalproducts.util.EditTextUtil;
+import com.app.agriculturalproducts.util.FieldTest;
 import com.app.agriculturalproducts.util.IMGUtil;
 import com.app.agriculturalproducts.util.InputType;
 import com.app.agriculturalproducts.view.UserInfoSimpleView;

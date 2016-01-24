@@ -29,10 +29,11 @@ public class BaseUploadActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
-        Bundle bundle = getIntent().getExtras();
-        if(bundle != null){
-            toolbar.setTitle(bundle.getString("title"));
-        }
+        hasSaved = false;
+    }
+
+    public void initToolBar(String title){
+        toolbar.setTitle(title);
         setSupportActionBar(toolbar);//toolbar支持
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener(
@@ -44,7 +45,6 @@ public class BaseUploadActivity extends BaseActivity {
                 }
         );
         toolbar.setOnMenuItemClickListener(itemClick);
-        hasSaved = false;
     }
 
     private Toolbar.OnMenuItemClickListener itemClick = new Toolbar.OnMenuItemClickListener() {

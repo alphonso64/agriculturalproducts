@@ -43,9 +43,15 @@ public class PesticidesActivity extends BaseUploadActivity {
 //            getSupportFragmentManager().beginTransaction().add(R.id.frame_view,perticidesFragment).commit();
 //        }
 
-        editFragment = new PlantFragment();
+
+        initToolBar("农药使用");
+        editFragment = new PerticidesFragment();
         dataFragment = new PerticidesHistoryFragment();
         currentFragment = editFragment;
+        Task task = (Task)getIntent().getSerializableExtra("task");
+        if(task!=null){
+            editFragment.object = task;
+        }
         getSupportFragmentManager().beginTransaction().add(R.id.frame_view,editFragment).commit();
 
     }

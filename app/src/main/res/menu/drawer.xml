@@ -9,7 +9,7 @@
                     <item
                         android:id="@+id/item_two"
                         android:icon="@drawable/ic_settings_white_24dp"
-                        android:title="@string/map"></item>
+                        android:title="地块信息"></item>
                     <item
                         android:id="@+id/item_three"
 

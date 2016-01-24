@@ -1,86 +1,132 @@
 package com.app.agriculturalproducts.fragment;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.LayoutTransition;
-import android.animation.ObjectAnimator;
-import android.content.Context;
+import android.app.DatePickerDialog;
+import android.content.ContentValues;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import android.support.v4.widget.CursorAdapter;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
-
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.app.agriculturalproducts.R;
+import com.app.agriculturalproducts.bean.FieldInfo;
 import com.app.agriculturalproducts.bean.PersticidesUsage;
+import com.app.agriculturalproducts.bean.PlantSpecies;
+import com.app.agriculturalproducts.bean.Task;
+import com.app.agriculturalproducts.db.FieldDataHelper;
 import com.app.agriculturalproducts.db.PersticidesUsageDataHelper;
+import com.app.agriculturalproducts.db.PlantSpeciesDataHelper;
+import com.app.agriculturalproducts.db.TaskDataHelper;
+import com.app.agriculturalproducts.model.UserInfoModel;
 import com.app.agriculturalproducts.util.InputType;
-import com.baidu.location.BDLocation;
-import com.baidu.location.BDLocationListener;
-import com.baidu.location.LocationClient;
-import com.baidu.location.LocationClientOption;
-import com.baidu.mapapi.map.BaiduMap;
-import com.baidu.mapapi.map.BitmapDescriptor;
-import com.baidu.mapapi.map.MapStatusUpdate;
-import com.baidu.mapapi.map.MapStatusUpdateFactory;
-import com.baidu.mapapi.map.MapView;
-import com.baidu.mapapi.map.MyLocationConfiguration;
-import com.baidu.mapapi.map.MyLocationData;
-import com.baidu.mapapi.model.LatLng;
-import com.baidu.mapapi.search.core.SearchResult;
-import com.baidu.mapapi.search.geocode.GeoCodeResult;
-import com.baidu.mapapi.search.geocode.GeoCoder;
-import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
-import com.baidu.mapapi.search.geocode.ReverseGeoCodeOption;
-import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
+import java.util.Objects;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
+import static nl.qbusict.cupboard.CupboardFactory.cupboard;
+
 /**
  * Created by ALPHONSO on 2016/1/5.
  */
-public class PerticidesFragment extends BaseMapFragment {
-    @Bind(R.id.persticides_name_text)
-    EditText name;
-    @Bind(R.id.usage_text)
-    EditText usage;
-    @Bind(R.id.remarks_text)
-    EditText remark;
-    @Bind(R.id.bmapView)
-    MapView mMapView;
-    @Bind(R.id.location__text)
-    TextView locTextView;
-    @Bind(R.id.lat_text)
-    TextView latTextView;
-    @Bind(R.id.long_text)
-    TextView longTextView;
-    @Bind(R.id.map_ly)
-    LinearLayout mapLy;
-    @Bind(R.id.map_imgview)
-    ImageView mapbtn;
+public class PerticidesFragment extends BaseUploadFragment {
+    private FieldDataHelper fieldDataHelper;
+    private TaskDataHelper taskDataHelper;
+    private PersticidesUsageDataHelper persticidesUsageDataHelper;
 
-    boolean flag;
-    PersticidesUsageDataHelper mDataHelper;
-    List<EditText> ls;
+    @Bind(R.id.p_date_img)
+    ImageView dateImg;
+    @Bind(R.id.p_field_img)
+    ImageView fieldImg;
+
+    @Bind(R.id.p_field_text)
+    TextView field_text;
+    @Bind(R.id.p_species_text)
+    TextView species_text;
+
+    @Bind(R.id.p_spec_text)
+    EditText spec_text;
+    @Bind(R.id.p_area_text)
+    EditText area_text;
+    @Bind(R.id.p_type_text)
+    EditText type_text;
+    @Bind(R.id.p_perticides_text)
+    EditText perticides_text;
+    @Bind(R.id.p_num_text)
+    EditText num_text;
+
+    @Bind(R.id.p_date_text)
+    TextView date_text;
+    @Bind(R.id.p_person_text)
+    TextView person_text;
+
+    boolean flag = false;
+    boolean textInput = false;
+
+    MaterialDialog dialog;
+    Cursor cursor;
+    ListAdapter adapter;
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public int upload() {
+        if(flag){
+            return InputType.INPUT_SAVE_ALREADY;
+        }
+        if(object == null){
+            if(!isEmpty() && textInput){
+                saveInfo();
+                flag = true;
+                disableWidget();
+                return InputType.INPUT_SAVE_OK;
+            }
+        }else{
+            if(!isEmpty_()){
+                saveInfo();
+                flag = true;
+                disableWidget();
+                Task task = (Task)object;
+                task.setIsDone("true");
+                ContentValues values = cupboard().withEntity(Task.class).toContentValues(task);
+                taskDataHelper.updateTask(values, String.valueOf(task.get_id()));
+                return InputType.INPUT_SAVE_OK;
+            }
+        }
+        return InputType.INPUT_EMPTY;
+    }
+
+    private void saveInfo(){
+        PersticidesUsage persticidesUsage = new PersticidesUsage();
+        persticidesUsage.setArea(area_text.getText().toString());
+        persticidesUsage.setField(field_text.getText().toString());
+        persticidesUsage.setDate(date_text.getText().toString());
+        persticidesUsage.setUsage(num_text.getText().toString());
+        persticidesUsage.setType(type_text.getText().toString());
+        persticidesUsage.setSpec(spec_text.getText().toString());
+        persticidesUsage.setSpecies(species_text.getText().toString());
+        persticidesUsage.setName(perticides_text.getText().toString());
+        persticidesUsage.setPerson(person_text.getText().toString());
+        persticidesUsageDataHelper.insert_(persticidesUsage);
+    }
+
+    private void disableWidget(){
+        num_text.setFocusable(false);
+        perticides_text.setFocusable(false);
+        type_text.setFocusable(false);
+        spec_text.setFocusable(false);
+        area_text.setFocusable(false);
+        fieldImg.setVisibility(View.INVISIBLE);
+        dateImg.setVisibility(View.INVISIBLE);
     }
 
     @Nullable
@@ -90,28 +136,121 @@ public class PerticidesFragment extends BaseMapFragment {
         View contextView = inflater.inflate(R.layout.fragment_persticides,
                 container, false);
         ButterKnife.bind(this, contextView);
-        setMpView(mMapView);
-        setLatTextView(latTextView);
-        setLocTextView(locTextView);
-        setLongTextView(longTextView);
-        setMapLy(mapLy);
-        setMap_imgview(mapbtn);
-        ls = new ArrayList<>();
-        ls.add(name);
-        ls.add(usage);
-        ls.add(remark);
+
         return contextView;
 
+    }
+
+    boolean isEmpty(){
+        if(TextUtils.isEmpty(num_text.getText().toString().trim())){
+            return true;
+        }
+        if(TextUtils.isEmpty(date_text.getText().toString().trim())){
+            return true;
+        }
+        if(TextUtils.isEmpty(perticides_text.getText().toString().trim())){
+            return true;
+        }
+        if(TextUtils.isEmpty(type_text.getText().toString().trim())){
+            return true;
+        }
+        if(TextUtils.isEmpty(spec_text.getText().toString().trim())){
+            return true;
+        }
+        if(TextUtils.isEmpty(area_text.getText().toString().trim())){
+            return true;
+        }
+        return  false;
+    }
+
+    boolean isEmpty_(){
+        if(TextUtils.isEmpty(num_text.getText().toString().trim())){
+            return true;
+        }
+        if(TextUtils.isEmpty(date_text.getText().toString().trim())){
+            return true;
+        }
+        return  false;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mDataHelper = new PersticidesUsageDataHelper(getActivity());
-        if(flag){
-            disableEditText(ls);
+        fieldDataHelper = new FieldDataHelper(getActivity().getApplicationContext());
+        persticidesUsageDataHelper = new PersticidesUsageDataHelper(getActivity().getApplicationContext());
+        taskDataHelper = new TaskDataHelper(getActivity().getApplicationContext());
+        cursor = fieldDataHelper.getCursor();
+        adapter = new SimpleCursorAdapter(getActivity(),
+                android.R.layout.simple_list_item_1,
+                cursor, new String[]{"filed"},
+                new int[]{android.R.id.text1}, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
+        fieldImg.setOnClickListener(fieldClickListener);
+        dateImg.setOnClickListener(dateClickListener);
+        UserInfoModel userInfoModel = new UserInfoModel(getActivity().getApplicationContext());
+        person_text.setText(userInfoModel.getUserInfo().getName());
+        checkInputType();
+    }
+
+    void checkInputType(){
+        if(object!=null){
+            fieldImg.setVisibility(View.INVISIBLE);
+            perticides_text.setBackgroundResource(R.drawable.text_backgroud);
+            perticides_text.setFocusable(false);
+            type_text.setBackgroundResource(R.drawable.text_backgroud);
+            type_text.setFocusable(false);
+            spec_text.setBackgroundResource(R.drawable.text_backgroud);
+            spec_text.setFocusable(false);
+            area_text.setBackgroundResource(R.drawable.text_backgroud);
+            area_text.setFocusable(false);
+            Task task = (Task)object;
+            field_text.setText(task.getField());
+            species_text.setText(task.getSpecies());
+            perticides_text.setText(task.getP_name());
+            spec_text.setText(task.getP_spec());
+            type_text.setText(task.getP_type());
+            area_text.setText(task.getP_area());
         }
     }
+
+    View.OnClickListener fieldClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            dialog = new MaterialDialog.Builder(getActivity()).title("地块选择").adapter(adapter, new MaterialDialog.ListCallback() {
+                @Override
+                public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                    cursor.moveToPosition(which);
+                    FieldInfo fieldInfo = FieldInfo.fromCursor(cursor);
+                    species_text.setText(fieldInfo.getSpecies());
+                    field_text.setText(fieldInfo.getFiled());
+                    textInput = true;
+                    dialog.cancel();
+                }
+            }).alwaysCallSingleChoiceCallback().build();
+            dialog.show();
+        }
+    };
+
+    private DatePickerDialog.OnDateSetListener DatePickerListener = new DatePickerDialog.OnDateSetListener(){
+
+        @Override
+        public void onDateSet(DatePicker view, int year, int monthOfYear,
+                              int dayOfMonth) {
+            monthOfYear++;
+            date_text.setText(year+"-"+monthOfYear+"-"+dayOfMonth);
+        }
+    };
+
+    View.OnClickListener dateClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            final Calendar objTime = Calendar.getInstance();
+            int iYear = objTime.get(Calendar.YEAR);
+            int iMonth = objTime.get(Calendar.MONTH);
+            int iDay = objTime.get(Calendar.DAY_OF_MONTH);
+            new DatePickerDialog(getActivity(), DatePickerListener, iYear, iMonth, iDay).show();
+        }
+    };
+
 
     @Override
     public void onResume() {
@@ -127,49 +266,12 @@ public class PerticidesFragment extends BaseMapFragment {
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
-        Log.e("testbb", "onDestroyView:");
+        cursor.close();
     }
 
-    public void setSavedFlag(boolean flag){
-        this.flag = flag;
-    }
-
-    public boolean isEditEmpty(List<EditText> ls){
-        for(EditText et:ls){
-            if(TextUtils.isEmpty(et.getText().toString().trim())){
-                return true;
-            }
-        }
-        return false;
-    }
-
-     public void disableEditText(List<EditText> ls){
-         for(EditText et:ls){
-             et.setFocusable(false);
-         }
-    }
-
-    public int upload(){
-        if(flag){
-            return InputType.INPUT_SAVE_ALREADY;
-        }
-        if(!isEditEmpty(ls)){
-            PersticidesUsage pu = new PersticidesUsage();
-            pu.setName(name.getText().toString());
-            pu.setRemarks(remark.getText().toString());
-            pu.setUsage(usage.getText().toString());
-            pu.setTime(Calendar.getInstance().getTimeInMillis());
-            pu.setLatitude(latitude);
-            pu.setLongtitude(longtitude);
-            pu.setLocation(location);
-            mDataHelper.insert_(pu);
-            disableEditText(ls);
-            InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-            inputMethodManager.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
-            flag = true;
-            return InputType.INPUT_SAVE_OK;
-        }
-        return InputType.INPUT_EMPTY;
+    @Override
+    public String toString() {
+        return super.toString();
     }
 }
 

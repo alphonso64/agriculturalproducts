@@ -1,50 +1,28 @@
 package com.app.agriculturalproducts.fragment;
 
 import android.app.DatePickerDialog;
-import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.CursorAdapter;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.Adapter;
-import android.widget.AdapterView;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.app.agriculturalproducts.MainActivity;
 import com.app.agriculturalproducts.R;
-import com.app.agriculturalproducts.bean.FertilizerUsage;
 import com.app.agriculturalproducts.bean.FieldInfo;
 import com.app.agriculturalproducts.bean.PlantSpecies;
-import com.app.agriculturalproducts.db.FertilizerUsageDataHelper;
 import com.app.agriculturalproducts.db.FieldDataHelper;
-import com.app.agriculturalproducts.db.PersticidesUsageDataHelper;
 import com.app.agriculturalproducts.db.PlantSpeciesDataHelper;
 import com.app.agriculturalproducts.util.InputType;
-import com.baidu.mapapi.map.MapView;
-
-import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -196,6 +174,7 @@ public class PlantFragment extends BaseUploadFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        cursor.close();
         ButterKnife.unbind(this);
     }
 

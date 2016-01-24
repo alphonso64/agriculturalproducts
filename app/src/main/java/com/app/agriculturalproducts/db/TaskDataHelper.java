@@ -65,9 +65,21 @@ public class TaskDataHelper extends BaseDataHelper implements DBInterface<Task> 
         insert(values);
     }
 
+    public void updateTask(ContentValues values,String id){
+        update(values, "_id = ?", new String[]{id});
+    }
+
     @Override
     public CursorLoader getCursorLoader() {
         return new CursorLoader(getContext(), getContentUri(), null, null, null, null);
+    }
+
+    public CursorLoader getDetailCursorLoader() {
+        return new CursorLoader(getContext(), DataProvider.TASK_DETAIL_CONTENT_URI, null, null, null, null);
+    }
+
+    public CursorLoader getDoneCursorLoader() {
+        return new CursorLoader(getContext(), DataProvider.TASK_DONE_CONTENT_URI, null, null, null, null);
     }
 
 }

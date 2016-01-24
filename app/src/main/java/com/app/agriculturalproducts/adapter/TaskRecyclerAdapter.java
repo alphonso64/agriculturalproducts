@@ -50,9 +50,9 @@ public class TaskRecyclerAdapter extends RecyclerView.Adapter<TaskRecyclerAdapte
                 }
             }
         });
-        holder.title.setText(mData.get(position).getTitle());
-        holder.detail.setText(mData.get(position).getDetail());
-        holder.icon.setImageResource(mData.get(position).getIconID());
+//        holder.title.setText(mData.get(position).getTitle());
+//        holder.detail.setText(mData.get(position).getDetail());
+//        holder.icon.setImageResource(mData.get(position).getIconID());
     }
 
     @Override

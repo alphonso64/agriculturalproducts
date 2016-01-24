@@ -22,8 +22,8 @@ public class OtherInfoActivity extends BaseUploadActivity {
 //            currentFragment = perticidesFragment;
 //            getSupportFragmentManager().beginTransaction().add(R.id.frame_view,perticidesFragment).commit();
 //        }
-
-        editFragment = new PlantFragment();
+        initToolBar("其他记录");
+        editFragment = new OtherInfoFragment();
         dataFragment = new OtherInfoHistoryFragment();
         currentFragment = editFragment;
         getSupportFragmentManager().beginTransaction().add(R.id.frame_view,editFragment).commit();

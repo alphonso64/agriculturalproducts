@@ -108,6 +108,8 @@
         </activity>
         <activity android:name=".MainDrawlayoutActivity" >
         </activity>
+        <activity android:name=".ProduceActivity" >
+        </activity>
     </application>
 
 </manifest>

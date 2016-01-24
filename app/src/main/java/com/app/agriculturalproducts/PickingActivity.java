@@ -2,6 +2,7 @@ package com.app.agriculturalproducts;
 
 import android.os.Bundle;
 
+import com.app.agriculturalproducts.bean.Task;
 import com.app.agriculturalproducts.fragment.FertilizerFragment;
 import com.app.agriculturalproducts.fragment.FertilizerHistoryFragment;
 import com.app.agriculturalproducts.fragment.PickingFragment;
@@ -22,12 +23,15 @@ public class PickingActivity extends BaseUploadActivity {
 //            currentFragment = perticidesFragment;
 //            getSupportFragmentManager().beginTransaction().add(R.id.frame_view,perticidesFragment).commit();
 //        }
-
-        editFragment = new PlantFragment();
+        initToolBar("采摘记录");
+        editFragment = new PickingFragment();
         dataFragment = new PickingHistoryFragment();
         currentFragment = editFragment;
+        Task task = (Task)getIntent().getSerializableExtra("task");
+        if(task!=null){
+            editFragment.object = task;
+        }
         getSupportFragmentManager().beginTransaction().add(R.id.frame_view,editFragment).commit();
-
     }
 
 

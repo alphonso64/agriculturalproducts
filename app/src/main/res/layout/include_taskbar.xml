@@ -22,23 +22,24 @@
             android:layout_marginRight="100dp"
             android:paddingBottom="3dp"/>
 
-
-    <ImageButton
-        android:id="@+id/task_more"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:background="@drawable/task_more_button_selector"
-        android:layout_centerVertical="true"
-        android:layout_alignParentRight="true"
-        />
-
     <ImageButton
         android:id="@+id/task_update"
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:background="@drawable/task_update_button_selector"
-        android:layout_toLeftOf="@id/task_more"
         android:layout_centerVertical="true"
-        android:layout_marginRight="15dp"/>
+        android:layout_alignParentRight="true"
+        />
+    <ImageButton
+        android:id="@+id/task_more"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:background="@drawable/task_more_button_selector"
+        android:layout_toLeftOf="@id/task_update"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="15dp"
+        />
+
+
 
 </RelativeLayout>

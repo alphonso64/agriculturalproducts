@@ -10,8 +10,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.app.agriculturalproducts.R;
+import com.app.agriculturalproducts.bean.FieldInfo;
 import com.app.agriculturalproducts.bean.PersticidesUsage;
-import com.app.agriculturalproducts.bean.Picking;
+import com.app.agriculturalproducts.bean.PlantSpecies;
 import com.app.agriculturalproducts.bean.Task;
 
 import java.text.SimpleDateFormat;
@@ -19,10 +20,10 @@ import java.text.SimpleDateFormat;
 import butterknife.OnClick;
 
 
-public class PickingCursorAdapter extends BaseAbstractRecycleCursorAdapter<RecyclerView.ViewHolder> {
+public class FieldCursorAdapter extends BaseAbstractRecycleCursorAdapter<RecyclerView.ViewHolder> {
     private Context context;
 
-    public PickingCursorAdapter(Context context) {
+    public FieldCursorAdapter(Context context) {
         super(context, null);
         this.context = context;
     }
@@ -35,10 +36,10 @@ public class PickingCursorAdapter extends BaseAbstractRecycleCursorAdapter<Recyc
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, Cursor cursor) {
-        Picking pu = Picking.fromCursor(cursor);
-        ((PusageViewHolder) holder).title_1.setText(pu.getField());
-        ((PusageViewHolder) holder).title_2.setText(pu.getDate());
-        ((PusageViewHolder) holder).title_3.setText(pu.getPick());
+        FieldInfo pu = FieldInfo.fromCursor(cursor);
+        ((PusageViewHolder) holder).title_1.setText(pu.getFiled());
+        ((PusageViewHolder) holder).title_3.setText(pu.getSpecies());
+        ((PusageViewHolder) holder).title_2.setText(pu.getSeed());
     }
 
     @Override
@@ -52,10 +53,10 @@ public class PickingCursorAdapter extends BaseAbstractRecycleCursorAdapter<Recyc
         TextView title_1;
         TextView title_2;
         TextView title_3;
-        PickingCursorAdapter mAdapter;
+        FieldCursorAdapter mAdapter;
 
 
-        public PusageViewHolder(View itemView,PickingCursorAdapter adapter) {
+        public PusageViewHolder(View itemView,FieldCursorAdapter adapter) {
             super(itemView);
             title_1 = (TextView) itemView.findViewById(R.id.pu_title_1);
             title_2 = (TextView) itemView.findViewById(R.id.pu_title_2);

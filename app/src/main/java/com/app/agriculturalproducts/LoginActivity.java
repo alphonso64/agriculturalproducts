@@ -112,7 +112,7 @@ public class LoginActivity extends AppCompatActivity {
         }
         ed.putString("isLogin",InputType.INPUT_CHECK_OK);
         ed.commit();
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, MainDrawlayoutActivity.class);
         startActivity(intent);
         finish();
     }

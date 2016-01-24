@@ -6,8 +6,8 @@
         <item>化肥使用</item>
         <item>采摘记录</item>
         <item>其他记录</item>
-        <item>土壤信息</item>
         <item>生产信息</item>
+        <item>土壤信息</item>
         <item>库存信息</item>
     </string-array>
 
@@ -28,7 +28,7 @@
         <item>com.app.agriculturalproducts.FertilizerActivity</item>
         <item>com.app.agriculturalproducts.PickingActivity</item>
         <item>com.app.agriculturalproducts.OtherInfoActivity</item>
-        <item>com.app.agriculturalproducts.TaskActivity</item>
+        <item>com.app.agriculturalproducts.ProduceActivity</item>
         <item>com.app.agriculturalproducts.TaskActivity</item>
         <item>com.app.agriculturalproducts.TaskActivity</item>
     </string-array>

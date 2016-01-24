@@ -36,12 +36,9 @@ public class OtherInfoCursorAdapter extends BaseAbstractRecycleCursorAdapter<Rec
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, Cursor cursor) {
         OtherInfo oi = OtherInfo.fromCursor(cursor);
-        ((PusageViewHolder) holder).title_1.setText(oi.getSituation());
-        long time = oi.getTime();
-        String ISO_FORMAT = "HH:mm:ss";
-        SimpleDateFormat sdf = new SimpleDateFormat(ISO_FORMAT);
-        ((PusageViewHolder) holder).title_2.setText(sdf.format(time));
-        ((PusageViewHolder) holder).title_3.setText(oi.getLocation());
+        ((PusageViewHolder) holder).title_1.setText(oi.getField());
+        ((PusageViewHolder) holder).title_2.setText(oi.getDate());
+        ((PusageViewHolder) holder).title_3.setText(oi.getSituation());
     }
 
     @Override

@@ -1,6 +1,8 @@
 package com.app.agriculturalproducts.fragment;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,28 +15,40 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.ImageButton;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.app.agriculturalproducts.FertilizerActivity;
+import com.app.agriculturalproducts.PesticidesActivity;
+import com.app.agriculturalproducts.PickingActivity;
 import com.app.agriculturalproducts.R;
 import com.app.agriculturalproducts.adapter.BasicIconRecyclerAdapter;
 import com.app.agriculturalproducts.adapter.OnAdpaterItemClickListener;
 import com.app.agriculturalproducts.adapter.TaskCursorAdapter;
 import com.app.agriculturalproducts.app.AppApplication;
+import com.app.agriculturalproducts.bean.FieldInfo;
 import com.app.agriculturalproducts.bean.MyIcon;
 import com.app.agriculturalproducts.bean.Task;
+import com.app.agriculturalproducts.db.FieldDataHelper;
 import com.app.agriculturalproducts.db.TaskDataHelper;
 import com.app.agriculturalproducts.view.NoScrollGridLayoutManager;
 import com.litesuits.http.listener.HttpListener;
 import com.litesuits.http.request.StringRequest;
 import com.litesuits.http.response.Response;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+
+import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 
 /**
  * Created by ALPHONSO on 2016/1/5.
@@ -53,11 +67,11 @@ public class WorkFragment extends Fragment implements LoaderManager.LoaderCallba
     private ArrayList<MyIcon> mDatas;
     private TaskDataHelper mDataHelper;
     private TaskCursorAdapter mAdapter;
-
+    private FieldDataHelper mFieldDataHelper;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mDataHelper = new TaskDataHelper(getActivity().getApplicationContext());
+
     }
 
     @Nullable
@@ -76,60 +90,26 @@ public class WorkFragment extends Fragment implements LoaderManager.LoaderCallba
 
         mRecyclerView.setLayoutManager(new NoScrollGridLayoutManager(getActivity(), 4));
         BasicIconRecyclerAdapter ba = new BasicIconRecyclerAdapter(mDatas,getActivity());
-        ba.setOnItemClickListener(new OnAdpaterItemClickListener() {
-            @Override
-            public void onItemClick(Object obj, int p) {
-                try {
-                    activityJump((String)obj);
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+        ba.setOnItemClickListener(icon_adpaterItemClickListener);
         mRecyclerView.setAdapter(ba);
 
         mTaskRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mAdapter = new TaskCursorAdapter(getActivity());
-        mAdapter.setOnItemClickListener(new OnAdpaterItemClickListener() {
-            @Override
-            public void onItemClick(Object obj, int p) {
-                new MaterialDialog.Builder(getActivity())
-                        .title(((Task) obj).getTitle())
-                        .content(((Task) obj).getDetail())
-                        .positiveText("接受")
-                        .negativeText("暂不")
-                        .positiveColorRes(R.color.colorPrimary)
-                        .negativeColorRes(R.color.colorPrimary)
-                        .show();
-            }
-        });
+        mAdapter.setOnItemClickListener(task_adpaterItemClickListener);
         mTaskRecyclerView.setAdapter(mAdapter);
 
-        update_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AppApplication.getLiteHttp().executeAsync(new StringRequest("http://139.196.11.207/app/v1/login").setHttpListener(
-                        new HttpListener<String>() {
-                            @Override
-                            public void onSuccess(String data, Response<String> response) {
-                                Log.e("testbb", data);
-                                Task icon = new Task();
-                                icon.setTitle("任务");
-                                icon.setIconID(R.drawable.t_a);
-                                icon.setDetail(data);
-                                icon.setTime(Calendar.getInstance().getTimeInMillis());
-                                mDataHelper.insert_(icon);
-                            }
-                        }
-                ));
-            }
-        });
-        more_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mDataHelper.delete_("title=?", new String[]{"任务"});
-            }
-        });
+        update_btn.setOnClickListener(update_onclickListner);
+//        more_btn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                mDataHelper.delete_("title=?", new String[]{"任务"});
+//            }
+//        });
+
+        more_btn.setVisibility(View.INVISIBLE);
+        mDataHelper = new TaskDataHelper(getActivity().getApplicationContext());
+        mFieldDataHelper = new FieldDataHelper(getActivity().getApplicationContext());
+
     }
 
     @Override
@@ -137,6 +117,99 @@ public class WorkFragment extends Fragment implements LoaderManager.LoaderCallba
         super.onActivityCreated(savedInstanceState);
         getLoaderManager().initLoader(0, null, this);
     }
+
+    private View.OnClickListener update_onclickListner = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Task icon = new Task();
+            Cursor cursor = mFieldDataHelper.getCursor();
+            if (cursor.moveToFirst()) {
+                FieldInfo fieldInfo = FieldInfo.fromCursor(cursor);
+                icon.setField(fieldInfo.getFiled());
+                icon.setSpecies(fieldInfo.getSpecies());
+            }
+            cursor.close();
+            icon.setTitle("化肥任务");
+            icon.setImgPath("t_a");
+            icon.setDetail("这是一个化肥任务");
+            icon.setIsDone("false");
+            icon.setF_area("化肥面积");
+            icon.setF_method("化肥方法");
+            icon.setF_spec("化肥规格");
+            icon.setF_name("化肥名称");
+            icon.setF_type("化肥类型");
+
+            SimpleDateFormat formatter = new SimpleDateFormat("yy:MM:dd HH:mm:ss");
+            Date curDate = new Date(System.currentTimeMillis());//获取当前时间
+            String str = formatter.format(curDate);
+            icon.setDate(str);
+            mDataHelper.insert_(icon);
+
+            icon.setTitle("农药任务");
+            icon.setImgPath("tb");
+            icon.setDetail("这是一个农药任务");
+            icon.setP_area("农药面积");
+            icon.setP_spec("农药规格");
+            icon.setP_name("农药名称");
+            icon.setP_type("农药类型");
+            mDataHelper.insert_(icon);
+
+            icon.setTitle("采摘任务");
+            icon.setPick_area("采摘面积");
+            icon.setImgPath("tc");
+            icon.setDetail("这是一个采摘任务");
+            mDataHelper.insert_(icon);
+        }
+    };
+
+    private OnAdpaterItemClickListener task_adpaterItemClickListener =new  OnAdpaterItemClickListener() {
+        @Override
+        public void onItemClick(Object obj, int p) {
+            final Task task =  (Task) obj;
+            new MaterialDialog.Builder(getActivity())
+                    .title(task.getTitle())
+                    .content(task.getDetail())
+                    .positiveText("接受")
+                    .negativeText("暂不").onPositive(new MaterialDialog.SingleButtonCallback() {
+                @Override
+                public void onClick(MaterialDialog dialog, DialogAction which) {
+                    if(task.getTitle().equals("农药任务")){
+                        Intent intent = new Intent(getActivity(), PesticidesActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("task", task);
+                        intent.putExtras(bundle);
+                        startActivity(intent);
+                    }
+                    if(task.getTitle().equals("化肥任务")){
+                        Intent intent = new Intent(getActivity(), FertilizerActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("task", task);
+                        intent.putExtras(bundle);
+                        startActivity(intent);
+                    }
+                    if(task.getTitle().equals("采摘任务")){
+                        Intent intent = new Intent(getActivity(), PickingActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("task", task);
+                        intent.putExtras(bundle);
+                        startActivity(intent);
+                    }
+                }
+            }).show();
+
+        }
+    };
+
+    private OnAdpaterItemClickListener icon_adpaterItemClickListener =new  OnAdpaterItemClickListener() {
+        @Override
+        public void onItemClick(Object obj, int p) {
+            try {
+                activityJump((String)obj);
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+    };
 
     protected void initData()
     {
@@ -159,50 +232,9 @@ public class WorkFragment extends Fragment implements LoaderManager.LoaderCallba
         for(MyIcon ai:mDatas){
             if(title.equals(ai.getTitle())){
             Intent intent = new Intent(getActivity(), Class.forName(ai.getClassName()));
-            Bundle bundle = new Bundle();
-            bundle.putString("title", title);
-            intent.putExtras(bundle);
             startActivity(intent);
             }
         }
-//        if(title.equals("农药")){
-//            Intent intent = new Intent(getActivity(), PesticidesActivity.class);
-//            Bundle bundle = new Bundle();
-//            bundle.putString("title",title);
-//            intent.putExtras(bundle);
-//            startActivity(intent);
-//        }else if(title.equals("化肥")){
-//            Intent intent = new Intent(getActivity(), FertilizerActivity.class);
-//            Bundle bundle = new Bundle();
-//            bundle.putString("title",title);
-//            intent.putExtras(bundle);
-//            startActivity(intent);
-//        }else if(title.equals("种植录入")){
-//            Intent intent = new Intent(getActivity(), Class.forName("com.app.agriculturalproducts.PlantActivity"));
-//            Bundle bundle = new Bundle();
-//            bundle.putString("title", title);
-//            intent.putExtras(bundle);
-//            startActivity(intent);
-//        }else if(title.equals("采摘")){
-//            Intent intent = new Intent(getActivity(), PickingActivity.class);
-//            Bundle bundle = new Bundle();
-//            bundle.putString("title",title);
-//            intent.putExtras(bundle);
-//            startActivity(intent);
-//        }else if(title.equals("其他")){
-//            Intent intent = new Intent(getActivity(), OtherInfoActivity.class);
-//            Bundle bundle = new Bundle();
-//            bundle.putString("title",title);
-//            intent.putExtras(bundle);
-//            startActivity(intent);
-//        }
-//        else{
-//            Intent intent = new Intent(getActivity(), TaskActivity.class);
-//            Bundle bundle = new Bundle();
-//            bundle.putString("title",title);
-//            intent.putExtras(bundle);
-//            startActivity(intent);
-//        }
     }
 
     @Override

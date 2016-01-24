@@ -11,6 +11,9 @@ public class OtherInfo {
     private String situation;
     private String handle;
     private String recorder;
+    private String field;
+    private String species;
+    private String Date;
     private long time;
     private String longtitude;
     private String latitude;
@@ -77,5 +80,29 @@ public class OtherInfo {
 
     public void setRecorder(String recorder) {
         this.recorder = recorder;
+    }
+
+    public String getSpecies() {
+        return species;
+    }
+
+    public void setSpecies(String species) {
+        this.species = species;
+    }
+
+    public String getField() {
+        return field;
+    }
+
+    public void setField(String field) {
+        this.field = field;
+    }
+
+    public String getDate() {
+        return Date;
+    }
+
+    public void setDate(String date) {
+        Date = date;
     }
 }
