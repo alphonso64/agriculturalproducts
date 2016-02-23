@@ -81,6 +81,7 @@ public class SignActivity extends AppCompatActivity implements UserInfoSimpleVie
     UserInfoPresenter mUserInfoPresenter;
     Uri imgUri;
     Bitmap photo;
+    Uri dataUri;
     private AlertDialog dialog;
     private int crop = 180;
     private static int output_X = 480;
@@ -180,7 +181,10 @@ public class SignActivity extends AppCompatActivity implements UserInfoSimpleVie
         intent.putExtra("aspectY", 1);
         intent.putExtra("outputX", output_X);
         intent.putExtra("outputY", output_Y);
-        intent.putExtra("return-data", true);
+        intent.putExtra("return-data", false);
+        dataUri = Uri.fromFile(new File(Environment
+                .getExternalStorageDirectory(), "myapp_" + String.valueOf(System.currentTimeMillis()) + ".png"));
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, dataUri);
         Intent i = new Intent(intent);
         ResolveInfo res = list.get(0);
         i.setComponent(new ComponentName(res.activityInfo.packageName,
@@ -197,16 +201,22 @@ public class SignActivity extends AppCompatActivity implements UserInfoSimpleVie
         intent.putExtra("aspectY", 1);
         intent.putExtra("outputX", output_X);
         intent.putExtra("outputY", output_Y);
-        intent.putExtra("return-data", true);
+        intent.putExtra("return-data", false);
+        dataUri = Uri.fromFile(new File(Environment
+                .getExternalStorageDirectory(), "myapp_" + String.valueOf(System.currentTimeMillis()) + ".png"));
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, dataUri);
         startActivityForResult(intent, CODE_RESULT_REQUEST);
     }
 
     public void setImgeView(Intent intent){
-        Bundle extras = intent.getExtras();
-        if (extras != null) {
-            photo = extras.getParcelable("data");
+        try {
+            photo = MediaStore.Images.Media.getBitmap(getContentResolver(), dataUri);
             imgView.setImageBitmap(photo);
+            Log.e("testbbb","new setImageView");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
     }
 
     @Override

@@ -78,6 +78,7 @@ public class PlantFragment extends BaseUploadFragment {
 
     private void disableWidget(){
         num_text.setFocusable(false);
+        num_text.setBackgroundResource(R.drawable.text_backgroud);
         fieldImg.setVisibility(View.INVISIBLE);
         dateImg.setVisibility(View.INVISIBLE);
     }

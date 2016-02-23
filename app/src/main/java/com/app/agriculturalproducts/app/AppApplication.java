@@ -9,6 +9,7 @@ import com.app.agriculturalproducts.db.DBHelper;
 import com.app.agriculturalproducts.util.FieldTest;
 import com.baidu.mapapi.SDKInitializer;
 import com.litesuits.http.LiteHttp;
+import com.litesuits.http.request.StringRequest;
 
 /**
  * Created by ALPHONSO on 2016/1/7.
