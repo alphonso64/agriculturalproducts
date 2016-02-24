@@ -119,4 +119,6 @@ public class MainDrawlayoutActivity extends BaseActivity implements UserInfoSimp
     public void setId(String id) {
 
     }
+
+
 }

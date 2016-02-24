@@ -15,17 +15,21 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.app.agriculturalproducts.http.HttpClient;
 import com.app.agriculturalproducts.util.InputType;
+import com.litesuits.http.exception.HttpException;
+import com.litesuits.http.listener.HttpListener;
+import com.litesuits.http.response.Response;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 
 
@@ -88,7 +92,6 @@ public class LoginActivity extends AppCompatActivity {
 
     @OnClick(R.id.loginbutton)
     void login(){
-
         String name = nameText.getEditableText().toString();
         String pwd = pwdText.getText().toString();
         if(TextUtils.isEmpty(name) || TextUtils.isEmpty(pwd)){
@@ -98,23 +101,47 @@ public class LoginActivity extends AppCompatActivity {
             toast.show();
             return;
         }
-        SharedPreferences sp = getSharedPreferences(InputType.loginInfoDB,
-                Activity.MODE_PRIVATE);
-        SharedPreferences.Editor ed = sp.edit();
-        String nameSave= sp.getString("name", null);
-        String pwdSave= sp.getString("pwd", null);
-        if(!name.equals(nameSave)|| !pwd.equals(pwdSave)){
-            Toast toast = Toast.makeText(getApplicationContext(),
-                    "用户名或密码出错", Toast.LENGTH_SHORT);
-            toast.setGravity(Gravity.CENTER, 0, 0);
-            toast.show();
-            return;
-        }
-        ed.putString("isLogin",InputType.INPUT_CHECK_OK);
-        ed.commit();
-        Intent intent = new Intent(this, MainDrawlayoutActivity.class);
-        startActivity(intent);
-        finish();
+//        SharedPreferences sp = getSharedPreferences(InputType.loginInfoDB,
+//                Activity.MODE_PRIVATE);
+//        SharedPreferences.Editor ed = sp.edit();
+//        String nameSave= sp.getString("name", null);
+//        String pwdSave= sp.getString("pwd", null);
+//        if(!name.equals(nameSave)|| !pwd.equals(pwdSave)){
+//            Toast toast = Toast.makeText(getApplicationContext(),
+//                    "用户名或密码出错", Toast.LENGTH_SHORT);
+//            toast.setGravity(Gravity.CENTER, 0, 0);
+//            toast.show();
+//            return;
+//        }
+
+        HttpListener listener =  new HttpListener<String>() {
+            @Override
+            public void onSuccess(String s, Response<String> response) {
+                try {
+                    JSONObject object = new JSONObject(s);
+                    String result = (String) object.get("return_code");
+                    if(result.equals("success")){
+                    Intent intent = new Intent(LoginActivity.this, MainDrawlayoutActivity.class);
+                    startActivity(intent);
+                    finish();
+                    }
+                } catch (JSONException e) {
+                    return;
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException e, Response<String> response) {
+
+            }
+        };
+        HttpClient.getInstance().checkLogin(listener,name,pwd);
+
+//        ed.putString("isLogin",InputType.INPUT_CHECK_OK);
+//        ed.commit();
+//        Intent intent = new Intent(this, MainDrawlayoutActivity.class);
+//        startActivity(intent);
+//        finish();
     }
 
     @OnClick(R.id.signbutton)

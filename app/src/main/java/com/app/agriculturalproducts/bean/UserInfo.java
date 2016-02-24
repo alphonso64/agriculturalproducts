@@ -11,6 +11,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by ALPHONSO on 2016/1/20.
  */
 public class UserInfo {
+    private String employee_id;
+    private String member_id;
+    private String sex;
+    private String birthday;
+    private String address;
     private String name;
     private String phone;
     private String id;
@@ -64,5 +69,45 @@ public class UserInfo {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    public String getEmployee_id() {
+        return employee_id;
+    }
+
+    public void setEmployee_id(String employee_id) {
+        this.employee_id = employee_id;
+    }
+
+    public String getMember_id() {
+        return member_id;
+    }
+
+    public void setMember_id(String member_id) {
+        this.member_id = member_id;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    public String getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }
