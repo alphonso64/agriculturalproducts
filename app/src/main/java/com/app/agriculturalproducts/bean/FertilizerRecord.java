@@ -1,6 +1,9 @@
 package com.app.agriculturalproducts.bean;
 
+import android.database.Cursor;
 import android.util.Log;
+
+import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 
 /**
  * Created by ALPHONSO on 2016/2/25.
@@ -20,6 +23,12 @@ public class FertilizerRecord {
     private String employee_name;
     private String plantrecord_breed;
     private String fertilizerecord_people;
+
+
+    public static FertilizerRecord fromCursor(Cursor cursor) {
+        FertilizerRecord fertilizerRecord= cupboard().withCursor(cursor).get(FertilizerRecord.class);
+        return fertilizerRecord;
+    }
 
     public String getFertilizerecord_id() {
         return fertilizerecord_id;

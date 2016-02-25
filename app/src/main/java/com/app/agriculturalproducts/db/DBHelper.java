@@ -4,13 +4,18 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.app.agriculturalproducts.bean.FertilizerRecord;
 import com.app.agriculturalproducts.bean.FertilizerUsage;
 import com.app.agriculturalproducts.bean.Field;
 import com.app.agriculturalproducts.bean.FieldInfo;
 import com.app.agriculturalproducts.bean.OtherInfo;
+import com.app.agriculturalproducts.bean.OtherRecord;
 import com.app.agriculturalproducts.bean.PersticidesUsage;
+import com.app.agriculturalproducts.bean.PickRecord;
 import com.app.agriculturalproducts.bean.Picking;
 import com.app.agriculturalproducts.bean.PlantSpecies;
+import com.app.agriculturalproducts.bean.PlanterRecord;
+import com.app.agriculturalproducts.bean.PreventionRecord;
 import com.app.agriculturalproducts.bean.Task;
 
 import static nl.qbusict.cupboard.CupboardFactory.cupboard;
@@ -34,6 +39,11 @@ public class DBHelper extends SQLiteOpenHelper {
     static {
         cupboard().register(Task.class);
         cupboard().register(Field.class);
+        cupboard().register(PlanterRecord.class);
+        cupboard().register(FertilizerRecord.class);
+        cupboard().register(PreventionRecord.class);
+        cupboard().register(PickRecord.class);
+        cupboard().register(OtherRecord.class);
 //        cupboard().register(PersticidesUsage.class);
 //        cupboard().register(FertilizerUsage.class);
 //        cupboard().register(PlantSpecies.class);

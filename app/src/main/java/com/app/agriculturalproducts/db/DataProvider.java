@@ -15,13 +15,18 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.app.agriculturalproducts.app.AppApplication;
+import com.app.agriculturalproducts.bean.FertilizerRecord;
 import com.app.agriculturalproducts.bean.FertilizerUsage;
 import com.app.agriculturalproducts.bean.Field;
 import com.app.agriculturalproducts.bean.FieldInfo;
 import com.app.agriculturalproducts.bean.OtherInfo;
+import com.app.agriculturalproducts.bean.OtherRecord;
 import com.app.agriculturalproducts.bean.PersticidesUsage;
+import com.app.agriculturalproducts.bean.PickRecord;
 import com.app.agriculturalproducts.bean.Picking;
 import com.app.agriculturalproducts.bean.PlantSpecies;
+import com.app.agriculturalproducts.bean.PlanterRecord;
+import com.app.agriculturalproducts.bean.PreventionRecord;
 import com.app.agriculturalproducts.bean.Task;
 import com.app.agriculturalproducts.util.InputType;
 
@@ -45,11 +50,11 @@ public class DataProvider extends ContentProvider {
     public static final String PATH_TASK_TABLE = "/task";
     public static final String PATH_TASK_DETAIL_TABLE = "/taskd";
     public static final String PATH_TASK_DONE_TABLE = "/taskud";
-    public static final String PATH_PUSAGE_TABLE = "/persticidesusage";
-    public static final String PATH_FUSAGE_TABLE = "/fertilizerusage";
-    public static final String PATH_PLANT_TABLE =  "/plantspecies";
-    public static final String PATH_PICK_TABLE = "/picking";
-    public static final String PATH_OTHER_TABLE =  "/otherinfo";
+    public static final String PATH_PUSAGE_TABLE = "/preventionrecord";
+    public static final String PATH_FUSAGE_TABLE = "/fertilizerrecord";
+    public static final String PATH_PLANT_TABLE =  "/planterrecord";
+    public static final String PATH_PICK_TABLE = "/pickrecord";
+    public static final String PATH_OTHER_TABLE =  "/otherrecord";
     public static final String PATH_FIELD_TABLE =  "/field";
 
     public static final Uri TASK_TABLE_CONTENT_URI = Uri.parse(SCHEME + AUTHORITY + PATH_TASK_TABLE);
@@ -73,6 +78,18 @@ public class DataProvider extends ContentProvider {
     public static final String OTHER_TABLE_CONTENT_TYPE = "com.other";
     public static final String FIELD_TABLE_CONTENT_TYPE = "com.field";
     private static DBHelper mDBHelper;
+
+    private static final UriMatcher sUriMATCHER = new UriMatcher(UriMatcher.NO_MATCH) {{
+        addURI(AUTHORITY, "task", TASK_TABLE);//Demo列表
+        addURI(AUTHORITY,"preventionrecord",PUSAGE_TABLE);
+        addURI(AUTHORITY,"fertilizerrecord",FUSAGE_TABLE);
+        addURI(AUTHORITY,"planterrecord",PLANT_TABLE);
+        addURI(AUTHORITY,"pickrecord",PICK_TABLE);
+        addURI(AUTHORITY,"otherrecord",OTHERINFO_TABLE);
+        addURI(AUTHORITY,"field",FIELD_TABLE);
+        addURI(AUTHORITY,"taskd",TASK_Detail_TABLE);
+        addURI(AUTHORITY,"taskud",TASK_Done_TABLE);
+    }};
 
     public static DBHelper getDBHelper() {
         if (mDBHelper == null) {
@@ -128,42 +145,42 @@ public class DataProvider extends ContentProvider {
                     cursor.setNotificationUri(getContext().getContentResolver(), uri);
                     break;
                 case PUSAGE_TABLE:
-                    cursor=  cupboard().withDatabase(db).query(PersticidesUsage.class).
+                    cursor=  cupboard().withDatabase(db).query(PreventionRecord.class).
                             withProjection(projection).
                             withSelection(selection, selectionArgs).
-                            orderBy("time DESC").
+                            orderBy(sortOrder).
                             getCursor();
                     cursor.setNotificationUri(getContext().getContentResolver(), uri);
                     break;
                 case FUSAGE_TABLE:
-                    cursor=  cupboard().withDatabase(db).query(FertilizerUsage.class).
+                    cursor=  cupboard().withDatabase(db).query(FertilizerRecord.class).
                             withProjection(projection).
                             withSelection(selection, selectionArgs).
-                            orderBy("time DESC").
+                            orderBy(sortOrder).
                             getCursor();
                     cursor.setNotificationUri(getContext().getContentResolver(), uri);
                     break;
                 case PLANT_TABLE:
-                    cursor=  cupboard().withDatabase(db).query(PlantSpecies.class).
+                    cursor=  cupboard().withDatabase(db).query(PlanterRecord.class).
                             withProjection(projection).
                             withSelection(selection, selectionArgs).
-                            orderBy("time DESC").
+                            orderBy(sortOrder).
                             getCursor();
                     cursor.setNotificationUri(getContext().getContentResolver(), uri);
                     break;
                 case PICK_TABLE:
-                    cursor=  cupboard().withDatabase(db).query(Picking.class).
+                    cursor=  cupboard().withDatabase(db).query(PickRecord.class).
                             withProjection(projection).
                             withSelection(selection, selectionArgs).
-                            orderBy("time DESC").
+                            orderBy(sortOrder).
                             getCursor();
                     cursor.setNotificationUri(getContext().getContentResolver(), uri);
                     break;
                 case OTHERINFO_TABLE:
-                    cursor=  cupboard().withDatabase(db).query(OtherInfo.class).
+                    cursor=  cupboard().withDatabase(db).query(OtherRecord.class).
                             withProjection(projection).
                             withSelection(selection, selectionArgs).
-                            orderBy("time DESC").
+                            orderBy(sortOrder).
                             getCursor();
                     cursor.setNotificationUri(getContext().getContentResolver(), uri);
                     break;
@@ -182,17 +199,7 @@ public class DataProvider extends ContentProvider {
         }
     }
 
-    private static final UriMatcher sUriMATCHER = new UriMatcher(UriMatcher.NO_MATCH) {{
-        addURI(AUTHORITY, "task", TASK_TABLE);//Demo列表
-        addURI(AUTHORITY,"persticidesusage",PUSAGE_TABLE);
-        addURI(AUTHORITY,"fertilizerusage",FUSAGE_TABLE);
-        addURI(AUTHORITY,"plantspecies",PLANT_TABLE);
-        addURI(AUTHORITY,"picking",PICK_TABLE);
-        addURI(AUTHORITY,"otherinfo",OTHERINFO_TABLE);
-        addURI(AUTHORITY,"field",FIELD_TABLE);
-        addURI(AUTHORITY,"taskd",TASK_Detail_TABLE);
-        addURI(AUTHORITY,"taskud",TASK_Done_TABLE);
-    }};
+
 
     private String matchTable(Uri uri) {
         String table;
@@ -288,6 +295,8 @@ public class DataProvider extends ContentProvider {
             db.beginTransaction();
             try {
                 for (ContentValues contentValues : values) {
+                    Log.e("testcc","bulkInsert:"+uri.toString());
+                    Log.e("testcc","bulkInsert:"+matchTable(uri));
                     db.insertWithOnConflict(matchTable(uri), BaseColumns._ID, contentValues, SQLiteDatabase.CONFLICT_IGNORE);
                 }
                 db.setTransactionSuccessful();

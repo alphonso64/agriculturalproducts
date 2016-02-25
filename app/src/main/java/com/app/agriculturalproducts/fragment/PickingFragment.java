@@ -18,6 +18,7 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.app.agriculturalproducts.R;
+import com.app.agriculturalproducts.bean.Field;
 import com.app.agriculturalproducts.bean.FieldInfo;
 import com.app.agriculturalproducts.bean.PersticidesUsage;
 import com.app.agriculturalproducts.bean.Picking;
@@ -100,14 +101,14 @@ public class PickingFragment extends BaseUploadFragment {
     }
 
     private void saveInfo(){
-        Picking picking = new Picking();
-        picking.setArea(area_text.getText().toString());
-        picking.setField(field_text.getText().toString());
-        picking.setDate(date_text.getText().toString());
-        picking.setPerson(person_text.getText().toString());
-        picking.setPick(num_text.getText().toString());
-        picking.setSpecies(species_text.getText().toString());
-        pickingDataHelper.insert_(picking);
+//        Picking picking = new Picking();
+//        picking.setArea(area_text.getText().toString());
+//        picking.setField(field_text.getText().toString());
+//        picking.setDate(date_text.getText().toString());
+//        picking.setPerson(person_text.getText().toString());
+//        picking.setPick(num_text.getText().toString());
+//        picking.setSpecies(species_text.getText().toString());
+//        pickingDataHelper.insert_(picking);
     }
 
     private void disableWidget(){
@@ -161,7 +162,7 @@ public class PickingFragment extends BaseUploadFragment {
         cursor = fieldDataHelper.getCursor();
         adapter = new SimpleCursorAdapter(getActivity(),
                 android.R.layout.simple_list_item_1,
-                cursor, new String[]{"filed"},
+                cursor, new String[]{"field_name"},
                 new int[]{android.R.id.text1}, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
         fieldImg.setOnClickListener(fieldClickListener);
         dateImg.setOnClickListener(dateClickListener);
@@ -188,9 +189,8 @@ public class PickingFragment extends BaseUploadFragment {
                 @Override
                 public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                     cursor.moveToPosition(which);
-                    FieldInfo fieldInfo = FieldInfo.fromCursor(cursor);
-                    species_text.setText(fieldInfo.getSpecies());
-                    field_text.setText(fieldInfo.getFiled());
+                    Field field = Field.fromCursor(cursor);
+                    field_text.setText(field.getField_name());
                     textInput = true;
                     dialog.cancel();
                 }

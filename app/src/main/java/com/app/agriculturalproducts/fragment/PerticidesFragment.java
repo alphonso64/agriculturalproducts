@@ -18,6 +18,7 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.app.agriculturalproducts.R;
+import com.app.agriculturalproducts.bean.Field;
 import com.app.agriculturalproducts.bean.FieldInfo;
 import com.app.agriculturalproducts.bean.PersticidesUsage;
 import com.app.agriculturalproducts.bean.PlantSpecies;
@@ -106,17 +107,17 @@ public class PerticidesFragment extends BaseUploadFragment {
     }
 
     private void saveInfo(){
-        PersticidesUsage persticidesUsage = new PersticidesUsage();
-        persticidesUsage.setArea(area_text.getText().toString());
-        persticidesUsage.setField(field_text.getText().toString());
-        persticidesUsage.setDate(date_text.getText().toString());
-        persticidesUsage.setUsage(num_text.getText().toString());
-        persticidesUsage.setType(type_text.getText().toString());
-        persticidesUsage.setSpec(spec_text.getText().toString());
-        persticidesUsage.setSpecies(species_text.getText().toString());
-        persticidesUsage.setName(perticides_text.getText().toString());
-        persticidesUsage.setPerson(person_text.getText().toString());
-        persticidesUsageDataHelper.insert_(persticidesUsage);
+//        PersticidesUsage persticidesUsage = new PersticidesUsage();
+//        persticidesUsage.setArea(area_text.getText().toString());
+//        persticidesUsage.setField(field_text.getText().toString());
+//        persticidesUsage.setDate(date_text.getText().toString());
+//        persticidesUsage.setUsage(num_text.getText().toString());
+//        persticidesUsage.setType(type_text.getText().toString());
+//        persticidesUsage.setSpec(spec_text.getText().toString());
+//        persticidesUsage.setSpecies(species_text.getText().toString());
+//        persticidesUsage.setName(perticides_text.getText().toString());
+//        persticidesUsage.setPerson(person_text.getText().toString());
+//        persticidesUsageDataHelper.insert_(persticidesUsage);
     }
 
     private void disableWidget(){
@@ -182,7 +183,7 @@ public class PerticidesFragment extends BaseUploadFragment {
         cursor = fieldDataHelper.getCursor();
         adapter = new SimpleCursorAdapter(getActivity(),
                 android.R.layout.simple_list_item_1,
-                cursor, new String[]{"filed"},
+                cursor, new String[]{"field_name"},
                 new int[]{android.R.id.text1}, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
         fieldImg.setOnClickListener(fieldClickListener);
         dateImg.setOnClickListener(dateClickListener);
@@ -193,22 +194,22 @@ public class PerticidesFragment extends BaseUploadFragment {
 
     void checkInputType(){
         if(object!=null){
-            fieldImg.setVisibility(View.INVISIBLE);
-            perticides_text.setBackgroundResource(R.drawable.text_backgroud);
-            perticides_text.setFocusable(false);
-            type_text.setBackgroundResource(R.drawable.text_backgroud);
-            type_text.setFocusable(false);
-            spec_text.setBackgroundResource(R.drawable.text_backgroud);
-            spec_text.setFocusable(false);
-            area_text.setBackgroundResource(R.drawable.text_backgroud);
-            area_text.setFocusable(false);
-            Task task = (Task)object;
-            field_text.setText(task.getField());
-            species_text.setText(task.getSpecies());
-            perticides_text.setText(task.getP_name());
-            spec_text.setText(task.getP_spec());
-            type_text.setText(task.getP_type());
-            area_text.setText(task.getP_area());
+//            fieldImg.setVisibility(View.INVISIBLE);
+//            perticides_text.setBackgroundResource(R.drawable.text_backgroud);
+//            perticides_text.setFocusable(false);
+//            type_text.setBackgroundResource(R.drawable.text_backgroud);
+//            type_text.setFocusable(false);
+//            spec_text.setBackgroundResource(R.drawable.text_backgroud);
+//            spec_text.setFocusable(false);
+//            area_text.setBackgroundResource(R.drawable.text_backgroud);
+//            area_text.setFocusable(false);
+//            Task task = (Task)object;
+//            field_text.setText(task.getField());
+//            species_text.setText(task.getSpecies());
+//            perticides_text.setText(task.getP_name());
+//            spec_text.setText(task.getP_spec());
+//            type_text.setText(task.getP_type());
+//            area_text.setText(task.getP_area());
         }
     }
 
@@ -219,9 +220,13 @@ public class PerticidesFragment extends BaseUploadFragment {
                 @Override
                 public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                     cursor.moveToPosition(which);
-                    FieldInfo fieldInfo = FieldInfo.fromCursor(cursor);
-                    species_text.setText(fieldInfo.getSpecies());
-                    field_text.setText(fieldInfo.getFiled());
+
+                    Field field = Field.fromCursor(cursor);
+                    field_text.setText(field.getField_name());
+//                    FieldInfo fieldInfo = FieldInfo.fromCursor(cursor);
+//                    species_text.setText(fieldInfo.getSpecies());
+//                    field_text.setText(fieldInfo.getFiled());
+
                     textInput = true;
                     dialog.cancel();
                 }

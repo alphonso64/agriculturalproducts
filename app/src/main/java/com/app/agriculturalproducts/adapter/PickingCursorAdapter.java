@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.app.agriculturalproducts.R;
 import com.app.agriculturalproducts.bean.PersticidesUsage;
+import com.app.agriculturalproducts.bean.PickRecord;
 import com.app.agriculturalproducts.bean.Picking;
 import com.app.agriculturalproducts.bean.Task;
 
@@ -35,10 +36,10 @@ public class PickingCursorAdapter extends BaseAbstractRecycleCursorAdapter<Recyc
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, Cursor cursor) {
-        Picking pu = Picking.fromCursor(cursor);
-        ((PusageViewHolder) holder).title_1.setText(pu.getField());
-        ((PusageViewHolder) holder).title_2.setText(pu.getDate());
-        ((PusageViewHolder) holder).title_3.setText(pu.getPick());
+        PickRecord pu = PickRecord.fromCursor(cursor);
+        ((PusageViewHolder) holder).title_1.setText(pu.getField_name());
+        ((PusageViewHolder) holder).title_2.setText(pu.getPickrecord_number());
+        ((PusageViewHolder) holder).title_3.setText(pu.getPickrecord_date());
     }
 
     @Override

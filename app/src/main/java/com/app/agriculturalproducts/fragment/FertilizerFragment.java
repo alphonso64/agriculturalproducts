@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.app.agriculturalproducts.R;
 import com.app.agriculturalproducts.bean.FertilizerUsage;
+import com.app.agriculturalproducts.bean.Field;
 import com.app.agriculturalproducts.bean.FieldInfo;
 import com.app.agriculturalproducts.bean.PersticidesUsage;
 import com.app.agriculturalproducts.bean.PlantSpecies;
@@ -107,18 +108,18 @@ public class FertilizerFragment extends BaseUploadFragment {
     }
 
     private void saveInfo(){
-        FertilizerUsage fertilizerUsage = new FertilizerUsage();
-        fertilizerUsage.setArea(area_text.getText().toString());
-        fertilizerUsage.setField(field_text.getText().toString());
-        fertilizerUsage.setDate(date_text.getText().toString());
-        fertilizerUsage.setUsage(num_text.getText().toString());
-        fertilizerUsage.setType(type_text.getText().toString());
-        fertilizerUsage.setSpec(spec_text.getText().toString());
-        fertilizerUsage.setSpecies(species_text.getText().toString());
-        fertilizerUsage.setName(perticides_text.getText().toString());
-        fertilizerUsage.setPerson(person_text.getText().toString());
-        fertilizerUsage.setMethod(method_text.getText().toString());
-        fertilizerUsageDataHelper.insert_(fertilizerUsage);
+//        FertilizerUsage fertilizerUsage = new FertilizerUsage();
+//        fertilizerUsage.setArea(area_text.getText().toString());
+//        fertilizerUsage.setField(field_text.getText().toString());
+//        fertilizerUsage.setDate(date_text.getText().toString());
+//        fertilizerUsage.setUsage(num_text.getText().toString());
+//        fertilizerUsage.setType(type_text.getText().toString());
+//        fertilizerUsage.setSpec(spec_text.getText().toString());
+//        fertilizerUsage.setSpecies(species_text.getText().toString());
+//        fertilizerUsage.setName(perticides_text.getText().toString());
+//        fertilizerUsage.setPerson(person_text.getText().toString());
+//        fertilizerUsage.setMethod(method_text.getText().toString());
+//        fertilizerUsageDataHelper.insert_(fertilizerUsage);
     }
 
     private void disableWidget(){
@@ -186,7 +187,7 @@ public class FertilizerFragment extends BaseUploadFragment {
         cursor = fieldDataHelper.getCursor();
         adapter = new SimpleCursorAdapter(getActivity(),
                 android.R.layout.simple_list_item_1,
-                cursor, new String[]{"filed"},
+                cursor, new String[]{"field_name"},
                 new int[]{android.R.id.text1}, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
         fieldImg.setOnClickListener(fieldClickListener);
         dateImg.setOnClickListener(dateClickListener);
@@ -227,9 +228,8 @@ public class FertilizerFragment extends BaseUploadFragment {
                 @Override
                 public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                     cursor.moveToPosition(which);
-                    FieldInfo fieldInfo = FieldInfo.fromCursor(cursor);
-                    species_text.setText(fieldInfo.getSpecies());
-                    field_text.setText(fieldInfo.getFiled());
+                    Field field = Field.fromCursor(cursor);
+                    field_text.setText(field.getField_name());
                     textInput = true;
                     dialog.cancel();
                 }

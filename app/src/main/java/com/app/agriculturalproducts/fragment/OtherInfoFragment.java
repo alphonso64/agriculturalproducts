@@ -18,6 +18,7 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.app.agriculturalproducts.R;
+import com.app.agriculturalproducts.bean.Field;
 import com.app.agriculturalproducts.bean.FieldInfo;
 import com.app.agriculturalproducts.bean.OtherInfo;
 import com.app.agriculturalproducts.bean.PlantSpecies;
@@ -66,14 +67,14 @@ public class OtherInfoFragment extends BaseUploadFragment {
             return InputType.INPUT_SAVE_ALREADY;
         }
         if(!isEmpty() && textInput){
-            OtherInfo otherInfo = new OtherInfo();
-            otherInfo.setField(field_text.getText().toString());
-            otherInfo.setSpecies(species_text.getText().toString());
-            otherInfo.setRecorder(person_text.getText().toString());
-            otherInfo.setDate(date_text.getText().toString());
-            otherInfo.setHandle(handle_text.getText().toString());
-            otherInfo.setSituation(situation_text.getText().toString());
-            otherInfoDataHelper.insert_(otherInfo);
+//            OtherInfo otherInfo = new OtherInfo();
+//            otherInfo.setField(field_text.getText().toString());
+//            otherInfo.setSpecies(species_text.getText().toString());
+//            otherInfo.setRecorder(person_text.getText().toString());
+//            otherInfo.setDate(date_text.getText().toString());
+//            otherInfo.setHandle(handle_text.getText().toString());
+//            otherInfo.setSituation(situation_text.getText().toString());
+//            otherInfoDataHelper.insert_(otherInfo);
             flag = true;
             disableWidget();
             return InputType.INPUT_SAVE_OK;
@@ -120,7 +121,7 @@ public class OtherInfoFragment extends BaseUploadFragment {
         cursor = fieldDataHelper.getCursor();
         adapter = new SimpleCursorAdapter(getActivity(),
                 android.R.layout.simple_list_item_1,
-                cursor, new String[]{"filed"},
+                cursor, new String[]{"field_name"},
                 new int[]{android.R.id.text1}, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
         fieldImg.setOnClickListener(fieldClickListener);
         dateImg.setOnClickListener(dateClickListener);
@@ -135,9 +136,8 @@ public class OtherInfoFragment extends BaseUploadFragment {
                 @Override
                 public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                     cursor.moveToPosition(which);
-                    FieldInfo fieldInfo = FieldInfo.fromCursor(cursor);
-                    species_text.setText(fieldInfo.getSpecies());
-                    field_text.setText(fieldInfo.getFiled());
+                    Field field = Field.fromCursor(cursor);
+                    field_text.setText(field.getField_name());
                     textInput = true;
                     dialog.cancel();
                 }

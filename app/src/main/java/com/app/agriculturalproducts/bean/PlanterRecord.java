@@ -1,6 +1,9 @@
 package com.app.agriculturalproducts.bean;
 
+import android.database.Cursor;
 import android.util.Log;
+
+import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 
 /**
  * Created by ALPHONSO on 2016/2/25.
@@ -22,6 +25,12 @@ public class PlanterRecord {
                 + " " + "plantrecord_seed_source" + ":" + plantrecord_seed_source + " " + "plantrecord_specifications" + ":" + plantrecord_specifications
                 + " " + "plantrecord_seed_number" + ":" + plantrecord_seed_number + " " + "plantrecord_plant_date" + ":" + plantrecord_plant_date
                 + " " + "field_name" + ":" + field_name + " " + "employee_name" + ":" + employee_name);
+    }
+
+    public static PlanterRecord fromCursor(Cursor cursor) {
+
+        PlanterRecord planterRecord= cupboard().withCursor(cursor).get(PlanterRecord.class);
+        return planterRecord;
     }
 
     public String getEmployee_name() {

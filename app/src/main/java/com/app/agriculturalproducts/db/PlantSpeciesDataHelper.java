@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.app.agriculturalproducts.bean.PersticidesUsage;
 import com.app.agriculturalproducts.bean.PlantSpecies;
+import com.app.agriculturalproducts.bean.PlanterRecord;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,13 +17,13 @@ import java.util.List;
 import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 
 
-public class PlantSpeciesDataHelper extends BaseDataHelper implements DBInterface<PlantSpecies> {
+public class PlantSpeciesDataHelper extends BaseDataHelper implements DBInterface<PlanterRecord> {
 
     public PlantSpeciesDataHelper(Context context) {
         super(context);
     }
 
-    public static final String TABLE_NAME = "PlantSpecies";
+    public static final String TABLE_NAME = "PlanterRecord";
     @Override
     protected Uri getContentUri() {
         return DataProvider.PLANT_TABLE_CONTENT_URI;
@@ -34,9 +35,9 @@ public class PlantSpeciesDataHelper extends BaseDataHelper implements DBInterfac
     }
 
     @Override
-    public void bulkInsert(List<PlantSpecies> listData) {
+    public void bulkInsert(List<PlanterRecord> listData) {
         ArrayList<ContentValues> contentValues = new ArrayList<>();
-        for (PlantSpecies item : listData) {
+        for (PlanterRecord item : listData) {
             ContentValues values = getContentValues(item);
             contentValues.add(values);
         }
@@ -45,8 +46,8 @@ public class PlantSpeciesDataHelper extends BaseDataHelper implements DBInterfac
     }
 
     @Override
-    public ContentValues getContentValues(PlantSpecies data) {
-        ContentValues values = cupboard().withEntity(PlantSpecies.class).toContentValues(data);
+    public ContentValues getContentValues(PlanterRecord data) {
+        ContentValues values = cupboard().withEntity(PlanterRecord.class).toContentValues(data);
         return values;
     }
 
@@ -54,9 +55,8 @@ public class PlantSpeciesDataHelper extends BaseDataHelper implements DBInterfac
         delete(where,selectionArgs);
     }
 
-    public void insert_(PlantSpecies data){
-        Log.e("tetstbb", "insert_");
-        ContentValues values = cupboard().withEntity(PlantSpecies.class).toContentValues(data);
+    public void insert_(PlanterRecord data){
+        ContentValues values = cupboard().withEntity(PlanterRecord.class).toContentValues(data);
         insert(values);
     }
 

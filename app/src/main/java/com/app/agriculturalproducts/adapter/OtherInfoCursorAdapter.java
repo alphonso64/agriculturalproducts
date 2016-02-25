@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.app.agriculturalproducts.R;
 import com.app.agriculturalproducts.bean.OtherInfo;
+import com.app.agriculturalproducts.bean.OtherRecord;
 import com.app.agriculturalproducts.bean.PlantSpecies;
 import com.app.agriculturalproducts.bean.Task;
 
@@ -35,10 +36,10 @@ public class OtherInfoCursorAdapter extends BaseAbstractRecycleCursorAdapter<Rec
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, Cursor cursor) {
-        OtherInfo oi = OtherInfo.fromCursor(cursor);
-        ((PusageViewHolder) holder).title_1.setText(oi.getField());
-        ((PusageViewHolder) holder).title_2.setText(oi.getDate());
-        ((PusageViewHolder) holder).title_3.setText(oi.getSituation());
+        OtherRecord oi = OtherRecord.fromCursor(cursor);
+        ((PusageViewHolder) holder).title_1.setText(oi.getField_name());
+        ((PusageViewHolder) holder).title_2.setText(oi.getOtherrecord_situation());
+        ((PusageViewHolder) holder).title_3.setText(oi.getOtherrecord_date());
     }
 
     @Override

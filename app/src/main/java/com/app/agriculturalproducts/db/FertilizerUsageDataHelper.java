@@ -4,23 +4,20 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.net.Uri;
 import android.support.v4.content.CursorLoader;
-
-import com.app.agriculturalproducts.bean.FertilizerUsage;
-import com.app.agriculturalproducts.bean.PersticidesUsage;
-
+import com.app.agriculturalproducts.bean.FertilizerRecord;
 import java.util.ArrayList;
 import java.util.List;
 
 import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 
 
-public class FertilizerUsageDataHelper extends BaseDataHelper implements DBInterface<FertilizerUsage> {
+public class FertilizerUsageDataHelper extends BaseDataHelper implements DBInterface<FertilizerRecord> {
 
     public FertilizerUsageDataHelper(Context context) {
         super(context);
     }
 
-    public static final String TABLE_NAME = "FertilizerUsage";
+    public static final String TABLE_NAME = "FertilizerRecord";
     @Override
     protected Uri getContentUri() {
         return DataProvider.FUSAGE_TABLE_CONTENT_URI;
@@ -32,9 +29,9 @@ public class FertilizerUsageDataHelper extends BaseDataHelper implements DBInter
     }
 
     @Override
-    public void bulkInsert(List<FertilizerUsage> listData) {
+    public void bulkInsert(List<FertilizerRecord> listData) {
         ArrayList<ContentValues> contentValues = new ArrayList<>();
-        for (FertilizerUsage item : listData) {
+        for (FertilizerRecord item : listData) {
             ContentValues values = getContentValues(item);
             contentValues.add(values);
         }
@@ -43,8 +40,8 @@ public class FertilizerUsageDataHelper extends BaseDataHelper implements DBInter
     }
 
     @Override
-    public ContentValues getContentValues(FertilizerUsage data) {
-        ContentValues values = cupboard().withEntity(FertilizerUsage.class).toContentValues(data);
+    public ContentValues getContentValues(FertilizerRecord data) {
+        ContentValues values = cupboard().withEntity(FertilizerRecord.class).toContentValues(data);
         return values;
     }
 
@@ -52,8 +49,8 @@ public class FertilizerUsageDataHelper extends BaseDataHelper implements DBInter
         delete(where,selectionArgs);
     }
 
-    public void insert_(FertilizerUsage data){
-        ContentValues values = cupboard().withEntity(FertilizerUsage.class).toContentValues(data);
+    public void insert_(FertilizerRecord data){
+        ContentValues values = cupboard().withEntity(FertilizerRecord.class).toContentValues(data);
         insert(values);
     }
 

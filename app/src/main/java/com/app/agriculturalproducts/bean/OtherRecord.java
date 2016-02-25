@@ -1,5 +1,9 @@
 package com.app.agriculturalproducts.bean;
 
+import android.database.Cursor;
+
+import static nl.qbusict.cupboard.CupboardFactory.cupboard;
+
 /**
  * Created by ALPHONSO on 2016/2/25.
  */
@@ -13,6 +17,11 @@ public class OtherRecord {
     private String plantrecord_breed;
     private String field_name;
     private String member_name;
+
+    public static OtherRecord fromCursor(Cursor cursor) {
+        OtherRecord otherRecord= cupboard().withCursor(cursor).get(OtherRecord.class);
+        return otherRecord;
+    }
 
     public String getOtherrecord_id() {
         return otherrecord_id;

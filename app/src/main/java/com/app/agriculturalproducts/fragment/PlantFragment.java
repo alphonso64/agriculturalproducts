@@ -17,6 +17,7 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.app.agriculturalproducts.R;
+import com.app.agriculturalproducts.bean.Field;
 import com.app.agriculturalproducts.bean.FieldInfo;
 import com.app.agriculturalproducts.bean.PlantSpecies;
 import com.app.agriculturalproducts.db.FieldDataHelper;
@@ -64,14 +65,14 @@ public class PlantFragment extends BaseUploadFragment {
             return InputType.INPUT_SAVE_ALREADY;
         }
         if(!isEmpty() && textInput){
-            PlantSpecies plantSpecies = new PlantSpecies();
-            plantSpecies.setFiled(field_text.getText().toString());
-            plantSpecies.setPlant_num(num_text.getText().toString());
-            plantSpecies.setDate(date_text.getText().toString());
-            plantSpeciesDataHelper.insert_(plantSpecies);
-            flag = true;
-            disableWidget();
-            return InputType.INPUT_SAVE_OK;
+//            PlantSpecies plantSpecies = new PlantSpecies();
+//            plantSpecies.setFiled(field_text.getText().toString());
+//            plantSpecies.setPlant_num(num_text.getText().toString());
+//            plantSpecies.setDate(date_text.getText().toString());
+//            plantSpeciesDataHelper.insert_(plantSpecies);
+//            flag = true;
+//            disableWidget();
+//            return InputType.INPUT_SAVE_OK;
         }
         return InputType.INPUT_EMPTY;
     }
@@ -112,7 +113,7 @@ public class PlantFragment extends BaseUploadFragment {
         cursor = fieldDataHelper.getCursor();
         adapter = new SimpleCursorAdapter(getActivity(),
                 android.R.layout.simple_list_item_1,
-                cursor, new String[]{"filed"},
+                cursor, new String[]{"field_name"},
                 new int[]{android.R.id.text1}, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
         fieldImg.setOnClickListener(fieldClickListener);
         dateImg.setOnClickListener(dateClickListener);
@@ -125,13 +126,15 @@ public class PlantFragment extends BaseUploadFragment {
                 @Override
                 public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                     cursor.moveToPosition(which);
-                    FieldInfo fieldInfo = FieldInfo.fromCursor(cursor);
-                    species_text.setText(fieldInfo.getSpecies());
-                    seed_text.setText(fieldInfo.getSeed());
-                    spec_text.setText(fieldInfo.getSpec());
-                    source_text.setText(fieldInfo.getSource());
-                    plot_info_text.setText(fieldInfo.getInfo());
-                    field_text.setText(fieldInfo.getFiled());
+                    Field field = Field.fromCursor(cursor);
+                    field_text.setText(field.getField_name());
+//                    FieldInfo fieldInfo = FieldInfo.fromCursor(cursor);
+//                    species_text.setText(fieldInfo.getSpecies());
+//                    seed_text.setText(fieldInfo.getSeed());
+//                    spec_text.setText(fieldInfo.getSpec());
+//                    source_text.setText(fieldInfo.getSource());
+//                    plot_info_text.setText(fieldInfo.getInfo());
+//                    field_text.setText(fieldInfo.getFiled());
                     textInput = true;
                     dialog.cancel();
                 }

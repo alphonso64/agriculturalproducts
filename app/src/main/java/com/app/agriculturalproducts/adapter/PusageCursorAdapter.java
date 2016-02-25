@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.app.agriculturalproducts.R;
 import com.app.agriculturalproducts.bean.PersticidesUsage;
+import com.app.agriculturalproducts.bean.PreventionRecord;
 import com.app.agriculturalproducts.bean.Task;
 
 import java.text.SimpleDateFormat;
@@ -35,10 +36,10 @@ public class PusageCursorAdapter extends BaseAbstractRecycleCursorAdapter<Recycl
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, Cursor cursor) {
-        PersticidesUsage pu = PersticidesUsage.fromCursor(cursor);
-        ((PusageViewHolder) holder).title_1.setText(pu.getField());
-        ((PusageViewHolder) holder).title_3.setText(pu.getName());
-        ((PusageViewHolder) holder).title_2.setText(pu.getDate());
+        PreventionRecord pu = PreventionRecord.fromCursor(cursor);
+        ((PusageViewHolder) holder).title_1.setText(pu.getField_name());
+        ((PusageViewHolder) holder).title_3.setText(pu.getPreventionrecord_medicine_name());
+        ((PusageViewHolder) holder).title_2.setText(pu.getPreventionrecord_date());
     }
 
     @Override

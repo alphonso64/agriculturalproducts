@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.app.agriculturalproducts.R;
+import com.app.agriculturalproducts.bean.FertilizerRecord;
 import com.app.agriculturalproducts.bean.FertilizerUsage;
 import com.app.agriculturalproducts.bean.PersticidesUsage;
 import com.app.agriculturalproducts.bean.Task;
@@ -35,10 +36,10 @@ public class FusageCursorAdapter extends BaseAbstractRecycleCursorAdapter<Recycl
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, Cursor cursor) {
-        FertilizerUsage fu = FertilizerUsage.fromCursor(cursor);
-        ((PusageViewHolder) holder).title_1.setText(fu.getField());
-        ((PusageViewHolder) holder).title_2.setText(fu.getDate());
-        ((PusageViewHolder) holder).title_3.setText(fu.getName());
+        FertilizerRecord fu = FertilizerRecord.fromCursor(cursor);
+        ((PusageViewHolder) holder).title_1.setText(fu.getField_name());
+        ((PusageViewHolder) holder).title_2.setText(fu.getFertilizerecord_name());
+        ((PusageViewHolder) holder).title_3.setText(fu.getFertilizerecord_date());
     }
 
     @Override

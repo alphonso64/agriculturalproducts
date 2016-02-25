@@ -5,8 +5,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.support.v4.content.CursorLoader;
 
-import com.app.agriculturalproducts.bean.OtherInfo;
-import com.app.agriculturalproducts.bean.Picking;
+import com.app.agriculturalproducts.bean.OtherRecord;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,13 +13,13 @@ import java.util.List;
 import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 
 
-public class OtherInfoDataHelper extends BaseDataHelper implements DBInterface<OtherInfo> {
+public class OtherInfoDataHelper extends BaseDataHelper implements DBInterface<OtherRecord> {
 
     public OtherInfoDataHelper(Context context) {
         super(context);
     }
 
-    public static final String TABLE_NAME = "OtherInfo";
+    public static final String TABLE_NAME = "OtherRecord";
     @Override
     protected Uri getContentUri() {
         return DataProvider.OTHER_TABLE_CONTENT_URI;
@@ -32,9 +31,9 @@ public class OtherInfoDataHelper extends BaseDataHelper implements DBInterface<O
     }
 
     @Override
-    public void bulkInsert(List<OtherInfo> listData) {
+    public void bulkInsert(List<OtherRecord> listData) {
         ArrayList<ContentValues> contentValues = new ArrayList<>();
-        for (OtherInfo item : listData) {
+        for (OtherRecord item : listData) {
             ContentValues values = getContentValues(item);
             contentValues.add(values);
         }
@@ -43,8 +42,8 @@ public class OtherInfoDataHelper extends BaseDataHelper implements DBInterface<O
     }
 
     @Override
-    public ContentValues getContentValues(OtherInfo data) {
-        ContentValues values = cupboard().withEntity(OtherInfo.class).toContentValues(data);
+    public ContentValues getContentValues(OtherRecord data) {
+        ContentValues values = cupboard().withEntity(OtherRecord.class).toContentValues(data);
         return values;
     }
 
@@ -52,8 +51,8 @@ public class OtherInfoDataHelper extends BaseDataHelper implements DBInterface<O
         delete(where,selectionArgs);
     }
 
-    public void insert_(OtherInfo data){
-        ContentValues values = cupboard().withEntity(OtherInfo.class).toContentValues(data);
+    public void insert_(OtherRecord data){
+        ContentValues values = cupboard().withEntity(OtherRecord.class).toContentValues(data);
         insert(values);
     }
 

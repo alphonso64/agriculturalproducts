@@ -1,6 +1,9 @@
 package com.app.agriculturalproducts.bean;
 
+import android.database.Cursor;
 import android.util.Log;
+
+import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 
 /**
  * Created by ALPHONSO on 2016/2/25.
@@ -18,6 +21,11 @@ public class PickRecord {
     private String field_area;
     private String pickrecord_status;
     private String member_name;
+
+    public static PickRecord fromCursor(Cursor cursor) {
+        PickRecord pickRecord= cupboard().withCursor(cursor).get(PickRecord.class);
+        return pickRecord;
+    }
 
     public void printfInfo(){
         Log.e("testcc", "pickrecord_id" + ":" + pickrecord_id

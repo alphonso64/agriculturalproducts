@@ -1,6 +1,9 @@
 package com.app.agriculturalproducts.bean;
 
+import android.database.Cursor;
 import android.util.Log;
+
+import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 
 /**
  * Created by ALPHONSO on 2016/2/25.
@@ -23,6 +26,12 @@ public class PreventionRecord {
     private String plantrecord_breed;
     private String plantrecord_plant_date;
     private String member_name;
+
+
+    public static PreventionRecord fromCursor(Cursor cursor) {
+        PreventionRecord preventionRecord= cupboard().withCursor(cursor).get(PreventionRecord.class);
+        return preventionRecord;
+    }
 
     public void printfInfo(){
         Log.e("testcc", "preventionrecord_id" + ":" + preventionrecord_id
