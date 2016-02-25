@@ -10,9 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.app.agriculturalproducts.R;
-import com.app.agriculturalproducts.bean.FieldInfo;
-import com.app.agriculturalproducts.bean.PersticidesUsage;
-import com.app.agriculturalproducts.bean.PlantSpecies;
+import com.app.agriculturalproducts.bean.Field;
 import com.app.agriculturalproducts.bean.Task;
 
 import java.text.SimpleDateFormat;
@@ -36,10 +34,10 @@ public class FieldCursorAdapter extends BaseAbstractRecycleCursorAdapter<Recycle
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, Cursor cursor) {
-        FieldInfo pu = FieldInfo.fromCursor(cursor);
-        ((PusageViewHolder) holder).title_1.setText(pu.getFiled());
-        ((PusageViewHolder) holder).title_3.setText(pu.getSpecies());
-        ((PusageViewHolder) holder).title_2.setText(pu.getSeed());
+        Field field = Field.fromCursor(cursor);
+        ((PusageViewHolder) holder).title_1.setText(field.getField_name());
+        ((PusageViewHolder) holder).title_3.setText(field.getField_type());
+        ((PusageViewHolder) holder).title_2.setText(field.getField_status());
     }
 
     @Override

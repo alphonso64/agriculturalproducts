@@ -17,26 +17,26 @@ public class FieldTest {
         fieldDataHelper = new FieldDataHelper(context);
     }
 
-    public void test(){
-        for(int i=0;i<5;i++){
-            insertFiled();
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    private void insertFiled(){
-        FieldInfo filed = new FieldInfo();
-        long val = System.currentTimeMillis();
-        filed.setFiled("地块"+val);
-        filed.setInfo("地块详细信息"+val);
-        filed.setSeed("种子信息"+val);
-        filed.setSource("来源"+val);
-        filed.setSpec("归资格信息"+val);
-        filed.setSpecies("种植种类信息"+val);
-        fieldDataHelper.insert_(filed);
-    }
+//    public void test(){
+//        for(int i=0;i<5;i++){
+//            insertFiled();
+//            try {
+//                Thread.sleep(10);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
+//
+//    private void insertFiled(){
+//        FieldInfo filed = new FieldInfo();
+//        long val = System.currentTimeMillis();
+//        filed.setFiled("地块"+val);
+//        filed.setInfo("地块详细信息"+val);
+//        filed.setSeed("种子信息"+val);
+//        filed.setSource("来源"+val);
+//        filed.setSpec("归资格信息"+val);
+//        filed.setSpecies("种植种类信息"+val);
+//        fieldDataHelper.insert_(filed);
+//    }
 }

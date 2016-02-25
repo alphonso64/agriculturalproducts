@@ -2,8 +2,10 @@ package com.app.agriculturalproducts.db;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.app.agriculturalproducts.bean.FertilizerUsage;
+import com.app.agriculturalproducts.bean.Field;
 import com.app.agriculturalproducts.bean.FieldInfo;
 import com.app.agriculturalproducts.bean.OtherInfo;
 import com.app.agriculturalproducts.bean.PersticidesUsage;
@@ -18,22 +20,26 @@ import static nl.qbusict.cupboard.CupboardFactory.cupboard;
  */
 public class DBHelper extends SQLiteOpenHelper {
 
-    private static final String DATABASE_NAME = "data.db";
+    private static final String DATABASE_NAME = "data";
     private static final int DB_NEW_VERSION = 2;
     private static final int DB_BASE_VERSION = 1;
+    private String name;
 
-    public DBHelper(Context context) {
-        super(context, DATABASE_NAME, null, DB_BASE_VERSION);
+    public DBHelper(Context context,String name) {
+        super(context, DATABASE_NAME+name+".db", null, DB_BASE_VERSION);
+        Log.e("testcc", DATABASE_NAME + name + ".db");
+        this.name = name;
     }
 
     static {
         cupboard().register(Task.class);
-        cupboard().register(PersticidesUsage.class);
-        cupboard().register(FertilizerUsage.class);
-        cupboard().register(PlantSpecies.class);
-        cupboard().register(Picking.class);
-        cupboard().register(OtherInfo.class);
-        cupboard().register(FieldInfo.class);
+        cupboard().register(Field.class);
+//        cupboard().register(PersticidesUsage.class);
+//        cupboard().register(FertilizerUsage.class);
+//        cupboard().register(PlantSpecies.class);
+//        cupboard().register(Picking.class);
+//        cupboard().register(OtherInfo.class);
+//        cupboard().register(FieldInfo.class);
     }
 
         @Override

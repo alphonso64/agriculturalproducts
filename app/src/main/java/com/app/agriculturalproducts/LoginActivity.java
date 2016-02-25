@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.app.agriculturalproducts.db.DataProvider;
 import com.app.agriculturalproducts.http.HttpClient;
 import com.app.agriculturalproducts.util.InputType;
 import com.litesuits.http.exception.HttpException;
@@ -92,7 +93,7 @@ public class LoginActivity extends AppCompatActivity {
 
     @OnClick(R.id.loginbutton)
     void login(){
-        String name = nameText.getEditableText().toString();
+        final String name = nameText.getEditableText().toString();
         String pwd = pwdText.getText().toString();
         if(TextUtils.isEmpty(name) || TextUtils.isEmpty(pwd)){
             Toast toast = Toast.makeText(getApplicationContext(),
@@ -121,10 +122,19 @@ public class LoginActivity extends AppCompatActivity {
                     JSONObject object = new JSONObject(s);
                     String result = (String) object.get("return_code");
                     if(result.equals("success")){
-                    Intent intent = new Intent(LoginActivity.this, MainDrawlayoutActivity.class);
-                    startActivity(intent);
-                    finish();
-                    }
+                        SharedPreferences sp = getSharedPreferences(InputType.loginInfoDB,
+                                Activity.MODE_PRIVATE);
+                        SharedPreferences.Editor ed = sp.edit();
+                        ed.putString("isLogin",InputType.INPUT_CHECK_OK);
+                        ed.putString("name",name);
+                        ed.commit();
+
+                        //打开db
+                        DataProvider.resetDBHelper();
+                        Intent intent = new Intent(LoginActivity.this, MainDrawlayoutActivity.class);
+                        startActivity(intent);
+                        finish();
+                }
                 } catch (JSONException e) {
                     return;
                 }

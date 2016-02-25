@@ -20,6 +20,8 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.app.agriculturalproducts.PersonInfoActivity;
 import com.app.agriculturalproducts.R;
+import com.app.agriculturalproducts.bean.EmployeeInfo;
+import com.app.agriculturalproducts.model.EmployeeInfoModel;
 import com.app.agriculturalproducts.util.InputType;
 
 import butterknife.Bind;
@@ -92,11 +94,11 @@ public class MineFragment extends Fragment {
     }
 
     void  setPersonINfo(){
-        SharedPreferences sp = getActivity().getSharedPreferences(InputType.loginInfoDB,
-                Activity.MODE_PRIVATE);
-        nameText.setText(sp.getString("name","无"));
-        coopText.setText(sp.getString("coop","无"));
-        String path = sp.getString("path", null);
+        EmployeeInfoModel employeeInfoModel = new EmployeeInfoModel(getActivity());
+        EmployeeInfo employeeInfo = employeeInfoModel.getEmployeeInfo();
+        nameText.setText(employeeInfo.getEmployee_name());
+        coopText.setText(employeeInfo.getMember_name());
+        String path = employeeInfo.getPath();
         if(path!=null){
             Bitmap picture = BitmapFactory.decodeFile(path);
             imgView.setImageBitmap(picture);

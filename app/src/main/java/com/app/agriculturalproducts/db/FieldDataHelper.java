@@ -7,7 +7,7 @@ import android.net.Uri;
 import android.support.v4.content.CursorLoader;
 import android.util.Log;
 
-import com.app.agriculturalproducts.bean.FieldInfo;
+import com.app.agriculturalproducts.bean.Field;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,13 +15,13 @@ import java.util.List;
 import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 
 
-public class FieldDataHelper extends BaseDataHelper implements DBInterface<FieldInfo> {
+public class FieldDataHelper extends BaseDataHelper implements DBInterface<Field> {
 
     public FieldDataHelper(Context context) {
         super(context);
     }
 
-    public static final String TABLE_NAME = "FieldInfo";
+    public static final String TABLE_NAME = "Field";
     @Override
     protected Uri getContentUri() {
         return DataProvider.FILED_TABLE_CONTENT_URI;
@@ -33,9 +33,9 @@ public class FieldDataHelper extends BaseDataHelper implements DBInterface<Field
     }
 
     @Override
-    public void bulkInsert(List<FieldInfo> listData) {
+    public void bulkInsert(List<Field> listData) {
         ArrayList<ContentValues> contentValues = new ArrayList<>();
-        for (FieldInfo item : listData) {
+        for (Field item : listData) {
             ContentValues values = getContentValues(item);
             contentValues.add(values);
         }
@@ -44,8 +44,8 @@ public class FieldDataHelper extends BaseDataHelper implements DBInterface<Field
     }
 
     @Override
-    public ContentValues getContentValues(FieldInfo data) {
-        ContentValues values = cupboard().withEntity(FieldInfo.class).toContentValues(data);
+    public ContentValues getContentValues(Field data) {
+        ContentValues values = cupboard().withEntity(Field.class).toContentValues(data);
         return values;
     }
 
@@ -53,9 +53,9 @@ public class FieldDataHelper extends BaseDataHelper implements DBInterface<Field
         delete(where,selectionArgs);
     }
 
-    public void insert_(FieldInfo data){
+    public void insert_(Field data){
         Log.e("tetstbb", "insert_");
-        ContentValues values = cupboard().withEntity(FieldInfo.class).toContentValues(data);
+        ContentValues values = cupboard().withEntity(Field.class).toContentValues(data);
         insert(values);
     }
 

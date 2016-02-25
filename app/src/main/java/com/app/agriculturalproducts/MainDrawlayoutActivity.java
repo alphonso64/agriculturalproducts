@@ -1,36 +1,61 @@
 package com.app.agriculturalproducts;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.app.agriculturalproducts.app.AppApplication;
+import com.app.agriculturalproducts.bean.EmployeeInfo;
 import com.app.agriculturalproducts.bean.FieldInfo;
 import com.app.agriculturalproducts.db.DBHelper;
 import com.app.agriculturalproducts.db.FieldDataHelper;
 import com.app.agriculturalproducts.fragment.DataFragment;
 import com.app.agriculturalproducts.fragment.MineFragment;
 import com.app.agriculturalproducts.fragment.WorkFragment;
+import com.app.agriculturalproducts.http.HttpClient;
+import com.app.agriculturalproducts.model.EmployeeInfoModel;
 import com.app.agriculturalproducts.presenter.UserInfoPresenter;
+import com.app.agriculturalproducts.util.InputType;
 import com.app.agriculturalproducts.view.UserInfoSimpleView;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class MainDrawlayoutActivity extends BaseActivity implements UserInfoSimpleView{
+public class MainDrawlayoutActivity extends BaseActivity {
 
     private UserInfoPresenter mUserInfoPresenter;
     CircleImageView mImgView;
     TextView mNameText;
     TextView mCOOPText;
     private FieldDataHelper filedDataHelper;
+    private ProgressDialog progressDialog;
+    private Handler mHandler = new Handler() {
+
+        @Override
+        public void handleMessage(Message msg) {
+            SharedPreferences sp = AppApplication.getContext().getSharedPreferences(InputType.loginInfoDB,
+                    Activity.MODE_PRIVATE);
+            String name = sp.getString("name", null);
+            SharedPreferences.Editor editor = sp.edit();
+            editor.putString(name,"no");
+            editor.commit();
+            progressDialog.dismiss();
+        }
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,48 +102,50 @@ public class MainDrawlayoutActivity extends BaseActivity implements UserInfoSimp
         params.width = width;
         mNavigationView.setLayoutParams(params);
 
+        SharedPreferences sp = AppApplication.getContext().getSharedPreferences(InputType.loginInfoDB,
+                Activity.MODE_PRIVATE);
+        final String name = sp.getString("name", null);
+        final String isFirstLogin = sp.getString(name,null);
+        final EmployeeInfoModel employeeInfoModel = new EmployeeInfoModel(getApplicationContext());
+        Log.e("testcc", name + isFirstLogin);
+        //if(isFirstLogin==null)
+        {
+            progressDialog = new ProgressDialog(this);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.setMessage("初始化");
+            progressDialog.setIndeterminate(false);
+            progressDialog.setCancelable(true);
+            progressDialog.show();
+            new Thread(){
+
+                @Override
+                public void run() {
+                    HttpClient.getInstance().getAllInfo(name);
+                    //保存地块信息至数据库
+                    FieldDataHelper fieldDataHelper = new FieldDataHelper(getApplicationContext());
+                    fieldDataHelper.bulkInsert(HttpClient.getInstance().fieldList);
+                    //保存雇员信息sp中
+                    employeeInfoModel.setEmployeeInfo(HttpClient.getInstance().employeeInfo);
+                    mHandler.sendEmptyMessage(1);
+                }}.start();
+        }
+
         View header = LayoutInflater.from(this).inflate(R.layout.draw_header, null);
         mNavigationView.addHeaderView(header);
         mImgView = (CircleImageView)header.findViewById(R.id.headerImgView);
         mNameText = (TextView)header.findViewById(R.id.headNameText);
         mCOOPText = (TextView)header.findViewById(R.id.headCOOPText);
-        mUserInfoPresenter = new UserInfoPresenter(getApplicationContext(),this);
-        mUserInfoPresenter.loadUserInfo();
+        EmployeeInfo employeeInfo = employeeInfoModel.getEmployeeInfo();
+        mNameText.setText(employeeInfo.getEmployee_name());
+        mCOOPText.setText(employeeInfo.getMember_name());
 
-        filedDataHelper = new FieldDataHelper(getApplicationContext());
+//        mUserInfoPresenter = new UserInfoPresenter(getApplicationContext(),this);
+//        mUserInfoPresenter.loadUserInfo();
+//        filedDataHelper = new FieldDataHelper(getApplicationContext());
     }
     @Override
     protected int getContentView() {
         return R.layout.activity_main_drawlayout;
     }
-
-    @Override
-    public void setName(String name) {
-        mNameText.setText(name);
-    }
-
-    @Override
-    public void setImg(String path) {
-        if(path!=null){
-            Bitmap picture = BitmapFactory.decodeFile(path);
-            mImgView.setImageBitmap(picture);
-        }
-    }
-
-    @Override
-    public void setPhone(String phone) {
-
-    }
-
-    @Override
-    public void setCoop(String coop) {
-        mCOOPText.setText(coop);
-    }
-
-    @Override
-    public void setId(String id) {
-
-    }
-
 
 }

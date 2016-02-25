@@ -19,6 +19,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.app.agriculturalproducts.bean.EmployeeInfo;
+import com.app.agriculturalproducts.model.EmployeeInfoModel;
 import com.app.agriculturalproducts.util.IMGUtil;
 import com.app.agriculturalproducts.util.InputType;
 import com.app.agriculturalproducts.util.StringUtil;
@@ -97,19 +99,32 @@ public class PersonInfoActivity extends BaseActivity {
     }
 
     private void setPersonInfo(){
-        SharedPreferences sp = getSharedPreferences(InputType.loginInfoDB, Activity.MODE_PRIVATE);
-        nameText.setText(sp.getString("name","无"));
-        coopText.setText(sp.getString("coop","无"));
+        EmployeeInfoModel employeeInfoModel = new EmployeeInfoModel(this);
+        EmployeeInfo employeeInfo = employeeInfoModel.getEmployeeInfo();
+
+        nameText.setText(employeeInfo.getEmployee_name());
+        coopText.setText(employeeInfo.getMember_name());
         {
-            String phone = sp.getString("phone",null);
-            phoneText.setText(StringUtil.getMaskedStr(phone,4,'*'));
+            String phone = employeeInfo.getEmployee_passport();
+           // phoneText.setText(StringUtil.getMaskedStr(phone,4,'*'));
+            if(phone == null){
+                phoneText.setText("无");
+            }else{
+                phoneText.setText(phone);
+            }
+
         }
         {
-            String id =  sp.getString("id", null);
-            idText.setText(StringUtil.getMaskedStr(id,8,'*'));
+            String id =  employeeInfo.getEmployee_tel();
+          //  idText.setText(StringUtil.getMaskedStr(id,8,'*'));
+            if(id == null){
+                idText.setText("无");
+            }else{
+                idText.setText(id);
+            }
         }
 
-        String path = sp.getString("path", null);
+        String path = employeeInfo.getPath();
         if(path!=null){
             Bitmap picture = BitmapFactory.decodeFile(path);
             imgView.setImageBitmap(picture);
@@ -208,12 +223,10 @@ public class PersonInfoActivity extends BaseActivity {
     }
 
     private void saveInfo() {
-        SharedPreferences sp = getSharedPreferences(InputType.loginInfoDB,
-                Activity.MODE_PRIVATE);
-        // 获取Editor对象
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putString("path",path);
-        editor.commit();
+        EmployeeInfoModel employeeInfoModel = new EmployeeInfoModel(this);
+        EmployeeInfo employeeInfo = employeeInfoModel.getEmployeeInfo();
+        employeeInfo.setPath(path);
+        employeeInfoModel.setEmployeeInfo(employeeInfo);
     }
 
 }
