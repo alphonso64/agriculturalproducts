@@ -58,7 +58,9 @@ public class PersticidesUsageDataHelper extends BaseDataHelper implements DBInte
         ContentValues values = cupboard().withEntity(PreventionRecord.class).toContentValues(data);
         insert(values);
     }
-
+    public void updateByID(ContentValues values,String id){
+        update(values, "_id = ?", new String[]{id});
+    }
     @Override
     public CursorLoader getCursorLoader() {
         return new CursorLoader(getContext(), getContentUri(), null, null, null, null);

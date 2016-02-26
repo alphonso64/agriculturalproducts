@@ -422,6 +422,7 @@ public class HttpClient {
                     if (!(value.equals("null") && value != null)) {
                         fertilizer.setFertilizerecord_people(value);
                     }
+                    fertilizer.setSaved("yes");
                     ls.add(fertilizer);
                 }
             }
@@ -518,6 +519,7 @@ public class HttpClient {
                     if (!(value.equals("null") && value != null)) {
                         preventionRecord.setMember_name(value);
                     }
+                    preventionRecord.setSaved("yes");
                     ls.add(preventionRecord);
                 }
             }
@@ -587,7 +589,7 @@ public class HttpClient {
                     if (!(value.equals("null") && value != null)) {
                         pickRecord.setMember_name(value);
                     }
-
+                    pickRecord.setSaved("yes");
                     ls.add(pickRecord);
                 }
             }
@@ -650,6 +652,7 @@ public class HttpClient {
                     if (!(value.equals("null") && value != null)) {
                         otherRecord.setMember_name(value);
                     }
+                    otherRecord.setSaved("yes");
                     ls.add(otherRecord);
                 }
             }
@@ -828,4 +831,105 @@ public class HttpClient {
         return 0;
     }
 
+    public int uploadFertilizer(HttpListener<String> listener,FertilizerRecord fertilizerRecord){
+        JSONObject object = new JSONObject();
+        try {
+            object.put("personalstock_id", fertilizerRecord.getLocal_stock_id());
+            object.put("fertilizerecord_date", fertilizerRecord.getFertilizerecord_date());
+            object.put("fertilizerecord_name", fertilizerRecord.getFertilizerecord_name());
+            object.put("fertilizerecord_number", fertilizerRecord.getFertilizerecord_number());
+            object.put("fertilizerecord_range", fertilizerRecord.getFertilizerecord_range());
+            object.put("fertilizerecord_type", fertilizerRecord.getFertilizerecord_type());
+            object.put("fertilizerecord_spec", fertilizerRecord.getFertilizerecord_spec());
+            object.put("fertilizerecord_method", fertilizerRecord.getFertilizerecord_method());
+            object.put("fertilizerecord_people", fertilizerRecord.getFertilizerecord_people());
+            object.put("plantrecord_id", fertilizerRecord.getLocal_plant_id());
+            Log.e("testcc",object.toString());
+        } catch (JSONException e) {
+            return 0;
+        }
+        LinkedHashMap<String, String> header = new LinkedHashMap<>();
+        header.put("contentType", "utf-8");
+        header.put("Content-type", "application/x-java-serialized-object");
+        StringRequest stringRequest = new StringRequest(Configure.ADD_FERTILIZERECORD_URL).setHeaders(header)
+                .setMethod(HttpMethods.Post).setHttpBody(new StringBody(object.toString()));
+        stringRequest.setHttpListener(listener);
+        liteHttp.executeAsync(stringRequest);
+        return 0;
+    }
+
+    public int uploadPrevention(HttpListener<String> listener,PreventionRecord preventionRecord){
+        JSONObject object = new JSONObject();
+        try {
+            object.put("personalstock_id", preventionRecord.getLocal_stock_id());
+            object.put("preventionrecord_medicine_name", preventionRecord.getPreventionrecord_medicine_name());
+            object.put("preventionrecord_date", preventionRecord.getPreventionrecord_date());
+            object.put("preventionrecord_range", preventionRecord.getPreventionrecord_range());
+            object.put("preventionrecord_type", preventionRecord.getPreventionrecord_type());
+            object.put("preventionrecord_spec", preventionRecord.getPreventionrecord_spec());
+            object.put("preventionrecord_method", preventionRecord.getPreventionrecord_method());
+            object.put("preventionrecord_medicine_number", preventionRecord.getPreventionrecord_medicine_number());
+            object.put("preventionrecord_plant_day", preventionRecord.getPreventionrecord_plant_day());
+            object.put("preventionrecord_symptom", preventionRecord.getPreventionrecord_symptom());
+            object.put("preventionrecord_medicine_people", preventionRecord.getPreventionrecord_medicine_people());
+            object.put("preventionrecord_use_people", preventionRecord.getPreventionrecord_use_people());
+            object.put("plantrecord_id", preventionRecord.getLocal_plant_id());
+            Log.e("testcc",object.toString());
+        } catch (JSONException e) {
+            return 0;
+        }
+        LinkedHashMap<String, String> header = new LinkedHashMap<>();
+        header.put("contentType", "utf-8");
+        header.put("Content-type", "application/x-java-serialized-object");
+        StringRequest stringRequest = new StringRequest(Configure.ADD_PREVENTIONRECORD_URL ).setHeaders(header)
+                .setMethod(HttpMethods.Post).setHttpBody(new StringBody(object.toString()));
+        stringRequest.setHttpListener(listener);
+        liteHttp.executeAsync(stringRequest);
+        return 0;
+    }
+
+    public int uploadPick(HttpListener<String> listener,PickRecord pickRecord){
+        JSONObject object = new JSONObject();
+        try {
+            object.put("plantrecord_id", pickRecord.getLocal_plant_id());
+            object.put("pickrecord_date", pickRecord.getPickrecord_date());
+            object.put("pickrecord_number", pickRecord.getPickrecord_number());
+            object.put("pickrecord_area", pickRecord.getPickrecord_area());
+            object.put("pickrecord_people", pickRecord.getPickrecord_people());
+            Log.e("testcc",object.toString());
+        } catch (JSONException e) {
+            return 0;
+        }
+        LinkedHashMap<String, String> header = new LinkedHashMap<>();
+        header.put("contentType", "utf-8");
+        header.put("Content-type", "application/x-java-serialized-object");
+        StringRequest stringRequest = new StringRequest(Configure.ADD_PICKRECORD_URL).setHeaders(header)
+                .setMethod(HttpMethods.Post).setHttpBody(new StringBody(object.toString()));
+        stringRequest.setHttpListener(listener);
+        liteHttp.executeAsync(stringRequest);
+        return 0;
+    }
+
+    public int uploadOther(HttpListener<String> listener,OtherRecord otherRecord){
+        JSONObject object = new JSONObject();
+        try {
+            object.put("otherrecord_situation", otherRecord.getOtherrecord_situation());
+            object.put("otherrecord_date", otherRecord.getOtherrecord_date());
+            object.put("otherrecord_method", otherRecord.getOtherrecord_method());
+            object.put("otherrecord_place", otherRecord.getOtherrecord_place());
+            object.put("otherrecord_people", otherRecord.getOtherrecord_people());
+            object.put("plantrecord_id", otherRecord.getLocal_plant_id());
+            Log.e("testcc",object.toString());
+        } catch (JSONException e) {
+            return 0;
+        }
+        LinkedHashMap<String, String> header = new LinkedHashMap<>();
+        header.put("contentType", "utf-8");
+        header.put("Content-type", "application/x-java-serialized-object");
+        StringRequest stringRequest = new StringRequest(Configure.ADD_OTHERRECORD_URL).setHeaders(header)
+                .setMethod(HttpMethods.Post).setHttpBody(new StringBody(object.toString()));
+        stringRequest.setHttpListener(listener);
+        liteHttp.executeAsync(stringRequest);
+        return 0;
+    }
 }

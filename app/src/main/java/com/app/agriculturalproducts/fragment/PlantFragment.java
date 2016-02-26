@@ -57,9 +57,6 @@ public class PlantFragment extends BaseUploadFragment {
     private FieldDataHelper fieldDataHelper;
     private PlantSpeciesDataHelper plantSpeciesDataHelper;
 
-    private Field field;
-    private PersonalStock personalStock;
-
     @Bind(R.id.date_img)
     ImageView dateImg;
     @Bind(R.id.field_img)
@@ -90,6 +87,8 @@ public class PlantFragment extends BaseUploadFragment {
     Cursor cursor;
     Cursor cursor_inner;
     ListAdapter adapter;
+    Field field;
+    PersonalStock personalStock;
 
     @Override
     public int save() {
@@ -236,7 +235,12 @@ public class PlantFragment extends BaseUploadFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        cursor.close();
+        if(cursor!=null){
+            cursor.close();
+        }
+        if(cursor_inner!=null){
+            cursor_inner.close();
+        }
         ButterKnife.unbind(this);
     }
 

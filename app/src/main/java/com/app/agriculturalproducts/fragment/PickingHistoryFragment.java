@@ -1,5 +1,6 @@
 package com.app.agriculturalproducts.fragment;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,19 +13,32 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.app.agriculturalproducts.R;
 import com.app.agriculturalproducts.adapter.FusageCursorAdapter;
+import com.app.agriculturalproducts.adapter.OnAdpaterItemClickListener;
 import com.app.agriculturalproducts.adapter.PickingCursorAdapter;
+import com.app.agriculturalproducts.bean.PickRecord;
+import com.app.agriculturalproducts.bean.PlanterRecord;
 import com.app.agriculturalproducts.db.FertilizerUsageDataHelper;
 import com.app.agriculturalproducts.db.PickingDataHelper;
+import com.app.agriculturalproducts.http.HttpClient;
+import com.litesuits.http.listener.HttpListener;
+import com.litesuits.http.response.Response;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
+import static nl.qbusict.cupboard.CupboardFactory.cupboard;
+
 /**
  * Created by ALPHONSO on 2016/1/5.
  */
-public class PickingHistoryFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
+public class PickingHistoryFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     @Bind(R.id.pu_recyclerview)
     RecyclerView mRecyclerView;
@@ -51,9 +65,54 @@ public class PickingHistoryFragment extends Fragment implements LoaderManager.Lo
         super.onViewCreated(view, savedInstanceState);
         mDataHelper = new PickingDataHelper(getActivity());
         mAdapter = new PickingCursorAdapter(getActivity());
+        mAdapter.setOnItemClickListener(itemClickListener);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(mAdapter);
     }
+
+
+    private OnAdpaterItemClickListener itemClickListener = new OnAdpaterItemClickListener() {
+        @Override
+        public void onItemClick(Object obj, int p) {
+            final PickRecord pickRecord = (PickRecord) obj;
+            String saved = pickRecord.getSaved();
+            if (!saved.equals("yes")) {
+                new MaterialDialog.Builder(getActivity())
+                        .title("上传采摘信息?")
+                        .positiveText("是")
+                        .negativeText("否").onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(MaterialDialog dialog, DialogAction which) {
+                        HttpClient.getInstance().uploadPick(new HttpListener<String>() {
+                            @Override
+                            public void onSuccess(String s, Response<String> response) {
+                                try {
+                                    JSONObject jsonObject = new JSONObject(s);
+                                    String val = jsonObject.getString("return_code");
+                                    if (val.equals("success")) {
+                                        pickRecord.setSaved("yes");
+                                        ContentValues values = cupboard().withEntity(PickRecord.class).toContentValues(pickRecord);
+                                        mDataHelper.updateByID(values, String.valueOf(pickRecord.get_id()));
+                                        new MaterialDialog.Builder(getActivity())
+                                                .title("上传成功！")
+                                                .positiveText("好的")
+                                                .show();
+                                    } else {
+                                        new MaterialDialog.Builder(getActivity())
+                                                .title("上传失败：农药安全期未到！")
+                                                .positiveText("好的")
+                                                .show();
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }, pickRecord);
+                    }
+                }).show();
+            }
+        }
+    };
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {

@@ -21,6 +21,9 @@ public class PickRecord {
     private String field_area;
     private String pickrecord_status;
     private String member_name;
+    private String saved;
+    private String local_plant_id;
+    private Long _id;
 
     public static PickRecord fromCursor(Cursor cursor) {
         PickRecord pickRecord= cupboard().withCursor(cursor).get(PickRecord.class);
@@ -131,5 +134,29 @@ public class PickRecord {
 
     public void setMember_name(String member_name) {
         this.member_name = member_name;
+    }
+
+    public String getSaved() {
+        return saved;
+    }
+
+    public void setSaved(String saved) {
+        this.saved = saved;
+    }
+
+    public String getLocal_plant_id() {
+        return local_plant_id;
+    }
+
+    public void setLocal_plant_id(String local_plant_id) {
+        this.local_plant_id = local_plant_id;
+    }
+
+    public Long get_id() {
+        return _id;
+    }
+
+    public void set_id(Long _id) {
+        this._id = _id;
     }
 }

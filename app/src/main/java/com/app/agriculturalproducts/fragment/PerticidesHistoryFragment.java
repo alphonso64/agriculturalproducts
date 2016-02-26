@@ -1,5 +1,6 @@
 package com.app.agriculturalproducts.fragment;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.app.agriculturalproducts.R;
 import com.app.agriculturalproducts.adapter.BasicIconRecyclerAdapter;
@@ -22,21 +24,30 @@ import com.app.agriculturalproducts.adapter.OnAdpaterItemClickListener;
 import com.app.agriculturalproducts.adapter.PusageCursorAdapter;
 import com.app.agriculturalproducts.adapter.TaskCursorAdapter;
 import com.app.agriculturalproducts.app.AppApplication;
+import com.app.agriculturalproducts.bean.FertilizerRecord;
 import com.app.agriculturalproducts.bean.PersticidesUsage;
+import com.app.agriculturalproducts.bean.PreventionRecord;
 import com.app.agriculturalproducts.bean.Task;
+import com.app.agriculturalproducts.db.FertilizerUsageDataHelper;
 import com.app.agriculturalproducts.db.PersticidesUsageDataHelper;
+import com.app.agriculturalproducts.http.HttpClient;
 import com.app.agriculturalproducts.view.NoScrollGridLayoutManager;
 import com.litesuits.http.listener.HttpListener;
 import com.litesuits.http.request.StringRequest;
 import com.litesuits.http.response.Response;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
+
+import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 
 /**
  * Created by ALPHONSO on 2016/1/5.
  */
-public class PerticidesHistoryFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
+public class PerticidesHistoryFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     @Bind(R.id.pu_recyclerview)
     RecyclerView mRecyclerView;
@@ -63,6 +74,7 @@ public class PerticidesHistoryFragment extends Fragment implements LoaderManager
         super.onViewCreated(view, savedInstanceState);
         mDataHelper = new PersticidesUsageDataHelper(getActivity());
         mAdapter = new PusageCursorAdapter(getActivity());
+        mAdapter.setOnItemClickListener(itemClickListener);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(mAdapter);
     }
@@ -72,6 +84,50 @@ public class PerticidesHistoryFragment extends Fragment implements LoaderManager
         super.onActivityCreated(savedInstanceState);
         getLoaderManager().initLoader(0, null, this);
     }
+
+    private OnAdpaterItemClickListener itemClickListener = new OnAdpaterItemClickListener() {
+        @Override
+        public void onItemClick(Object obj, int p) {
+            final PreventionRecord preventionRecord = (PreventionRecord) obj;
+            String saved = preventionRecord.getSaved();
+            if (!saved.equals("yes")) {
+                new MaterialDialog.Builder(getActivity())
+                        .title("上传防治信息?")
+                        .positiveText("是")
+                        .negativeText("否").onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(MaterialDialog dialog, DialogAction which) {
+                        HttpClient.getInstance().uploadPrevention(new HttpListener<String>() {
+                            @Override
+                            public void onSuccess(String s, Response<String> response) {
+                                Log.e("testcc",s);
+                                try {
+                                    JSONObject jsonObject = new JSONObject(s);
+                                    String val = jsonObject.getString("return_code");
+                                    if (val.equals("success")) {
+                                        preventionRecord.setSaved("yes");
+                                        ContentValues values = cupboard().withEntity(PreventionRecord.class).toContentValues(preventionRecord);
+                                        mDataHelper.updateByID(values, String.valueOf(preventionRecord.get_id()));
+                                        new MaterialDialog.Builder(getActivity())
+                                                .title("上传成功！")
+                                                .positiveText("好的")
+                                                .show();
+                                    } else {
+                                        new MaterialDialog.Builder(getActivity())
+                                                .title("上传失败：农药数量不足！")
+                                                .positiveText("好的")
+                                                .show();
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }, preventionRecord);
+                    }
+                }).show();
+            }
+        }
+    };
 
     @Override
     public void onDestroyView() {

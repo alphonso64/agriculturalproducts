@@ -17,6 +17,9 @@ public class OtherRecord {
     private String plantrecord_breed;
     private String field_name;
     private String member_name;
+    private String saved;
+    private String local_plant_id;
+    private Long _id;
 
     public static OtherRecord fromCursor(Cursor cursor) {
         OtherRecord otherRecord= cupboard().withCursor(cursor).get(OtherRecord.class);
@@ -93,5 +96,29 @@ public class OtherRecord {
 
     public void setMember_name(String member_name) {
         this.member_name = member_name;
+    }
+
+    public String getSaved() {
+        return saved;
+    }
+
+    public void setSaved(String saved) {
+        this.saved = saved;
+    }
+
+    public String getLocal_plant_id() {
+        return local_plant_id;
+    }
+
+    public void setLocal_plant_id(String local_plant_id) {
+        this.local_plant_id = local_plant_id;
+    }
+
+    public Long get_id() {
+        return _id;
+    }
+
+    public void set_id(Long _id) {
+        this._id = _id;
     }
 }

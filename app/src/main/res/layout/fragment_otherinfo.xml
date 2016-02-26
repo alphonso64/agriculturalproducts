@@ -1,223 +1,311 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/lightGray">
+    android:background="@color/lightGray"
+    android:orientation="vertical">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:paddingLeft="20dp"
             android:paddingRight="10dp"
             android:paddingTop="10dp">
 
             <LinearLayout
-                android:focusable="true" android:focusableInTouchMode="true"
-                android:layout_width="0px" android:layout_height="0px">
+                android:layout_width="0px"
+                android:layout_height="0px"
+                android:focusable="true"
+                android:focusableInTouchMode="true">
+
                 <requestFocus />
             </LinearLayout>
 
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:layout_marginTop="15dp">
+                android:layout_marginTop="15dp"
+                android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_gravity="center_vertical"
-                    android:text="@string/plot"/>
+                    android:layout_weight="1"
+                    android:text="@string/plot" />
 
                 <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_weight="4"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:layout_weight="4">
+
                     <TextView
+                        android:id="@+id/o_field_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
                         android:layout_marginLeft="10dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/text_backgroud"
                         android:gravity="left|top"
                         android:padding="5dp"
-                        android:textSize="15sp"
-                        android:id="@+id/o_field_text"
-                        android:layout_gravity="center_vertical"
-                        android:background="@drawable/text_backgroud"
-                        android:layout_weight="1"
-                        android:singleLine="true" />
+                        android:singleLine="true"
+                        android:textSize="15sp" />
+
                     <ImageView
-                        android:id ="@+id/o_field_img"
+                        android:id="@+id/o_field_img"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
-                        android:layout_marginLeft="6dp"
                         android:layout_gravity="center_vertical"
-                        android:src="@drawable/ic_view_list_white_24dp"/>
+                        android:layout_marginLeft="6dp"
+                        android:src="@drawable/ic_view_list_white_24dp" />
                 </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:layout_gravity="center_vertical">
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="种植品种"
                     android:layout_gravity="center_vertical"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:text="种植品种" />
 
                 <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_weight="4"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:layout_weight="4">
+
                     <TextView
+                        android:id="@+id/o_species_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
                         android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="30dp"
+                        android:background="@drawable/text_backgroud"
                         android:gravity="left|top"
                         android:padding="5dp"
-                        android:textSize="15sp"
-                        android:id="@+id/o_species_text"
-                        android:background="@drawable/text_backgroud"
-                        android:layout_marginRight="30dp"
-                        android:singleLine="true" />
+                        android:singleLine="true"
+                        android:textSize="15sp" />
                 </LinearLayout>
             </LinearLayout>
 
 
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="40dp">
+                android:layout_height="40dp"
+                android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_gravity="center_vertical"
-                    android:text="记录日期"/>
+                    android:layout_weight="1"
+                    android:text="记录日期" />
+
                 <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_weight="4"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:layout_weight="4">
+
                     <TextView
+                        android:id="@+id/o_date_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
                         android:layout_marginLeft="10dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/text_backgroud"
                         android:gravity="left|top"
                         android:padding="5dp"
-                        android:textSize="15sp"
-                        android:id="@+id/o_date_text"
-                        android:layout_gravity="center_vertical"
-                        android:background="@drawable/text_backgroud"
-                        android:layout_weight="1"
-                        android:singleLine="true" />
+                        android:singleLine="true"
+                        android:textSize="15sp" />
+
                     <ImageView
                         android:id="@+id/o_date_img"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
-                        android:layout_marginLeft="5dp"
                         android:layout_gravity="center_vertical"
-                        android:src="@drawable/ic_date_range_white_24dp"/>
+                        android:layout_marginLeft="5dp"
+                        android:src="@drawable/ic_date_range_white_24dp" />
                 </LinearLayout>
             </LinearLayout>
+
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:layout_gravity="center_vertical">
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="记录人员"
                     android:layout_gravity="center_vertical"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:text="企业" />
 
                 <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_weight="4"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:layout_weight="4">
+
                     <TextView
+                        android:id="@+id/o_member_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
                         android:layout_gravity="center_vertical"
-                        android:gravity="left|top"
-                        android:padding="5dp"
-                        android:textSize="15sp"
-                        android:id="@+id/o_person_text"
-                        android:background="@drawable/text_backgroud"
+                        android:layout_marginLeft="10dp"
                         android:layout_marginRight="30dp"
-                        android:singleLine="true" />
+                        android:background="@drawable/text_backgroud"
+                        android:gravity="left|top"
+                        android:padding="5dp"
+                        android:singleLine="true"
+                        android:textSize="15sp" />
                 </LinearLayout>
             </LinearLayout>
+
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp">
+                android:layout_height="40dp"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/situation"
                     android:layout_gravity="center_vertical"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:text="记录人员" />
 
                 <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_weight="4"
-                    android:layout_height="wrap_content">
+                    android:layout_height="match_parent"
+                    android:layout_weight="4">
+
                     <EditText
-                        android:layout_width="wrap_content"
+                        android:id="@+id/o_person_text"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
                         android:layout_marginLeft="10dp"
-                        android:padding="5dp"
-                        android:textSize="15sp"
+                        android:layout_marginRight="30dp"
+                        android:background="@drawable/editext_backgroud"
                         android:gravity="left|top"
+                        android:padding="5dp"
+                        android:singleLine="true"
+                        android:textSize="15sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:text="发生地点" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="4">
+
+                    <EditText
+                        android:id="@+id/o_place_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="30dp"
+                        android:background="@drawable/editext_backgroud"
+                        android:gravity="left|top"
+                        android:padding="5dp"
+                        android:singleLine="true"
+                        android:textSize="15sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:text="@string/situation" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4">
+
+                    <EditText
                         android:id="@+id/o_situation_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="30dp"
+                        android:layout_weight="1"
                         android:background="@drawable/editext_backgroud"
+                        android:gravity="left|top"
                         android:lines="5"
                         android:maxLines="5"
-                        android:layout_weight="1"
-                        android:layout_marginRight="30dp" />
+                        android:padding="5dp"
+                        android:textSize="15sp" />
                 </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp">
+                android:layout_marginTop="15dp"
+                android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/handle"
                     android:layout_gravity="center_vertical"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:text="@string/handle" />
 
                 <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_weight="4"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4">
+
                     <EditText
+                        android:id="@+id/o_handle_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
-                        android:padding="5dp"
-                        android:textSize="15sp"
-                        android:gravity="left|top"
-                        android:id="@+id/o_handle_text"
+                        android:layout_marginRight="30dp"
+                        android:layout_weight="1"
                         android:background="@drawable/editext_backgroud"
+                        android:gravity="left|top"
                         android:lines="5"
                         android:maxLines="5"
-                        android:layout_weight="1"
-                        android:layout_marginRight="30dp" />
+                        android:padding="5dp"
+                        android:textSize="15sp" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

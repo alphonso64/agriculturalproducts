@@ -68,7 +68,7 @@ public class PlantHistoryFragment extends Fragment implements LoaderManager.Load
         super.onViewCreated(view, savedInstanceState);
         mDataHelper = new PlantSpeciesDataHelper(getActivity());
         mAdapter = new PlantCursorAdapter(getActivity());
-        mAdapter.setOnItemClickListener(task_adpaterItemClickListener);
+        mAdapter.setOnItemClickListener(itemClickListener);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(mAdapter);
     }
@@ -85,14 +85,14 @@ public class PlantHistoryFragment extends Fragment implements LoaderManager.Load
         ButterKnife.unbind(this);
     }
 
-    private OnAdpaterItemClickListener task_adpaterItemClickListener =new  OnAdpaterItemClickListener() {
+    private OnAdpaterItemClickListener itemClickListener =new  OnAdpaterItemClickListener() {
         @Override
         public void onItemClick(Object obj, int p) {
             final PlanterRecord planterRecord =  (PlanterRecord) obj;
             String saved = planterRecord.getSaved();
             if(!saved.equals("yes")){
                 new MaterialDialog.Builder(getActivity())
-                        .title("上传种植信息")
+                        .title("上传种植信息?")
                         .positiveText("是")
                         .negativeText("否").onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
@@ -106,9 +106,8 @@ public class PlantHistoryFragment extends Fragment implements LoaderManager.Load
                                     String val = jsonObject.getString("return_code");
                                     if(val.equals("success")){
                                         planterRecord.setSaved("yes");
-                                        PlantSpeciesDataHelper plantSpeciesDataHelper = new PlantSpeciesDataHelper(getActivity());
                                         ContentValues values = cupboard().withEntity(PlanterRecord.class).toContentValues(planterRecord);
-                                        plantSpeciesDataHelper.updatePlant(values, String.valueOf(planterRecord.get_id()));
+                                        mDataHelper.updateByID(values, String.valueOf(planterRecord.get_id()));
                                         new MaterialDialog.Builder(getActivity())
                                                 .title("上传成功！")
                                                 .positiveText("好的")

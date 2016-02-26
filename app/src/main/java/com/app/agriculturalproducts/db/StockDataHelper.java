@@ -73,4 +73,12 @@ public class StockDataHelper extends BaseDataHelper implements DBInterface<Perso
         return query(getContentUri(),null, "type=?",new String[]{PersonalStock.SEED_TYPE}, null);
     }
 
+    public Cursor getCursorFertilizer() {
+        return query(getContentUri(),null, "type=?",new String[]{PersonalStock.F_TYPE}, null);
+    }
+
+    public Cursor getCursorPrevention() {
+        return query(getContentUri(),null, "type=?",new String[]{PersonalStock.P_TYPE}, null);
+    }
+
 }

@@ -10,7 +10,7 @@
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/cv_pu_type_b"
+        android:id="@+id/cv_pu_type_c"
         >
 
         <RelativeLayout
@@ -159,6 +159,54 @@
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:id="@+id/pu_title_d_2"
+                    android:singleLine="true"
+                    android:textSize="14sp"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/pu_row_f"
+                android:id="@+id/pu_row_g"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/pu_title_g_1"
+                    android:singleLine="true"
+                    android:textSize="14sp"
+                    />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/pu_title_g_2"
+                    android:singleLine="true"
+                    android:textSize="14sp"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/pu_row_g"
+                android:id="@+id/pu_row_h"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/pu_title_h_1"
+                    android:singleLine="true"
+                    android:textSize="14sp"
+                    />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/pu_title_h_2"
                     android:singleLine="true"
                     android:textSize="14sp"
                     />

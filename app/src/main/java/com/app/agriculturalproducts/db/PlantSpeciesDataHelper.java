@@ -60,13 +60,17 @@ public class PlantSpeciesDataHelper extends BaseDataHelper implements DBInterfac
         insert(values);
     }
 
-    public void updatePlant(ContentValues values,String id){
+    public void updateByID(ContentValues values,String id){
         update(values, "_id = ?", new String[]{id});
     }
 
     @Override
     public CursorLoader getCursorLoader() {
         return new CursorLoader(getContext(), getContentUri(), null, null, null, null);
+    }
+
+    public Cursor getCursor() {
+        return query(getContentUri(), null, null, null, null);
     }
 
 }

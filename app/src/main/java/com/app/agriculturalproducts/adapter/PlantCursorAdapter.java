@@ -39,7 +39,7 @@ public class PlantCursorAdapter extends BaseAbstractRecycleCursorAdapter<Recycle
         ((PusageViewHolder) holder).title_3.setText("种子:"+ps.getPlantrecord_seed_name());
         ((PusageViewHolder) holder).title_4.setText("来源:"+ps.getPlantrecord_seed_source());
         ((PusageViewHolder) holder).title_5.setText("规格:"+ps.getPlantrecord_specifications());
-        ((PusageViewHolder) holder).title_6.setText("数量："+ps.getPlantrecord_seed_number());
+        ((PusageViewHolder) holder).title_6.setText("数量:"+ps.getPlantrecord_seed_number());
         ((PusageViewHolder) holder).title_7.setText(ps.getPlantrecord_plant_date());
         String uploadState = ps.getSaved();
         if(uploadState.equals("no")){

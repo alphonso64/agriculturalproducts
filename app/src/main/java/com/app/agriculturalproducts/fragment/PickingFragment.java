@@ -20,20 +20,28 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.app.agriculturalproducts.R;
 import com.app.agriculturalproducts.bean.Field;
 import com.app.agriculturalproducts.bean.FieldInfo;
+import com.app.agriculturalproducts.bean.PersonalStock;
 import com.app.agriculturalproducts.bean.PersticidesUsage;
+import com.app.agriculturalproducts.bean.PickRecord;
 import com.app.agriculturalproducts.bean.Picking;
 import com.app.agriculturalproducts.bean.PlantSpecies;
+import com.app.agriculturalproducts.bean.PlanterRecord;
 import com.app.agriculturalproducts.bean.Task;
 import com.app.agriculturalproducts.db.FieldDataHelper;
 import com.app.agriculturalproducts.db.PersticidesUsageDataHelper;
 import com.app.agriculturalproducts.db.PickingDataHelper;
 import com.app.agriculturalproducts.db.PlantSpeciesDataHelper;
+import com.app.agriculturalproducts.db.StockDataHelper;
 import com.app.agriculturalproducts.db.TaskDataHelper;
+import com.app.agriculturalproducts.model.EmployeeInfoModel;
 import com.app.agriculturalproducts.model.UserInfoModel;
+import com.app.agriculturalproducts.util.EditTextUtil;
 import com.app.agriculturalproducts.util.InputType;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -54,32 +62,40 @@ public class PickingFragment extends BaseUploadFragment {
 
     @Bind(R.id.pick_field_text)
     TextView field_text;
+    @Bind(R.id.pick_field_area_text)
+    TextView field_area_text;
+    @Bind(R.id.pick_plant_date_text)
+    TextView plant_date_text;
     @Bind(R.id.pick_species_text)
     TextView species_text;
+    @Bind(R.id.pick_date_text)
+    TextView date_text;
+    @Bind(R.id.pick_member_text)
+    TextView member_text;
 
     @Bind(R.id.pick_area_text)
     EditText area_text;
     @Bind(R.id.pick_num_text)
     EditText num_text;
-
-    @Bind(R.id.pick_date_text)
-    TextView date_text;
     @Bind(R.id.pick_person_text)
-    TextView person_text;
+    EditText person_text;
 
     boolean flag = false;
-    boolean textInput = false;
-
     MaterialDialog dialog;
+    MaterialDialog dialog_inner;
     Cursor cursor;
+    Cursor cursor_inner;
     ListAdapter adapter;
+    Field field;
+    PlanterRecord planterRecord;
+
     @Override
-    public int upload() {
+    public int save() {
         if(flag){
             return InputType.INPUT_SAVE_ALREADY;
         }
         if(object == null){
-            if(!isEmpty() && textInput){
+            if(!isEmpty()){
                 saveInfo();
                 flag = true;
                 disableWidget();
@@ -101,19 +117,29 @@ public class PickingFragment extends BaseUploadFragment {
     }
 
     private void saveInfo(){
-//        Picking picking = new Picking();
-//        picking.setArea(area_text.getText().toString());
-//        picking.setField(field_text.getText().toString());
-//        picking.setDate(date_text.getText().toString());
-//        picking.setPerson(person_text.getText().toString());
-//        picking.setPick(num_text.getText().toString());
-//        picking.setSpecies(species_text.getText().toString());
-//        pickingDataHelper.insert_(picking);
+        PickRecord picking = new PickRecord();
+        picking.setPickrecord_date(date_text.getText().toString());
+        picking.setPickrecord_number(num_text.getText().toString());
+        picking.setPickrecord_area(area_text.getText().toString());
+        picking.setPickrecord_people(person_text.getText().toString());
+
+        picking.setPlantrecord_plant_date(plant_date_text.getText().toString());
+        picking.setPlantrecord_breed(species_text.getText().toString());
+        picking.setField_name(field_text.getText().toString());
+        picking.setField_area(field_area_text.getText().toString());
+        picking.setMember_name(member_text.getText().toString());
+        picking.setSaved("no");
+        picking.setLocal_plant_id(planterRecord.getPlantrecord_id());
+        pickingDataHelper.insert_(picking);
     }
 
     private void disableWidget(){
-        num_text.setFocusable(false);
-        area_text.setFocusable(false);
+        List<EditText> ls = new ArrayList();
+        ls.add(num_text);
+        ls.add(area_text);
+        ls.add(person_text);
+
+        EditTextUtil.disableEditText(ls);
         fieldImg.setVisibility(View.INVISIBLE);
         dateImg.setVisibility(View.INVISIBLE);
     }
@@ -131,25 +157,26 @@ public class PickingFragment extends BaseUploadFragment {
     }
 
     boolean isEmpty(){
-        if(TextUtils.isEmpty(num_text.getText().toString().trim())){
+        if(TextUtils.isEmpty(field_text.getText().toString().trim())){
             return true;
         }
         if(TextUtils.isEmpty(date_text.getText().toString().trim())){
             return true;
         }
-        if(TextUtils.isEmpty(area_text.getText().toString().trim())){
-            return true;
-        }
-        return  false;
+        List<EditText> ls = new ArrayList();
+        ls.add(num_text);
+        ls.add(area_text);
+        ls.add(person_text);
+        return  EditTextUtil.isEditEmpty(ls);
     }
 
     boolean isEmpty_(){
-        if(TextUtils.isEmpty(num_text.getText().toString().trim())){
-            return true;
-        }
-        if(TextUtils.isEmpty(date_text.getText().toString().trim())){
-            return true;
-        }
+//        if(TextUtils.isEmpty(num_text.getText().toString().trim())){
+//            return true;
+//        }
+//        if(TextUtils.isEmpty(date_text.getText().toString().trim())){
+//            return true;
+//        }
         return  false;
     }
 
@@ -166,20 +193,20 @@ public class PickingFragment extends BaseUploadFragment {
                 new int[]{android.R.id.text1}, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
         fieldImg.setOnClickListener(fieldClickListener);
         dateImg.setOnClickListener(dateClickListener);
-        UserInfoModel userInfoModel = new UserInfoModel(getActivity().getApplicationContext());
-        person_text.setText(userInfoModel.getUserInfo().getName());
         checkInputType();
+        EmployeeInfoModel employeeInfoModel = new EmployeeInfoModel(getActivity());
+        member_text.setText(employeeInfoModel.getEmployeeInfo().getMember_name());
     }
     void checkInputType(){
-        if(object!=null){
-            fieldImg.setVisibility(View.INVISIBLE);
-            area_text.setBackgroundResource(R.drawable.text_backgroud);
-            area_text.setFocusable(false);
-            Task task = (Task)object;
-            field_text.setText(task.getField());
-            species_text.setText(task.getSpecies());
-            area_text.setText(task.getPick_area());
-        }
+//        if(object!=null){
+//            fieldImg.setVisibility(View.INVISIBLE);
+//            area_text.setBackgroundResource(R.drawable.text_backgroud);
+//            area_text.setFocusable(false);
+//            Task task = (Task)object;
+//            field_text.setText(task.getField());
+//            species_text.setText(task.getSpecies());
+//            area_text.setText(task.getPick_area());
+//        }
     }
 
     View.OnClickListener fieldClickListener = new View.OnClickListener() {
@@ -189,9 +216,25 @@ public class PickingFragment extends BaseUploadFragment {
                 @Override
                 public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                     cursor.moveToPosition(which);
-                    Field field = Field.fromCursor(cursor);
+                    field = Field.fromCursor(cursor);
                     field_text.setText(field.getField_name());
-                    textInput = true;
+                    field_area_text.setText(field.getField_area());
+                    cursor_inner = new PlantSpeciesDataHelper(getActivity()).getCursor();
+                    ListAdapter adapter_inner = new SimpleCursorAdapter(getActivity(),
+                            android.R.layout.simple_list_item_1,
+                            cursor_inner, new String[]{"plantrecord_breed"},
+                            new int[]{android.R.id.text1}, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
+                    dialog_inner = new MaterialDialog.Builder(getActivity()).title("品种选择").adapter(adapter_inner, new MaterialDialog.ListCallback() {
+                        @Override
+                        public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                            cursor_inner.moveToPosition(which);
+                            planterRecord = PlanterRecord.fromCursor(cursor_inner);
+                            species_text.setText(planterRecord.getPlantrecord_breed());
+                            plant_date_text.setText(planterRecord.getPlantrecord_plant_date());
+                            dialog_inner.cancel();
+                        }
+                    }).alwaysCallSingleChoiceCallback().build();
+                    dialog_inner.show();
                     dialog.cancel();
                 }
             }).alwaysCallSingleChoiceCallback().build();

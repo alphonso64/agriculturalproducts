@@ -56,7 +56,9 @@ public class PickingDataHelper extends BaseDataHelper implements DBInterface<Pic
         ContentValues values = cupboard().withEntity(PickRecord.class).toContentValues(data);
         insert(values);
     }
-
+    public void updateByID(ContentValues values,String id){
+        update(values, "_id = ?", new String[]{id});
+    }
     @Override
     public CursorLoader getCursorLoader() {
         return new CursorLoader(getContext(), getContentUri(), null, null, null, null);

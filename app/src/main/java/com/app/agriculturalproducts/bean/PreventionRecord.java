@@ -27,6 +27,9 @@ public class PreventionRecord {
     private String plantrecord_plant_date;
     private String member_name;
     private String saved;
+    private String local_stock_id;
+    private String local_plant_id;
+    private Long _id;
 
 
     public static PreventionRecord fromCursor(Cursor cursor) {
@@ -188,6 +191,30 @@ public class PreventionRecord {
 
     public void setSaved(String saved) {
         this.saved = saved;
+    }
+
+    public String getLocal_stock_id() {
+        return local_stock_id;
+    }
+
+    public void setLocal_stock_id(String local_stock_id) {
+        this.local_stock_id = local_stock_id;
+    }
+
+    public String getLocal_plant_id() {
+        return local_plant_id;
+    }
+
+    public void setLocal_plant_id(String local_plant_id) {
+        this.local_plant_id = local_plant_id;
+    }
+
+    public Long get_id() {
+        return _id;
+    }
+
+    public void set_id(Long _id) {
+        this._id = _id;
     }
 
 //    public void printfInfo(){
