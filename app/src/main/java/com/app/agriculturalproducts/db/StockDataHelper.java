@@ -7,9 +7,8 @@ import android.net.Uri;
 import android.support.v4.content.CursorLoader;
 import android.util.Log;
 
-import com.app.agriculturalproducts.bean.PersticidesUsage;
-import com.app.agriculturalproducts.bean.PlantSpecies;
-import com.app.agriculturalproducts.bean.PlanterRecord;
+
+import com.app.agriculturalproducts.bean.PersonalStock;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,16 +16,16 @@ import java.util.List;
 import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 
 
-public class PlantSpeciesDataHelper extends BaseDataHelper implements DBInterface<PlanterRecord> {
+public class StockDataHelper extends BaseDataHelper implements DBInterface<PersonalStock> {
 
-    public PlantSpeciesDataHelper(Context context) {
+    public StockDataHelper(Context context) {
         super(context);
     }
 
-    public static final String TABLE_NAME = "PlanterRecord";
+    public static final String TABLE_NAME = "PersonalStock";
     @Override
     protected Uri getContentUri() {
-        return DataProvider.PLANT_TABLE_CONTENT_URI;
+        return DataProvider.STOCK_TABLE_CONTENT_URI;
     }
 
     @Override
@@ -35,9 +34,9 @@ public class PlantSpeciesDataHelper extends BaseDataHelper implements DBInterfac
     }
 
     @Override
-    public void bulkInsert(List<PlanterRecord> listData) {
+    public void bulkInsert(List<PersonalStock> listData) {
         ArrayList<ContentValues> contentValues = new ArrayList<>();
-        for (PlanterRecord item : listData) {
+        for (PersonalStock item : listData) {
             ContentValues values = getContentValues(item);
             contentValues.add(values);
         }
@@ -46,8 +45,8 @@ public class PlantSpeciesDataHelper extends BaseDataHelper implements DBInterfac
     }
 
     @Override
-    public ContentValues getContentValues(PlanterRecord data) {
-        ContentValues values = cupboard().withEntity(PlanterRecord.class).toContentValues(data);
+    public ContentValues getContentValues(PersonalStock data) {
+        ContentValues values = cupboard().withEntity(PersonalStock.class).toContentValues(data);
         return values;
     }
 
@@ -55,18 +54,23 @@ public class PlantSpeciesDataHelper extends BaseDataHelper implements DBInterfac
         delete(where,selectionArgs);
     }
 
-    public void insert_(PlanterRecord data){
-        ContentValues values = cupboard().withEntity(PlanterRecord.class).toContentValues(data);
+    public void insert_(PersonalStock data){
+        Log.e("tetstbb", "insert_");
+        ContentValues values = cupboard().withEntity(PersonalStock.class).toContentValues(data);
         insert(values);
-    }
-
-    public void updatePlant(ContentValues values,String id){
-        update(values, "_id = ?", new String[]{id});
     }
 
     @Override
     public CursorLoader getCursorLoader() {
         return new CursorLoader(getContext(), getContentUri(), null, null, null, null);
+    }
+
+    public Cursor getCursor() {
+        return query(getContentUri(), null, null, null, null);
+    }
+
+    public Cursor getCursorSeed() {
+        return query(getContentUri(),null, "type=?",new String[]{PersonalStock.SEED_TYPE}, null);
     }
 
 }

@@ -3,6 +3,8 @@ package com.app.agriculturalproducts.util;
 import android.text.TextUtils;
 import android.widget.EditText;
 
+import com.app.agriculturalproducts.R;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -30,6 +32,7 @@ public class EditTextUtil {
     public static void disableEditText(List<EditText> ls){
         for(EditText et:ls){
             et.setFocusable(false);
+            et.setBackgroundResource(R.drawable.text_backgroud);
         }
     }
 

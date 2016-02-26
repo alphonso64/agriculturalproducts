@@ -6,6 +6,8 @@ import com.app.agriculturalproducts.bean.EmployeeInfo;
 import com.app.agriculturalproducts.bean.FertilizerRecord;
 import com.app.agriculturalproducts.bean.Field;
 import com.app.agriculturalproducts.bean.OtherRecord;
+import com.app.agriculturalproducts.bean.PersonalStock;
+import com.app.agriculturalproducts.bean.PersonalStockDetail;
 import com.app.agriculturalproducts.bean.PickRecord;
 import com.app.agriculturalproducts.bean.PlanterRecord;
 import com.app.agriculturalproducts.bean.PreventionRecord;
@@ -31,7 +33,7 @@ import java.util.List;
  */
 public class HttpClient {
     private LiteHttp liteHttp;
-    private static HttpClient single=null;
+    private static HttpClient single = null;
     public EmployeeInfo employeeInfo;
     public List<Field> fieldList;
     public List<PlanterRecord> planterList;
@@ -39,11 +41,18 @@ public class HttpClient {
     public List<PreventionRecord> preventionList;
     public List<PickRecord> pickList;
     public List<OtherRecord> otherList;
+    public List<PersonalStock> seedStockList;
+    public List<PersonalStock> fStockList;
+    public List<PersonalStock> pStcokList;
+    public List<PersonalStockDetail> stockList;
     //public List
 
-    private HttpClient(){
+    private HttpClient() {
         liteHttp = LiteHttp.newApacheHttpClient(null);
-    };
+    }
+
+    ;
+
     public static HttpClient getInstance() {
         if (single == null) {
             single = new HttpClient();
@@ -51,51 +60,51 @@ public class HttpClient {
         return single;
     }
 
-    public void checkLogin(HttpListener<String> listener,String name ,String pwd){
-        if(listener == null || name == null || pwd == null) return;
+    public void checkLogin(HttpListener<String> listener, String name, String pwd) {
+        if (listener == null || name == null || pwd == null) return;
         JSONObject object = new JSONObject();
         try {
-            object.put("userinfo_username",name);
-            object.put("userinfo_password",pwd);
+            object.put("userinfo_username", name);
+            object.put("userinfo_password", pwd);
         } catch (JSONException e) {
             return;
         }
-        LinkedHashMap<String,String> header = new LinkedHashMap<>();
+        LinkedHashMap<String, String> header = new LinkedHashMap<>();
         header.put("contentType", "utf-8");
         header.put("Content-type", "application/x-java-serialized-object");
         liteHttp.executeAsync(new StringRequest(Configure.LOGIN_URL).setHeaders(header)
                 .setMethod(HttpMethods.Post).setHttpBody(new StringBody(object.toString())).setHttpListener(listener));
     }
 
-    public void infoRequestAsync(HttpListener<String> listener,String url,String name){
-        if(listener == null || name == null ) return;
+    public void infoRequestAsync(HttpListener<String> listener, String url, String name) {
+        if (listener == null || name == null) return;
         JSONObject object = new JSONObject();
         try {
-            object.put("userinfo_username",name);
+            object.put("userinfo_username", name);
         } catch (JSONException e) {
             return;
         }
-        LinkedHashMap<String,String> header = new LinkedHashMap<>();
+        LinkedHashMap<String, String> header = new LinkedHashMap<>();
         header.put("contentType", "utf-8");
         header.put("Content-type", "application/x-java-serialized-object");
         liteHttp.executeAsync(new StringRequest(url).setHeaders(header)
                 .setMethod(HttpMethods.Post).setHttpBody(new StringBody(object.toString())).setHttpListener(listener));
     }
 
-    public void getAllInfo(String name){
+    public void getAllInfo(String name) {
         JSONObject object = new JSONObject();
         try {
-            object.put("userinfo_username",name);
+            object.put("userinfo_username", name);
         } catch (JSONException e) {
             return;
         }
-        LinkedHashMap<String,String> header = new LinkedHashMap<>();
+        LinkedHashMap<String, String> header = new LinkedHashMap<>();
         header.put("contentType", "utf-8");
         header.put("Content-type", "application/x-java-serialized-object");
         StringRequest stringRequest = new StringRequest(Configure.GET_EMPLOYEE_BY_USERNAME_URL).setHeaders(header)
                 .setMethod(HttpMethods.Post).setHttpBody(new StringBody(object.toString()));
 
-        Response<String>  result = liteHttp.execute(stringRequest);
+        Response<String> result = liteHttp.execute(stringRequest);
         employeeInfo = parseEmployeeInfo(result.getResult());
 //        Log.e("testcc", result.getResult());
         employeeInfo.printfInfo();
@@ -116,7 +125,7 @@ public class HttpClient {
 //            planterList.get(i).printfInfo();
 //        }
 
-        stringRequest.setUri(Configure.GET_FERTILIZERECORD_BY_USERNAME_URL );
+        stringRequest.setUri(Configure.GET_FERTILIZERECORD_BY_USERNAME_URL);
         result = liteHttp.execute(stringRequest);
         fertiList = parseFertilizer(result.getResult());
 //        Log.e("testcc", result.getResult()+fertiList.size());
@@ -133,7 +142,7 @@ public class HttpClient {
 //            preventionList.get(i).printfInfo();
 //        }
 
-        stringRequest.setUri(Configure. GET_PICKRECORD_BY_USERNAME_URL );
+        stringRequest.setUri(Configure.GET_PICKRECORD_BY_USERNAME_URL);
         result = liteHttp.execute(stringRequest);
         pickList = parsePick(result.getResult());
 //        Log.e("testcc", result.getResult()+pickList.size());
@@ -141,109 +150,139 @@ public class HttpClient {
 //            pickList.get(i).printfInfo();
 //        }
 
-        stringRequest.setUri(Configure. GET_OTHERRECORD_BY_USERNAME_URL );
+        stringRequest.setUri(Configure.GET_OTHERRECORD_BY_USERNAME_URL);
         result = liteHttp.execute(stringRequest);
         otherList = parseOther(result.getResult());
-        Log.e("testcc", result.getResult());
+        //Log.e("testcc", result.getResult());
+
+        stringRequest.setUri(Configure.GET_ENTERPERSONALSTOCKDETAIL_BY_USERNAME_URL);
+        result = liteHttp.execute(stringRequest);
+        stockList = parsePersonalStockDetail(result.getResult());
+//        Log.e("testcc", result.getResult());
+        for (int i = 0; i < stockList.size(); i++) {
+            stockList.get(i).printfInfo();
+        }
+
+        stringRequest.setUri(Configure.GET_SEED_PERSONALSTOCK_BY_USERNAME_URL);
+        result = liteHttp.execute(stringRequest);
+        seedStockList = parsePersonalStock(result.getResult(),0);
+//        for (int i = 0; i < seedStockList.size(); i++) {
+//            seedStockList.get(i).printfInfo();
+//        }
+        // Log.e("testcc", result.getResult());
+
+        stringRequest.setUri(Configure.GET_FERTILIZER_PERSONALSTOCK_BY_USERNAME_URL);
+        result = liteHttp.execute(stringRequest);
+        fStockList = parsePersonalStock(result.getResult(),1);
+//        for (int i = 0; i < fStockList.size(); i++) {
+//            fStockList.get(i).printfInfo();
+//        }
+
+        stringRequest.setUri(Configure.GET_PESTICIDE_PERSONALSTOCK_BY_USERNAME_URL);
+        result = liteHttp.execute(stringRequest);
+        pStcokList = parsePersonalStock(result.getResult(),2);
+//        for (int i = 0; i < pStcokList.size(); i++) {
+//            pStcokList.get(i).printfInfo();
+//        }
     }
 
-    public EmployeeInfo parseEmployeeInfo(String val){
+    public EmployeeInfo parseEmployeeInfo(String val) {
         try {
             JSONObject object = new JSONObject(val);
             String result = (String) object.get("return_code");
-            if(result.equals("success")){
+            if (result.equals("success")) {
                 EmployeeInfo employeeInfo = new EmployeeInfo();
                 String value = (String) object.get("employee_id");
-                if(!(value.equals("null") && value !=null)){
+                if (!(value.equals("null") && value != null)) {
                     employeeInfo.setEmployee_id(value);
                 }
 
                 value = (String) object.get("member_id");
-                if(!(value.equals("null") && value !=null)){
+                if (!(value.equals("null") && value != null)) {
                     employeeInfo.setMember_id(value);
                 }
 
                 value = (String) object.get("employee_name");
-                if(!(value.equals("null") && value !=null)){
+                if (!(value.equals("null") && value != null)) {
                     employeeInfo.setEmployee_name(value);
                 }
 
                 value = (String) object.get("employee_sex");
-                if(!(value.equals("null") && value !=null)){
+                if (!(value.equals("null") && value != null)) {
                     employeeInfo.setEmployee_sex(value);
                 }
 
                 value = (String) object.get("employee_birthday");
-                if(!(value.equals("null") && value !=null)){
+                if (!(value.equals("null") && value != null)) {
                     employeeInfo.setEmployee_birthday(value);
                 }
 
                 value = (String) object.get("employee_tel");
-                if(!(value.equals("null") && value !=null)){
+                if (!(value.equals("null") && value != null)) {
                     employeeInfo.setEmployee_tel(value);
                 }
 
                 value = (String) object.get("employee_address");
-                if(!(value.equals("null") && value !=null)){
+                if (!(value.equals("null") && value != null)) {
                     employeeInfo.setEmployee_address(value);
                 }
 
                 value = (String) object.get("employee_passport");
-                if(!(value.equals("null") && value !=null)){
+                if (!(value.equals("null") && value != null)) {
                     employeeInfo.setEmployee_passport(value);
                 }
 
                 value = (String) object.get("employee_type");
-                if(!(value.equals("null") && value !=null)){
+                if (!(value.equals("null") && value != null)) {
                     employeeInfo.setEmployee_type(value);
                 }
 
                 value = (String) object.get("member_name");
-                if(!(value.equals("null") && value !=null)){
+                if (!(value.equals("null") && value != null)) {
                     employeeInfo.setMember_name(value);
                 }
                 return employeeInfo;
             }
         } catch (JSONException e) {
-           // e.printStackTrace();
+            // e.printStackTrace();
         }
         return null;
     }
 
-    public List<Field> parseField(String val){
+    public List<Field> parseField(String val) {
         try {
             List<Field> ls = new ArrayList<>();
             JSONObject object = new JSONObject(val);
             String result = (String) object.get("return_code");
-            if(result.equals("success")){
+            if (result.equals("success")) {
                 JSONArray array = object.getJSONArray("data");
-                for(int i=0;i<array.length();i++){
+                for (int i = 0; i < array.length(); i++) {
                     JSONObject jobject = (JSONObject) array.get(i);
 
                     Field field = new Field();
                     String value = (String) jobject.get("field_id");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         field.setField_id(value);
                     }
 
                     value = (String) jobject.get("employee_id");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         field.setEmployee_id(value);
                     }
                     value = (String) jobject.get("field_name");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         field.setField_name(value);
                     }
                     value = (String) jobject.get("field_type");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         field.setField_type(value);
                     }
                     value = (String) jobject.get("field_area");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         field.setField_area(value);
                     }
                     value = (String) jobject.get("field_status");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         field.setField_status(value);
                     }
                     ls.add(field);
@@ -256,55 +295,56 @@ public class HttpClient {
         return null;
     }
 
-    public List<PlanterRecord> parsePlant(String val){
+    public List<PlanterRecord> parsePlant(String val) {
         try {
             List<PlanterRecord> ls = new ArrayList<>();
             JSONObject object = new JSONObject(val);
             String result = (String) object.get("return_code");
-            if(result.equals("success")){
+            if (result.equals("success")) {
                 JSONArray array = object.getJSONArray("data");
-                for(int i=0;i<array.length();i++){
+                for (int i = 0; i < array.length(); i++) {
                     JSONObject jobject = (JSONObject) array.get(i);
 
                     PlanterRecord plant = new PlanterRecord();
                     String value = (String) jobject.get("plantrecord_id");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         plant.setPlantrecord_id(value);
                     }
 
                     value = (String) jobject.get("plantrecord_seed_name");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         plant.setPlantrecord_seed_name(value);
                     }
                     value = (String) jobject.get("plantrecord_seed_source");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         plant.setPlantrecord_seed_source(value);
                     }
                     value = (String) jobject.get("plantrecord_specifications");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         plant.setPlantrecord_specifications(value);
                     }
                     value = (String) jobject.get("plantrecord_seed_number");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         plant.setPlantrecord_seed_number(value);
                     }
 
                     value = (String) jobject.get("plantrecord_plant_date");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         plant.setPlantrecord_plant_date(value);
                     }
                     value = (String) jobject.get("field_name");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         plant.setField_name(value);
                     }
                     value = (String) jobject.get("employee_name");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         plant.setEmployee_name(value);
                     }
                     value = (String) jobject.get("plantrecord_breed");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         plant.setPlantrecord_breed(value);
                     }
+                    plant.setSaved("yes");
                     ls.add(plant);
                 }
             }
@@ -315,71 +355,71 @@ public class HttpClient {
         return null;
     }
 
-    public List<FertilizerRecord> parseFertilizer(String val){
+    public List<FertilizerRecord> parseFertilizer(String val) {
         try {
             List<FertilizerRecord> ls = new ArrayList<>();
             JSONObject object = new JSONObject(val);
             String result = (String) object.get("return_code");
-            if(result.equals("success")){
+            if (result.equals("success")) {
                 JSONArray array = object.getJSONArray("data");
-                for(int i=0;i<array.length();i++){
+                for (int i = 0; i < array.length(); i++) {
                     JSONObject jobject = (JSONObject) array.get(i);
 
                     FertilizerRecord fertilizer = new FertilizerRecord();
                     String value = (String) jobject.get("fertilizerecord_id");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         fertilizer.setFertilizerecord_id(value);
                     }
                     value = (String) jobject.get("fertilizerecord_date");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         fertilizer.setFertilizerecord_date(value);
                     }
                     value = (String) jobject.get("fertilizerecord_name");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         fertilizer.setFertilizerecord_name(value);
                     }
                     value = (String) jobject.get("fertilizerecord_number");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         fertilizer.setFertilizerecord_number(value);
                     }
                     value = (String) jobject.get("fertilizerecord_range");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         fertilizer.setFertilizerecord_range(value);
                     }
                     value = (String) jobject.get("fertilizerecord_type");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         fertilizer.setFertilizerecord_type(value);
                     }
                     value = (String) jobject.get("fertilizerecord_spec");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         fertilizer.setFertilizerecord_spec(value);
                     }
                     value = (String) jobject.get("fertilizerecord_method");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         fertilizer.setFertilizerecord_method(value);
                     }
                     value = (String) jobject.get("field_name");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         fertilizer.setField_name(value);
                     }
                     value = (String) jobject.get("field_area");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         fertilizer.setField_area(value);
                     }
                     value = (String) jobject.get("member_name");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         fertilizer.setMember_name(value);
                     }
                     value = (String) jobject.get("employee_name");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         fertilizer.setEmployee_name(value);
                     }
                     value = (String) jobject.get("plantrecord_breed");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         fertilizer.setPlantrecord_breed(value);
                     }
                     value = (String) jobject.get("fertilizerecord_people");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         fertilizer.setFertilizerecord_people(value);
                     }
                     ls.add(fertilizer);
@@ -392,90 +432,90 @@ public class HttpClient {
         return null;
     }
 
-    public List<PreventionRecord> parsePrevention(String val){
+    public List<PreventionRecord> parsePrevention(String val) {
         try {
             List<PreventionRecord> ls = new ArrayList<>();
             JSONObject object = new JSONObject(val);
             String result = (String) object.get("return_code");
-            if(result.equals("success")){
+            if (result.equals("success")) {
                 JSONArray array = object.getJSONArray("data");
-                for(int i=0;i<array.length();i++){
+                for (int i = 0; i < array.length(); i++) {
                     JSONObject jobject = (JSONObject) array.get(i);
 
                     PreventionRecord preventionRecord = new PreventionRecord();
                     String value = (String) jobject.get("preventionrecord_id");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         preventionRecord.setPreventionrecord_id(value);
                     }
                     value = (String) jobject.get("preventionrecord_medicine_name");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         preventionRecord.setPreventionrecord_medicine_name(value);
                     }
 
                     value = (String) jobject.get("preventionrecord_date");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         preventionRecord.setPreventionrecord_date(value);
                     }
 
                     value = (String) jobject.get("preventionrecord_range");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         preventionRecord.setPreventionrecord_range(value);
                     }
                     value = (String) jobject.get("preventionrecord_type");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         preventionRecord.setPreventionrecord_type(value);
                     }
 
                     value = (String) jobject.get("preventionrecord_spec");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         preventionRecord.setPreventionrecord_spec(value);
                     }
                     value = (String) jobject.get("preventionrecord_method");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         preventionRecord.setPreventionrecord_method(value);
                     }
 
                     value = (String) jobject.get("preventionrecord_medicine_number");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         preventionRecord.setPreventionrecord_medicine_number(value);
                     }
                     value = (String) jobject.get("preventionrecord_plant_day");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         preventionRecord.setPreventionrecord_plant_day(value);
                     }
                     value = (String) jobject.get("preventionrecord_symptom");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         preventionRecord.setPreventionrecord_symptom(value);
                     }
 
                     value = (String) jobject.get("preventionrecord_medicine_people");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         preventionRecord.setPreventionrecord_medicine_people(value);
                     }
                     value = (String) jobject.get("preventionrecord_use_people");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         preventionRecord.setPreventionrecord_use_people(value);
                     }
 
                     value = (String) jobject.get("field_name");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         preventionRecord.setField_name(value);
                     }
                     value = (String) jobject.get("field_area");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         preventionRecord.setField_area(value);
                     }
 
                     value = (String) jobject.get("plantrecord_breed");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         preventionRecord.setPlantrecord_breed(value);
                     }
                     value = (String) jobject.get("plantrecord_plant_date");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         preventionRecord.setPlantrecord_plant_date(value);
                     }
                     value = (String) jobject.get("member_name");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         preventionRecord.setMember_name(value);
                     }
                     ls.add(preventionRecord);
@@ -488,51 +528,51 @@ public class HttpClient {
         return null;
     }
 
-    public List<PickRecord> parsePick(String val){
+    public List<PickRecord> parsePick(String val) {
         try {
             List<PickRecord> ls = new ArrayList<>();
             JSONObject object = new JSONObject(val);
             String result = (String) object.get("return_code");
-            if(result.equals("success")){
+            if (result.equals("success")) {
                 JSONArray array = object.getJSONArray("data");
-                for(int i=0;i<array.length();i++){
+                for (int i = 0; i < array.length(); i++) {
                     JSONObject jobject = (JSONObject) array.get(i);
 
                     PickRecord pickRecord = new PickRecord();
                     String value = (String) jobject.get("pickrecord_id");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         pickRecord.setPickrecord_id(value);
                     }
                     value = (String) jobject.get("pickrecord_date");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         pickRecord.setPickrecord_date(value);
                     }
                     value = (String) jobject.get("pickrecord_number");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         pickRecord.setPickrecord_number(value);
                     }
                     value = (String) jobject.get("pickrecord_area");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         pickRecord.setPickrecord_area(value);
                     }
                     value = (String) jobject.get("pickrecord_people");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         pickRecord.setPickrecord_people(value);
                     }
                     value = (String) jobject.get("plantrecord_plant_date");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         pickRecord.setPlantrecord_plant_date(value);
                     }
                     value = (String) jobject.get("field_name");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         pickRecord.setField_name(value);
                     }
                     value = (String) jobject.get("plantrecord_breed");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         pickRecord.setPlantrecord_breed(value);
                     }
                     value = (String) jobject.get("field_area");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         pickRecord.setField_area(value);
                     }
 //                    value = (String) jobject.get("pickrecord_code");
@@ -540,11 +580,11 @@ public class HttpClient {
 //                        pickRecord.setPickrecord_code(value);
 //                    }
                     value = (String) jobject.get("pickrecord_status");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         pickRecord.setPickrecord_status(value);
                     }
                     value = (String) jobject.get("member_name");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         pickRecord.setMember_name(value);
                     }
 
@@ -558,56 +598,56 @@ public class HttpClient {
         return null;
     }
 
-    public List<OtherRecord> parseOther(String val){
+    public List<OtherRecord> parseOther(String val) {
         try {
             List<OtherRecord> ls = new ArrayList<>();
             JSONObject object = new JSONObject(val);
             String result = (String) object.get("return_code");
-            if(result.equals("success")){
+            if (result.equals("success")) {
                 JSONArray array = object.getJSONArray("data");
-                for(int i=0;i<array.length();i++){
+                for (int i = 0; i < array.length(); i++) {
                     JSONObject jobject = (JSONObject) array.get(i);
 
                     OtherRecord otherRecord = new OtherRecord();
 
                     String value = (String) jobject.get("otherrecord_id");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         otherRecord.setOtherrecord_id(value);
                     }
 
                     value = (String) jobject.get("otherrecord_situation");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         otherRecord.setOtherrecord_situation(value);
                     }
                     value = (String) jobject.get("otherrecord_date");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         otherRecord.setOtherrecord_date(value);
                     }
 
                     value = (String) jobject.get("otherrecord_method");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         otherRecord.setOtherrecord_method(value);
                     }
                     value = (String) jobject.get("otherrecord_place");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         otherRecord.setOtherrecord_place(value);
                     }
 
                     value = (String) jobject.get("otherrecord_people");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         otherRecord.setOtherrecord_people(value);
                     }
                     value = (String) jobject.get("plantrecord_breed");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         otherRecord.setPlantrecord_breed(value);
                     }
 
                     value = (String) jobject.get("field_name");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         otherRecord.setField_name(value);
                     }
                     value = (String) jobject.get("member_name");
-                    if(!(value.equals("null") && value !=null)){
+                    if (!(value.equals("null") && value != null)) {
                         otherRecord.setMember_name(value);
                     }
                     ls.add(otherRecord);
@@ -619,4 +659,173 @@ public class HttpClient {
         }
         return null;
     }
+
+    public List<PersonalStock> parsePersonalStock(String val,int cmd) {
+        try {
+            List<PersonalStock> ls = new ArrayList<>();
+            JSONObject object = new JSONObject(val);
+            String result = (String) object.get("return_code");
+            if (result.equals("success")) {
+                JSONArray array = object.getJSONArray("data");
+                for (int i = 0; i < array.length(); i++) {
+                    JSONObject jobject = (JSONObject) array.get(i);
+
+                    PersonalStock personalStock = new PersonalStock();
+
+                    String value = (String) jobject.get("personalstock_id");
+                    if (!(value.equals("null") && value != null)) {
+                        personalStock.setPersonalstock_id(value);
+                    }
+                    value = (String) jobject.get("personalstock_num");
+                    if (!(value.equals("null") && value != null)) {
+                        personalStock.setPersonalstock_num(value);
+                    }
+                    value = (String) jobject.get("personalstock_goods_id");
+                    if (!(value.equals("null") && value != null)) {
+                        personalStock.setPersonalstock_goods_id(value);
+                    }
+                    value = (String) jobject.get("personalstock_goods_type");
+                    if (!(value.equals("null") && value != null)) {
+                        personalStock.setPersonalstock_goods_type(value);
+                    }
+                    value = (String) jobject.get("personalstock_goods_name");
+                    if (!(value.equals("null") && value != null)) {
+                        personalStock.setPersonalstock_goods_name(value);
+                    }
+                    value = (String) jobject.get("spec");
+                    if (!(value.equals("null") && value != null)) {
+                        personalStock.setSpec(value);
+                    }
+                    value = (String) jobject.get("producer");
+                    if (!(value.equals("null") && value != null)) {
+                        personalStock.setProducer(value);
+                    }
+                    value = (String) jobject.get("employee_name");
+                    if (!(value.equals("null") && value != null)) {
+                        personalStock.setEmployee_name(value);
+                    }
+                    value = (String) jobject.get("member_name");
+                    if (!(value.equals("null") && value != null)) {
+                        personalStock.setMember_name(value);
+                    }
+                    if(cmd == 0){
+                        personalStock.setType(PersonalStock.SEED_TYPE);
+                    }else if(cmd == 1) {
+                        personalStock.setType(PersonalStock.F_TYPE);
+                    }else if(cmd == 2) {
+                        personalStock.setType(PersonalStock.P_TYPE);
+                    }
+                        ls.add(personalStock);
+                }
+            }
+            return ls;
+        } catch (JSONException e) {
+            // e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<PersonalStockDetail> parsePersonalStockDetail(String val) {
+        try {
+            List<PersonalStockDetail> ls = new ArrayList<>();
+            JSONObject object = new JSONObject(val);
+            String result = (String) object.get("return_code");
+            if (result.equals("success")) {
+                JSONArray array = object.getJSONArray("data");
+                for (int i = 0; i < array.length(); i++) {
+                    JSONObject jobject = (JSONObject) array.get(i);
+
+                    PersonalStockDetail personalStock = new PersonalStockDetail();
+
+                    String value = (String) jobject.get("personalstockdetail_id");
+                    if (!(value.equals("null") && value != null)) {
+                        personalStock.setPersonalstockdetail_id(value);
+                    }
+                    value = (String) jobject.get("personalstockdetail_orderno");
+                    if (!(value.equals("null") && value != null)) {
+                        personalStock.setPersonalstockdetail_orderno(value);
+                    }
+                    value = (String) jobject.get("personalstockdetail_goods_id");
+                    if (!(value.equals("null") && value != null)) {
+                        personalStock.setPersonalstockdetail_goods_id(value);
+                    }
+                    value = (String) jobject.get("personalstockdetail_num");
+                    if (!(value.equals("null") && value != null)) {
+                        personalStock.setPersonalstockdetail_num(value);
+                    }
+                    value = (String) jobject.get("personalstockdetail_price");
+                    if (!(value.equals("null") && value != null)) {
+                        personalStock.setPersonalstockdetail_price(value);
+                    }
+                    value = (String) jobject.get("personalstockdetail_total");
+                    if (!(value.equals("null") && value != null)) {
+                        personalStock.setPersonalstockdetail_total(value);
+                    }
+                    value = (String) jobject.get("personalstockdetail_goods_type");
+                    if (!(value.equals("null") && value != null)) {
+                        personalStock.setPersonalstockdetail_goods_type(value);
+                    }
+                    value = (String) jobject.get("personalstockdetail_date");
+                    if (!(value.equals("null") && value != null)) {
+                        personalStock.setPersonalstockdetail_date(value);
+                    }
+                    value = (String) jobject.get("personalstockdetail_type");
+                    if (!(value.equals("null") && value != null)) {
+                        personalStock.setPersonalstockdetail_type(value);
+                    }
+                    value = (String) jobject.get("personalstockdetail_goods_name");
+                    if (!(value.equals("null") && value != null)) {
+                        personalStock.setPersonalstockdetail_goods_name(value);
+                    }
+                    value = (String) jobject.get("spec");
+                    if (!(value.equals("null") && value != null)) {
+                        personalStock.setSpec(value);
+                    }
+                    value = (String) jobject.get("producer");
+                    if (!(value.equals("null") && value != null)) {
+                        personalStock.setProducer(value);
+                    }
+                    value = (String) jobject.get("employee_name");
+                    if (!(value.equals("null") && value != null)) {
+                        personalStock.setEmployee_name(value);
+                    }
+                    value = (String) jobject.get("member_name");
+                    if (!(value.equals("null") && value != null)) {
+                        personalStock.setMember_name(value);
+                    }
+                    ls.add(personalStock);
+                }
+            }
+            return ls;
+        } catch (JSONException e) {
+            // e.printStackTrace();
+        }
+        return null;
+    }
+
+    public int uploadPlant(HttpListener<String> listener,PlanterRecord planterRecord){
+        JSONObject object = new JSONObject();
+        try {
+            object.put("personalstock_id", planterRecord.getLocal_stock_id());
+            object.put("plantrecord_breed", planterRecord.getPlantrecord_breed());
+            object.put("plantrecord_seed_name", planterRecord.getPlantrecord_seed_name());
+            object.put("plantrecord_seed_source", planterRecord.getPlantrecord_seed_source());
+            object.put("plantrecord_specifications", planterRecord.getPlantrecord_specifications());
+            object.put("plantrecord_seed_number", planterRecord.getPlantrecord_seed_number());
+            object.put("plantrecord_plant_date", planterRecord.getPlantrecord_plant_date());
+            object.put("field_id", planterRecord.getLocal_field_id());
+            Log.e("testcc",object.toString());
+        } catch (JSONException e) {
+            return 0;
+        }
+        LinkedHashMap<String, String> header = new LinkedHashMap<>();
+        header.put("contentType", "utf-8");
+        header.put("Content-type", "application/x-java-serialized-object");
+        StringRequest stringRequest = new StringRequest(Configure.ADD_PLANTRECORD_URL).setHeaders(header)
+                .setMethod(HttpMethods.Post).setHttpBody(new StringBody(object.toString()));
+        stringRequest.setHttpListener(listener);
+        liteHttp.executeAsync(stringRequest);
+        return 0;
+    }
+
 }

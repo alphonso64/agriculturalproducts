@@ -9,6 +9,9 @@ public class InputType {
     public final static int INPUT_SAVE_OK = 2;
     public final static int INPUT_SAVE_ERR = 3;
     public final static int INPUT_SAVE_ALREADY = 4;
+    public final static int INPUT_UPLOAD_OK = 5;
+    public final static int INPUT_UPLOAD_ERR = 6;
+    public final static int INPUT_UPLOAD_ALREADY = 7;
 
     public final static int TASK_INPUT = 10;
     public final static int CUSTOM_INPUT = 11;

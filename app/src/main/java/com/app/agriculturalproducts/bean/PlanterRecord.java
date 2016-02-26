@@ -9,6 +9,7 @@ import static nl.qbusict.cupboard.CupboardFactory.cupboard;
  * Created by ALPHONSO on 2016/2/25.
  */
 public class PlanterRecord {
+    private Long _id;
     private String plantrecord_id;
     private String plantrecord_seed_name;
     private String plantrecord_breed;
@@ -18,6 +19,9 @@ public class PlanterRecord {
     private String plantrecord_plant_date;
     private String field_name;
     private String employee_name;
+    private String saved;
+    private String local_stock_id;
+    private String local_field_id;
 
     public void printfInfo(){
         Log.e("testcc", "plantrecord_id" + ":" + plantrecord_id
@@ -103,5 +107,37 @@ public class PlanterRecord {
 
     public void setPlantrecord_id(String plantrecord_id) {
         this.plantrecord_id = plantrecord_id;
+    }
+
+    public String getSaved() {
+        return saved;
+    }
+
+    public void setSaved(String saved) {
+        this.saved = saved;
+    }
+
+    public Long get_id() {
+        return _id;
+    }
+
+    public void set_id(Long _id) {
+        this._id = _id;
+    }
+
+    public String getLocal_stock_id() {
+        return local_stock_id;
+    }
+
+    public void setLocal_stock_id(String local_stock_id) {
+        this.local_stock_id = local_stock_id;
+    }
+
+    public String getLocal_field_id() {
+        return local_field_id;
+    }
+
+    public void setLocal_field_id(String local_field_id) {
+        this.local_field_id = local_field_id;
     }
 }

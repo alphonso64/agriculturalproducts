@@ -110,6 +110,10 @@
         </activity>
         <activity android:name=".ProduceActivity" >
         </activity>
+        <activity android:name=".StockDetailActivity" >
+        </activity>
+        <activity android:name=".StockActivity" >
+        </activity>
     </application>
 
 </manifest>

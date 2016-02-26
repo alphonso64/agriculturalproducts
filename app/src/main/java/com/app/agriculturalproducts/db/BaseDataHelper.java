@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.support.v4.content.CursorLoader;
 
+import java.net.URL;
+
 
 public abstract class BaseDataHelper {
     private Context mContext;
@@ -43,6 +45,10 @@ public abstract class BaseDataHelper {
 
     protected final int update(ContentValues values, String where, String[] whereArgs) {
         return mContext.getContentResolver().update(getContentUri(), values, where, whereArgs);
+    }
+
+    protected final int update(Uri uri,ContentValues values, String where, String[] whereArgs) {
+        return mContext.getContentResolver().update(uri, values, where, whereArgs);
     }
 
     protected final int delete(String where, String[] selectionArgs) {

@@ -21,6 +21,8 @@ import com.app.agriculturalproducts.bean.Field;
 import com.app.agriculturalproducts.bean.FieldInfo;
 import com.app.agriculturalproducts.bean.OtherInfo;
 import com.app.agriculturalproducts.bean.OtherRecord;
+import com.app.agriculturalproducts.bean.PersonalStock;
+import com.app.agriculturalproducts.bean.PersonalStockDetail;
 import com.app.agriculturalproducts.bean.PersticidesUsage;
 import com.app.agriculturalproducts.bean.PickRecord;
 import com.app.agriculturalproducts.bean.Picking;
@@ -46,6 +48,8 @@ public class DataProvider extends ContentProvider {
     private static final int PICK_TABLE = 4;
     private static final int OTHERINFO_TABLE = 5;
     private static final int FIELD_TABLE = 6;
+    private static final int STOCK_TABLE = 7;
+    private static final int STOCK_DETAIL_TABLE = 8;
 
     public static final String PATH_TASK_TABLE = "/task";
     public static final String PATH_TASK_DETAIL_TABLE = "/taskd";
@@ -56,6 +60,8 @@ public class DataProvider extends ContentProvider {
     public static final String PATH_PICK_TABLE = "/pickrecord";
     public static final String PATH_OTHER_TABLE =  "/otherrecord";
     public static final String PATH_FIELD_TABLE =  "/field";
+    public static final String PATH_STOCK_TABLE =  "/personalstock";
+    public static final String PATH_STOCK_DETAIL_TABLE =  "/personalstockdetail";
 
     public static final Uri TASK_TABLE_CONTENT_URI = Uri.parse(SCHEME + AUTHORITY + PATH_TASK_TABLE);
     public static final Uri TASK_DETAIL_CONTENT_URI = Uri.parse(SCHEME + AUTHORITY + PATH_TASK_DETAIL_TABLE);
@@ -66,7 +72,8 @@ public class DataProvider extends ContentProvider {
     public static final Uri PICK_TABLE_CONTENT_URI = Uri.parse(SCHEME + AUTHORITY + PATH_PICK_TABLE);
     public static final Uri OTHER_TABLE_CONTENT_URI = Uri.parse(SCHEME + AUTHORITY + PATH_OTHER_TABLE);
     public static final Uri FILED_TABLE_CONTENT_URI = Uri.parse(SCHEME + AUTHORITY + PATH_FIELD_TABLE);
-
+    public static final Uri STOCK_TABLE_CONTENT_URI = Uri.parse(SCHEME + AUTHORITY + PATH_STOCK_TABLE);
+    public static final Uri STOCK_DETAIL_TABLE_CONTENT_URI = Uri.parse(SCHEME + AUTHORITY + PATH_STOCK_DETAIL_TABLE);
 
     public static final String TASK_TABLE_CONTENT_TYPE = "com.task";
     public static final String TASK_DETAIL_TABLE_CONTENT_TYPE = "com.task.detail";
@@ -77,6 +84,8 @@ public class DataProvider extends ContentProvider {
     public static final String PICK_TABLE_CONTENT_TYPE = "com.pick";
     public static final String OTHER_TABLE_CONTENT_TYPE = "com.other";
     public static final String FIELD_TABLE_CONTENT_TYPE = "com.field";
+    public static final String STOCK_TABLE_CONTENT_TYPE = "com.stock";
+    public static final String STOCK_DETAIL_TABLE_CONTENT_TYPE = "com.stockfield";
     private static DBHelper mDBHelper;
 
     private static final UriMatcher sUriMATCHER = new UriMatcher(UriMatcher.NO_MATCH) {{
@@ -89,6 +98,8 @@ public class DataProvider extends ContentProvider {
         addURI(AUTHORITY,"field",FIELD_TABLE);
         addURI(AUTHORITY,"taskd",TASK_Detail_TABLE);
         addURI(AUTHORITY,"taskud",TASK_Done_TABLE);
+        addURI(AUTHORITY,"personalstock",STOCK_TABLE);
+        addURI(AUTHORITY,"personalstockdetail",STOCK_DETAIL_TABLE);
     }};
 
     public static DBHelper getDBHelper() {
@@ -192,6 +203,22 @@ public class DataProvider extends ContentProvider {
                             getCursor();
                     cursor.setNotificationUri(getContext().getContentResolver(), uri);
                     break;
+                case STOCK_TABLE:
+                    cursor=  cupboard().withDatabase(db).query(PersonalStock.class).
+                            withProjection(projection).
+                            withSelection(selection, selectionArgs).
+                            orderBy(sortOrder).
+                            getCursor();
+                    cursor.setNotificationUri(getContext().getContentResolver(), uri);
+                    break;
+                case STOCK_DETAIL_TABLE:
+                    cursor=  cupboard().withDatabase(db).query(PersonalStockDetail.class).
+                            withProjection(projection).
+                            withSelection(selection, selectionArgs).
+                            orderBy(sortOrder).
+                            getCursor();
+                    cursor.setNotificationUri(getContext().getContentResolver(), uri);
+                    break;
                 default:
                     throw new IllegalArgumentException("Unknown Uri" + uri);
             }
@@ -231,6 +258,12 @@ public class DataProvider extends ContentProvider {
             case FIELD_TABLE:
                 table = FieldDataHelper.TABLE_NAME;
                 break;
+            case STOCK_TABLE:
+                table = StockDataHelper.TABLE_NAME;
+                break;
+            case STOCK_DETAIL_TABLE:
+                table = StockDetailDataHelper.TABLE_NAME;
+                break;
             default:
                 throw new IllegalArgumentException("Unknown Uri" + uri);
         }
@@ -258,6 +291,10 @@ public class DataProvider extends ContentProvider {
                 return TASK_DETAIL_TABLE_CONTENT_TYPE;
             case TASK_Done_TABLE://Demo列表
                 return TASK_DONE_TABLE_CONTENT_TYPE;
+            case STOCK_DETAIL_TABLE:
+                return STOCK_DETAIL_TABLE_CONTENT_TYPE;
+            case STOCK_TABLE:
+                return STOCK_TABLE_CONTENT_TYPE;
             default:
                 throw new IllegalArgumentException("Unknown Uri" + uri);
         }
@@ -265,15 +302,14 @@ public class DataProvider extends ContentProvider {
 
     @Override
     public Uri insert(Uri uri, ContentValues values) {
-        Log.e("testbbb","insert1:"+uri.toString());
         synchronized (obj) {
             SQLiteDatabase db = getDBHelper().getWritableDatabase();
             long rowId = 0;
             db.beginTransaction();
             try {
+                Log.e("testbbb", "insert2:" + uri.toString());
                 rowId = db.insert(matchTable(uri), null, values);
                 db.setTransactionSuccessful();
-                Log.e("testbbb", "insert2:" + uri.toString());
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
@@ -296,7 +332,6 @@ public class DataProvider extends ContentProvider {
             try {
                 for (ContentValues contentValues : values) {
                     Log.e("testcc","bulkInsert:"+uri.toString());
-                    Log.e("testcc","bulkInsert:"+matchTable(uri));
                     db.insertWithOnConflict(matchTable(uri), BaseColumns._ID, contentValues, SQLiteDatabase.CONFLICT_IGNORE);
                 }
                 db.setTransactionSuccessful();

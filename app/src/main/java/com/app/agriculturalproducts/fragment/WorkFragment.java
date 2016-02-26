@@ -29,6 +29,7 @@ import com.app.agriculturalproducts.adapter.BasicIconRecyclerAdapter;
 import com.app.agriculturalproducts.adapter.OnAdpaterItemClickListener;
 import com.app.agriculturalproducts.adapter.TaskCursorAdapter;
 import com.app.agriculturalproducts.app.AppApplication;
+import com.app.agriculturalproducts.bean.Field;
 import com.app.agriculturalproducts.bean.FieldInfo;
 import com.app.agriculturalproducts.bean.MyIcon;
 import com.app.agriculturalproducts.bean.Task;
@@ -124,9 +125,9 @@ public class WorkFragment extends Fragment implements LoaderManager.LoaderCallba
             Task icon = new Task();
             Cursor cursor = mFieldDataHelper.getCursor();
             if (cursor.moveToFirst()) {
-                FieldInfo fieldInfo = FieldInfo.fromCursor(cursor);
-                icon.setField(fieldInfo.getFiled());
-                icon.setSpecies(fieldInfo.getSpecies());
+                Field fieldInfo = Field.fromCursor(cursor);
+                icon.setField(fieldInfo.getField_name());
+                icon.setSpecies(fieldInfo.getField_type());
             }
             cursor.close();
             icon.setTitle("化肥任务");
@@ -173,27 +174,27 @@ public class WorkFragment extends Fragment implements LoaderManager.LoaderCallba
                     .negativeText("暂不").onPositive(new MaterialDialog.SingleButtonCallback() {
                 @Override
                 public void onClick(MaterialDialog dialog, DialogAction which) {
-                    if(task.getTitle().equals("农药任务")){
-                        Intent intent = new Intent(getActivity(), PesticidesActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable("task", task);
-                        intent.putExtras(bundle);
-                        startActivity(intent);
-                    }
-                    if(task.getTitle().equals("化肥任务")){
-                        Intent intent = new Intent(getActivity(), FertilizerActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable("task", task);
-                        intent.putExtras(bundle);
-                        startActivity(intent);
-                    }
-                    if(task.getTitle().equals("采摘任务")){
-                        Intent intent = new Intent(getActivity(), PickingActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable("task", task);
-                        intent.putExtras(bundle);
-                        startActivity(intent);
-                    }
+//                    if(task.getTitle().equals("农药任务")){
+//                        Intent intent = new Intent(getActivity(), PesticidesActivity.class);
+//                        Bundle bundle = new Bundle();
+//                        bundle.putSerializable("task", task);
+//                        intent.putExtras(bundle);
+//                        startActivity(intent);
+//                    }
+//                    if(task.getTitle().equals("化肥任务")){
+//                        Intent intent = new Intent(getActivity(), FertilizerActivity.class);
+//                        Bundle bundle = new Bundle();
+//                        bundle.putSerializable("task", task);
+//                        intent.putExtras(bundle);
+//                        startActivity(intent);
+//                    }
+//                    if(task.getTitle().equals("采摘任务")){
+//                        Intent intent = new Intent(getActivity(), PickingActivity.class);
+//                        Bundle bundle = new Bundle();
+//                        bundle.putSerializable("task", task);
+//                        intent.putExtras(bundle);
+//                        startActivity(intent);
+//                    }
                 }
             }).show();
 

@@ -50,12 +50,7 @@ public class BaseUploadActivity extends BaseActivity {
     private Toolbar.OnMenuItemClickListener itemClick = new Toolbar.OnMenuItemClickListener() {
         @Override
         public boolean onMenuItemClick(MenuItem item) {
-            if (item.getItemId() == R.id.action_upload) {
-                new MaterialDialog.Builder(BaseUploadActivity.this)
-                        .title("暂不支持上传")
-                        .positiveText("好的")
-                        .show();
-            }else if(item.getItemId()==R.id.action_history){
+            if(item.getItemId()==R.id.action_history){
                 if(currentFragment == editFragment){
                     chageFragment(editFragment,dataFragment,R.id.frame_view);
                     currentFragment = dataFragment;
@@ -68,10 +63,10 @@ public class BaseUploadActivity extends BaseActivity {
                     currentFragment = editFragment;
                 }
                 toolbar.getMenu().clear();
-                toolbar.inflateMenu(R.menu.menu);
+                toolbar.inflateMenu(R.menu.menu_a);
             }else if(item.getItemId()==R.id.action_save){
                 if(currentFragment == editFragment){
-                    int val = editFragment.upload();
+                    int val = editFragment.save();
                     if(val == InputType.INPUT_EMPTY){
                         new MaterialDialog.Builder(BaseUploadActivity.this)
                                 .title("内容不能为空！")
@@ -108,7 +103,7 @@ public class BaseUploadActivity extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
+        getMenuInflater().inflate(R.menu.menu_a, menu);
         return true;
     }
 }

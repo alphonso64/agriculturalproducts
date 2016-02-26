@@ -10,6 +10,8 @@ import com.app.agriculturalproducts.bean.Field;
 import com.app.agriculturalproducts.bean.FieldInfo;
 import com.app.agriculturalproducts.bean.OtherInfo;
 import com.app.agriculturalproducts.bean.OtherRecord;
+import com.app.agriculturalproducts.bean.PersonalStock;
+import com.app.agriculturalproducts.bean.PersonalStockDetail;
 import com.app.agriculturalproducts.bean.PersticidesUsage;
 import com.app.agriculturalproducts.bean.PickRecord;
 import com.app.agriculturalproducts.bean.Picking;
@@ -44,6 +46,8 @@ public class DBHelper extends SQLiteOpenHelper {
         cupboard().register(PreventionRecord.class);
         cupboard().register(PickRecord.class);
         cupboard().register(OtherRecord.class);
+        cupboard().register(PersonalStock.class);
+        cupboard().register(PersonalStockDetail.class);
 //        cupboard().register(PersticidesUsage.class);
 //        cupboard().register(FertilizerUsage.class);
 //        cupboard().register(PlantSpecies.class);

@@ -1,284 +1,312 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/lightGray">
+    android:background="@color/lightGray"
+    android:orientation="vertical">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:paddingLeft="20dp"
             android:paddingRight="10dp"
             android:paddingTop="10dp">
 
             <LinearLayout
-                android:focusable="true" android:focusableInTouchMode="true"
-                android:layout_width="0px" android:layout_height="0px">
+                android:layout_width="0px"
+                android:layout_height="0px"
+                android:focusable="true"
+                android:focusableInTouchMode="true">
+
                 <requestFocus />
             </LinearLayout>
 
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:layout_marginTop="15dp">
+                android:layout_marginTop="15dp"
+                android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_gravity="center_vertical"
-                    android:text="@string/plot"/>
+                    android:layout_weight="1"
+                    android:text="@string/plot" />
 
                 <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_weight="4"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:layout_weight="4">
+
                     <TextView
+                        android:id="@+id/field_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
                         android:layout_marginLeft="10dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/text_backgroud"
                         android:gravity="left|top"
                         android:padding="5dp"
-                        android:textSize="15sp"
-                        android:id="@+id/field_text"
-                        android:layout_gravity="center_vertical"
-                        android:background="@drawable/text_backgroud"
-                        android:layout_weight="1"
-                        android:singleLine="true" />
+                        android:singleLine="true"
+                        android:textSize="15sp" />
+
                     <ImageView
-                        android:id ="@+id/field_img"
+                        android:id="@+id/field_img"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
+                        android:layout_gravity="center_vertical"
                         android:layout_marginLeft="6dp"
-                        android:layout_gravity="center_vertical"
-                        android:src="@drawable/ic_view_list_white_24dp"/>
+                        android:src="@drawable/ic_view_list_white_24dp" />
                 </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:layout_gravity="center_vertical">
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="种植品种"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"/>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="4"
-                    android:layout_height="match_parent">
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_gravity="center_vertical"
-                        android:gravity="left|top"
-                        android:padding="5dp"
-                        android:textSize="15sp"
-                        android:id="@+id/species_text"
-                        android:background="@drawable/text_backgroud"
-                        android:layout_marginRight="30dp"
-                        android:singleLine="true" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_gravity="center_vertical">
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="@string/seed"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"/>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="4"
-                    android:layout_height="match_parent">
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_gravity="center_vertical"
-                        android:gravity="left|top"
-                        android:padding="5dp"
-                        android:textSize="15sp"
-                        android:id="@+id/seed_text"
-                        android:background="@drawable/text_backgroud"
-                        android:layout_marginRight="30dp"
-                        android:singleLine="true" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_gravity="center_vertical">
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="种子来源"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"/>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="4"
-                    android:layout_height="match_parent">
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_gravity="center_vertical"
-                        android:gravity="left|top"
-                        android:padding="5dp"
-                        android:textSize="15sp"
-                        android:id="@+id/source_text"
-                        android:background="@drawable/text_backgroud"
-                        android:layout_marginRight="30dp"
-                        android:singleLine="true" />
-                </LinearLayout>
-            </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_gravity="center_vertical">
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="规格"
                 android:layout_gravity="center_vertical"
-                android:layout_weight="1"/>
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:text="@string/seed" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="4">
+
+                    <TextView
+                        android:id="@+id/seed_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="30dp"
+                        android:background="@drawable/text_backgroud"
+                        android:gravity="left|top"
+                        android:padding="5dp"
+                        android:singleLine="true"
+                        android:textSize="15sp" />
+                </LinearLayout>
+            </LinearLayout>
 
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_weight="4"
-                android:layout_height="match_parent">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_gravity="center_vertical"
-                    android:gravity="left|top"
-                    android:padding="5dp"
-                    android:textSize="15sp"
-                    android:id="@+id/spec_text"
-                    android:background="@drawable/text_backgroud"
-                    android:layout_marginRight="30dp"
-                    android:singleLine="true" />
-            </LinearLayout>
-        </LinearLayout>
-            <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:layout_gravity="center_vertical">
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="地块信息"
                     android:layout_gravity="center_vertical"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:text="种子来源" />
 
                 <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_weight="4"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:layout_weight="4">
+
                     <TextView
+                        android:id="@+id/source_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
                         android:layout_gravity="center_vertical"
-                        android:gravity="left|top"
-                        android:padding="5dp"
-                        android:textSize="15sp"
-                        android:id="@+id/plot_info_text"
-                        android:background="@drawable/text_backgroud"
+                        android:layout_marginLeft="10dp"
                         android:layout_marginRight="30dp"
-                        android:singleLine="true" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="40dp">
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_gravity="center_vertical"
-                    android:text="种植数量"/>
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="4"
-                    android:layout_height="match_parent">
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:gravity="left|top"
-                        android:padding="5dp"
-                        android:layout_gravity="center_vertical"
-                        android:textSize="15sp"
-                        android:id="@+id/num_text"
-                        android:background="@drawable/editext_backgroud"
-                        android:singleLine="true"
-                        android:layout_marginRight="30dp"/>
-                </LinearLayout>
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="40dp">
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_gravity="center_vertical"
-                    android:text="种植日期"/>
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="4"
-                    android:layout_height="match_parent">
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:gravity="left|top"
-                        android:padding="5dp"
-                        android:textSize="15sp"
-                        android:id="@+id/date_text"
-                        android:layout_gravity="center_vertical"
                         android:background="@drawable/text_backgroud"
+                        android:gravity="left|top"
+                        android:padding="5dp"
+                        android:singleLine="true"
+                        android:textSize="15sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:text="规格" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="4">
+
+                    <TextView
+                        android:id="@+id/spec_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="30dp"
+                        android:background="@drawable/text_backgroud"
+                        android:gravity="left|top"
+                        android:padding="5dp"
+                        android:singleLine="true"
+                        android:textSize="15sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:text="种植品种" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="4">
+
+                    <EditText
+                        android:id="@+id/species_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="30dp"
+                        android:background="@drawable/editext_backgroud"
+                        android:gravity="left|top"
+                        android:padding="5dp"
+                        android:singleLine="true"
+                        android:textSize="15sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:text="种植数量" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="4">
+
+                    <EditText
+                        android:id="@+id/num_text"
+                        android:inputType="number"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="30dp"
+                        android:background="@drawable/editext_backgroud"
+                        android:gravity="left|top"
+                        android:padding="5dp"
+                        android:singleLine="true"
+                        android:textSize="15sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:text="种植日期" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="4">
+
+                    <TextView
+                        android:id="@+id/date_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
                         android:layout_weight="1"
-                        android:singleLine="true" />
+                        android:background="@drawable/text_backgroud"
+                        android:gravity="left|top"
+                        android:padding="5dp"
+                        android:singleLine="true"
+                        android:textSize="15sp" />
+
                     <ImageView
                         android:id="@+id/date_img"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
-                        android:layout_marginLeft="5dp"
                         android:layout_gravity="center_vertical"
-                        android:src="@drawable/ic_date_range_white_24dp"/>
+                        android:layout_marginLeft="5dp"
+                        android:src="@drawable/ic_date_range_white_24dp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:text="田地所属" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="4">
+
+                    <TextView
+                        android:id="@+id/plot_info_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="30dp"
+                        android:background="@drawable/text_backgroud"
+                        android:gravity="left|top"
+                        android:padding="5dp"
+                        android:singleLine="true"
+                        android:textSize="15sp" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
+
 </LinearLayout>

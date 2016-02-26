@@ -1,5 +1,6 @@
 package com.app.agriculturalproducts.fragment;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,20 +9,34 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.app.agriculturalproducts.R;
+import com.app.agriculturalproducts.adapter.OnAdpaterItemClickListener;
 import com.app.agriculturalproducts.adapter.PlantCursorAdapter;
 import com.app.agriculturalproducts.adapter.PusageCursorAdapter;
 import com.app.agriculturalproducts.bean.FieldInfo;
+import com.app.agriculturalproducts.bean.PlanterRecord;
+import com.app.agriculturalproducts.bean.Task;
 import com.app.agriculturalproducts.db.FieldDataHelper;
 import com.app.agriculturalproducts.db.PersticidesUsageDataHelper;
 import com.app.agriculturalproducts.db.PlantSpeciesDataHelper;
+import com.app.agriculturalproducts.http.HttpClient;
+import com.litesuits.http.listener.HttpListener;
+import com.litesuits.http.response.Response;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+
+import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 
 /**
  * Created by ALPHONSO on 2016/1/5.
@@ -53,6 +68,7 @@ public class PlantHistoryFragment extends Fragment implements LoaderManager.Load
         super.onViewCreated(view, savedInstanceState);
         mDataHelper = new PlantSpeciesDataHelper(getActivity());
         mAdapter = new PlantCursorAdapter(getActivity());
+        mAdapter.setOnItemClickListener(task_adpaterItemClickListener);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(mAdapter);
     }
@@ -68,6 +84,51 @@ public class PlantHistoryFragment extends Fragment implements LoaderManager.Load
         super.onDestroyView();
         ButterKnife.unbind(this);
     }
+
+    private OnAdpaterItemClickListener task_adpaterItemClickListener =new  OnAdpaterItemClickListener() {
+        @Override
+        public void onItemClick(Object obj, int p) {
+            final PlanterRecord planterRecord =  (PlanterRecord) obj;
+            String saved = planterRecord.getSaved();
+            if(!saved.equals("yes")){
+                new MaterialDialog.Builder(getActivity())
+                        .title("上传种植信息")
+                        .positiveText("是")
+                        .negativeText("否").onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(MaterialDialog dialog, DialogAction which) {
+
+                        HttpClient.getInstance().uploadPlant(new HttpListener<String>() {
+                            @Override
+                            public void onSuccess(String s, Response<String> response) {
+                                try {
+                                    JSONObject jsonObject = new JSONObject(s);
+                                    String val = jsonObject.getString("return_code");
+                                    if(val.equals("success")){
+                                        planterRecord.setSaved("yes");
+                                        PlantSpeciesDataHelper plantSpeciesDataHelper = new PlantSpeciesDataHelper(getActivity());
+                                        ContentValues values = cupboard().withEntity(PlanterRecord.class).toContentValues(planterRecord);
+                                        plantSpeciesDataHelper.updatePlant(values, String.valueOf(planterRecord.get_id()));
+                                        new MaterialDialog.Builder(getActivity())
+                                                .title("上传成功！")
+                                                .positiveText("好的")
+                                                .show();
+                                    }else{
+                                        new MaterialDialog.Builder(getActivity())
+                                                .title("上传失败：种子数量不足！")
+                                                .positiveText("好的")
+                                                .show();
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        },planterRecord);
+                    }
+                }).show();
+            }
+        }
+    };
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {

@@ -69,7 +69,6 @@ public class TaskCursorAdapter extends BaseAbstractRecycleCursorAdapter<Recycler
                 @Override
                 public void onClick(View v) {
                     Cursor cursor = (Cursor) mAdapter.getItem(getAdapterPosition());
-
                     Task task = Task.fromCursor(cursor);
                     if(mAdapter.onItemClickListener!=null){
                         mAdapter.onItemClickListener.onItemClick(task,getAdapterPosition());

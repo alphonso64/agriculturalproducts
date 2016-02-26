@@ -26,6 +26,7 @@ public class PreventionRecord {
     private String plantrecord_breed;
     private String plantrecord_plant_date;
     private String member_name;
+    private String saved;
 
 
     public static PreventionRecord fromCursor(Cursor cursor) {
@@ -179,6 +180,14 @@ public class PreventionRecord {
 
     public void setMember_name(String member_name) {
         this.member_name = member_name;
+    }
+
+    public String getSaved() {
+        return saved;
+    }
+
+    public void setSaved(String saved) {
+        this.saved = saved;
     }
 
 //    public void printfInfo(){

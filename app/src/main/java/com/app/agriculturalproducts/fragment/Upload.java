@@ -5,4 +5,5 @@ package com.app.agriculturalproducts.fragment;
  */
 public interface Upload {
     public int upload();
+    public int save();
 }

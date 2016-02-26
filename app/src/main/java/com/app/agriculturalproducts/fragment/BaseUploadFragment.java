@@ -13,6 +13,11 @@ public class BaseUploadFragment extends Fragment implements Upload {
     public Object object;
     @Override
     public int upload() {
+        return InputType.INPUT_UPLOAD_OK;
+    }
+
+    @Override
+    public int save() {
         return InputType.INPUT_SAVE_OK;
     }
 }

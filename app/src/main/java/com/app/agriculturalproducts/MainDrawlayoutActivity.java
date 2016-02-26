@@ -30,6 +30,8 @@ import com.app.agriculturalproducts.db.OtherInfoDataHelper;
 import com.app.agriculturalproducts.db.PersticidesUsageDataHelper;
 import com.app.agriculturalproducts.db.PickingDataHelper;
 import com.app.agriculturalproducts.db.PlantSpeciesDataHelper;
+import com.app.agriculturalproducts.db.StockDataHelper;
+import com.app.agriculturalproducts.db.StockDetailDataHelper;
 import com.app.agriculturalproducts.fragment.DataFragment;
 import com.app.agriculturalproducts.fragment.MineFragment;
 import com.app.agriculturalproducts.fragment.WorkFragment;
@@ -113,7 +115,7 @@ public class MainDrawlayoutActivity extends BaseActivity {
         final String name = sp.getString("name", null);
         final String isFirstLogin = sp.getString(name,null);
         final EmployeeInfoModel employeeInfoModel = new EmployeeInfoModel(getApplicationContext());
-        Log.e("testcc", name + isFirstLogin);
+        //Log.e("testcc", name + isFirstLogin);
         if(isFirstLogin==null)
         {
             progressDialog = new ProgressDialog(this);
@@ -128,24 +130,31 @@ public class MainDrawlayoutActivity extends BaseActivity {
                 public void run() {
                     HttpClient.getInstance().getAllInfo(name);
                     //保存地块信息至数据库
-                    FieldDataHelper fieldDataHelper = new FieldDataHelper(getApplicationContext());
+                    FieldDataHelper fieldDataHelper = new FieldDataHelper(MainDrawlayoutActivity.this);
                     fieldDataHelper.bulkInsert(HttpClient.getInstance().fieldList);
 
-                    PlantSpeciesDataHelper plantSpeciesDataHelper = new PlantSpeciesDataHelper(getApplicationContext());
+                    PlantSpeciesDataHelper plantSpeciesDataHelper = new PlantSpeciesDataHelper(MainDrawlayoutActivity.this);
                     plantSpeciesDataHelper.bulkInsert(HttpClient.getInstance().planterList);
 
-                    FertilizerUsageDataHelper fertilizerUsageDataHelper = new FertilizerUsageDataHelper(getApplicationContext());
+                    FertilizerUsageDataHelper fertilizerUsageDataHelper = new FertilizerUsageDataHelper(MainDrawlayoutActivity.this);
                     fertilizerUsageDataHelper.bulkInsert(HttpClient.getInstance().fertiList);
 
-                    PersticidesUsageDataHelper persticidesUsageDataHelper = new PersticidesUsageDataHelper(getApplicationContext());
+                    PersticidesUsageDataHelper persticidesUsageDataHelper = new PersticidesUsageDataHelper(MainDrawlayoutActivity.this);
                     persticidesUsageDataHelper.bulkInsert(HttpClient.getInstance().preventionList);
 
-                    PickingDataHelper pickingDataHelper = new PickingDataHelper(getApplicationContext());
+                    PickingDataHelper pickingDataHelper = new PickingDataHelper(MainDrawlayoutActivity.this);
                     pickingDataHelper.bulkInsert(HttpClient.getInstance().pickList);
 
-                    OtherInfoDataHelper otherInfoDataHelper = new OtherInfoDataHelper(getApplicationContext());
+                    OtherInfoDataHelper otherInfoDataHelper = new OtherInfoDataHelper(MainDrawlayoutActivity.this);
                     otherInfoDataHelper.bulkInsert(HttpClient.getInstance().otherList);
 
+                    StockDataHelper stockDataHelper = new StockDataHelper(MainDrawlayoutActivity.this);
+                    stockDataHelper.bulkInsert(HttpClient.getInstance().seedStockList);
+                    stockDataHelper.bulkInsert(HttpClient.getInstance().fStockList);
+                    stockDataHelper.bulkInsert(HttpClient.getInstance().pStcokList);
+
+                    StockDetailDataHelper stockDetailDataHelper = new StockDetailDataHelper(MainDrawlayoutActivity.this);
+                    stockDetailDataHelper.bulkInsert(HttpClient.getInstance().stockList);
                     //保存雇员信息sp中
                     employeeInfoModel.setEmployeeInfo(HttpClient.getInstance().employeeInfo);
                     mHandler.sendEmptyMessage(1);

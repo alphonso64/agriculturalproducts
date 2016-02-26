@@ -44,7 +44,7 @@ public class PusageCursorAdapter extends BaseAbstractRecycleCursorAdapter<Recycl
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v= LayoutInflater.from(context).inflate(R.layout.pusage_item,parent,false);
+        View v= LayoutInflater.from(context).inflate(R.layout.pusage_item_type_a,parent,false);
         PusageViewHolder bvh=new PusageViewHolder(v,this);
         return bvh;
     }
