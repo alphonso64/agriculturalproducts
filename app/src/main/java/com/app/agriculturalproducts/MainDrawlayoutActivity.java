@@ -59,9 +59,10 @@ public class MainDrawlayoutActivity extends BaseActivity {
                     Activity.MODE_PRIVATE);
             String name = sp.getString("name", null);
             SharedPreferences.Editor editor = sp.edit();
-            editor.putString(name,"no");
+            editor.putString(name, "no");
             editor.commit();
             progressDialog.dismiss();
+            setPersonINfo();
         }
     };
     @Override
@@ -156,7 +157,8 @@ public class MainDrawlayoutActivity extends BaseActivity {
                     StockDetailDataHelper stockDetailDataHelper = new StockDetailDataHelper(MainDrawlayoutActivity.this);
                     stockDetailDataHelper.bulkInsert(HttpClient.getInstance().stockList);
                     //保存雇员信息sp中
-                    employeeInfoModel.setEmployeeInfo(HttpClient.getInstance().employeeInfo);
+                    EmployeeInfo employeeInfo = HttpClient.getInstance().employeeInfo;
+                    employeeInfoModel.setEmployeeInfo(employeeInfo);
                     mHandler.sendEmptyMessage(1);
                 }}.start();
         }
@@ -166,17 +168,28 @@ public class MainDrawlayoutActivity extends BaseActivity {
         mImgView = (CircleImageView)header.findViewById(R.id.headerImgView);
         mNameText = (TextView)header.findViewById(R.id.headNameText);
         mCOOPText = (TextView)header.findViewById(R.id.headCOOPText);
-        EmployeeInfo employeeInfo = employeeInfoModel.getEmployeeInfo();
-        mNameText.setText(employeeInfo.getEmployee_name());
-        mCOOPText.setText(employeeInfo.getMember_name());
-
-//        mUserInfoPresenter = new UserInfoPresenter(getApplicationContext(),this);
-//        mUserInfoPresenter.loadUserInfo();
-//        filedDataHelper = new FieldDataHelper(getApplicationContext());
     }
     @Override
     protected int getContentView() {
         return R.layout.activity_main_drawlayout;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setPersonINfo();
+    }
+
+    void  setPersonINfo(){
+        EmployeeInfoModel employeeInfoModel = new EmployeeInfoModel(MainDrawlayoutActivity.this);
+        EmployeeInfo employeeInfo = employeeInfoModel.getEmployeeInfo();
+        mNameText.setText(employeeInfo.getEmployee_name());
+        mCOOPText.setText(employeeInfo.getMember_name());
+        String path = employeeInfo.getPath();
+        if(path!=null){
+            Bitmap picture = BitmapFactory.decodeFile(path);
+            mImgView.setImageBitmap(picture);
+        }
     }
 
 }

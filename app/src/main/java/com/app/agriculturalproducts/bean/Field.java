@@ -4,6 +4,8 @@ import android.database.Cursor;
 import android.util.Log;
 
 
+import nl.qbusict.cupboard.annotation.Index;
+
 import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 
 /**

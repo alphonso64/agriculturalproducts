@@ -331,8 +331,9 @@ public class DataProvider extends ContentProvider {
             db.beginTransaction();
             try {
                 for (ContentValues contentValues : values) {
-                    Log.e("testcc","bulkInsert:"+uri.toString());
+                    Log.e("testcc", "bulkInsert:" + uri.toString());
                     db.insertWithOnConflict(matchTable(uri), BaseColumns._ID, contentValues, SQLiteDatabase.CONFLICT_IGNORE);
+                    //db.replace(matchTable(uri), BaseColumns._ID, contentValues);
                 }
                 db.setTransactionSuccessful();
                 getContext().getContentResolver().notifyChange(uri, null);
@@ -379,6 +380,8 @@ public class DataProvider extends ContentProvider {
             return count;
         }
     }
+
+
 
     public static void clearDBCache() {
         synchronized (DataProvider.obj) {

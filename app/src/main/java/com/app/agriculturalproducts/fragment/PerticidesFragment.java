@@ -98,7 +98,8 @@ public class PerticidesFragment extends BaseUploadFragment {
     MaterialDialog dialog;
     MaterialDialog dialog_inner;
     Cursor cursor;
-    Cursor cursor_inner;
+    Cursor cursor_inner_a;
+    Cursor cursor_inner_b;
     ListAdapter adapter;
     Field field;
     PersonalStock personalStock;
@@ -283,29 +284,28 @@ public class PerticidesFragment extends BaseUploadFragment {
                     field = Field.fromCursor(cursor);
                     field_text.setText(field.getField_name());
                     field_area_text.setText(field.getField_area());
-                    cursor_inner = new PlantSpeciesDataHelper(getActivity()).getCursor();
+                    cursor_inner_a = new PlantSpeciesDataHelper(getActivity()).getCursor();
                     ListAdapter adapter_inner = new SimpleCursorAdapter(getActivity(),
                             android.R.layout.simple_list_item_1,
-                            cursor_inner, new String[]{"plantrecord_breed"},
+                            cursor_inner_a, new String[]{"plantrecord_breed"},
                             new int[]{android.R.id.text1}, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
                     dialog_inner = new MaterialDialog.Builder(getActivity()).title("品种选择").adapter(adapter_inner, new MaterialDialog.ListCallback() {
                         @Override
                         public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                            cursor_inner.moveToPosition(which);
-                            planterRecord = PlanterRecord.fromCursor(cursor_inner);
+                            cursor_inner_a.moveToPosition(which);
+                            planterRecord = PlanterRecord.fromCursor(cursor_inner_a);
                             species_text.setText(planterRecord.getPlantrecord_breed());
                             plant_date_text.setText(planterRecord.getPlantrecord_plant_date());
-                            cursor.close();
-                            cursor = new StockDataHelper(getActivity()).getCursorPrevention();
+                            cursor_inner_b = new StockDataHelper(getActivity()).getCursorPrevention();
                             ListAdapter adapter_inner = new SimpleCursorAdapter(getActivity(),
                                     android.R.layout.simple_list_item_1,
-                                    cursor, new String[]{"personalstock_goods_name"},
+                                    cursor_inner_b, new String[]{"personalstock_goods_name"},
                                     new int[]{android.R.id.text1}, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
                             dialog = new MaterialDialog.Builder(getActivity()).title("农药选择").adapter(adapter_inner, new MaterialDialog.ListCallback() {
                                 @Override
                                 public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                                    cursor.moveToPosition(which);
-                                    personalStock = PersonalStock.fromCursor(cursor);
+                                    cursor_inner_b.moveToPosition(which);
+                                    personalStock = PersonalStock.fromCursor(cursor_inner_b);
                                     perticides_text.setText(personalStock.getPersonalstock_goods_name());
                                     type_text.setText(personalStock.getPersonalstock_goods_type());
                                     spec_text.setText(personalStock.getSpec());
@@ -341,8 +341,11 @@ public class PerticidesFragment extends BaseUploadFragment {
         if(cursor!=null){
             cursor.close();
         }
-        if(cursor_inner!=null){
-            cursor_inner.close();
+        if(cursor_inner_a!=null){
+            cursor_inner_a.close();
+        }
+        if(cursor_inner_b!=null){
+            cursor_inner_b.close();
         }
     }
 

@@ -92,7 +92,8 @@ public class FertilizerFragment extends BaseUploadFragment {
     MaterialDialog dialog;
     MaterialDialog dialog_inner;
     Cursor cursor;
-    Cursor cursor_inner;
+    Cursor cursor_inner_a;
+    Cursor cursor_inner_b;
     ListAdapter adapter;
     Field field;
     PersonalStock personalStock;
@@ -111,16 +112,16 @@ public class FertilizerFragment extends BaseUploadFragment {
                 return InputType.INPUT_SAVE_OK;
             }
         }else{
-            if(!isEmpty_()){
-                saveInfo();
-                flag = true;
-                disableWidget();
-                Task task = (Task)object;
-                task.setIsDone("true");
-                ContentValues values = cupboard().withEntity(Task.class).toContentValues(task);
-                taskDataHelper.updateTask(values, String.valueOf(task.get_id()));
-                return InputType.INPUT_SAVE_OK;
-            }
+//            if(!isEmpty_()){
+//                saveInfo();
+//                flag = true;
+//                disableWidget();
+//                Task task = (Task)object;
+//                task.setIsDone("true");
+//                ContentValues values = cupboard().withEntity(Task.class).toContentValues(task);
+//                taskDataHelper.updateTask(values, String.valueOf(task.get_id()));
+//                return InputType.INPUT_SAVE_OK;
+//            }
         }
         return InputType.INPUT_EMPTY;
     }
@@ -248,28 +249,27 @@ public class FertilizerFragment extends BaseUploadFragment {
                     field = Field.fromCursor(cursor);
                     field_text.setText(field.getField_name());
                     field_area_text.setText(field.getField_area());
-                    cursor_inner = new PlantSpeciesDataHelper(getActivity()).getCursor();
+                    cursor_inner_a = new PlantSpeciesDataHelper(getActivity()).getCursor();
                     ListAdapter adapter_inner = new SimpleCursorAdapter(getActivity(),
                             android.R.layout.simple_list_item_1,
-                            cursor_inner, new String[]{"plantrecord_breed"},
+                            cursor_inner_a, new String[]{"plantrecord_breed"},
                             new int[]{android.R.id.text1}, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
                     dialog_inner = new MaterialDialog.Builder(getActivity()).title("品种选择").adapter(adapter_inner, new MaterialDialog.ListCallback() {
                         @Override
                         public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                            cursor_inner.moveToPosition(which);
-                            planterRecord = PlanterRecord.fromCursor(cursor_inner);
+                            cursor_inner_a.moveToPosition(which);
+                            planterRecord = PlanterRecord.fromCursor(cursor_inner_a);
                             species_text.setText(planterRecord.getPlantrecord_breed());
-                            cursor.close();
-                            cursor = new StockDataHelper(getActivity()).getCursorFertilizer();
+                            cursor_inner_b = new StockDataHelper(getActivity()).getCursorFertilizer();
                             ListAdapter adapter_inner = new SimpleCursorAdapter(getActivity(),
                                     android.R.layout.simple_list_item_1,
-                                    cursor, new String[]{"personalstock_goods_name"},
+                                    cursor_inner_b, new String[]{"personalstock_goods_name"},
                                     new int[]{android.R.id.text1}, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
                             dialog = new MaterialDialog.Builder(getActivity()).title("化肥选择").adapter(adapter_inner, new MaterialDialog.ListCallback() {
                                 @Override
                                 public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                                    cursor.moveToPosition(which);
-                                    personalStock = PersonalStock.fromCursor(cursor);
+                                    cursor_inner_b.moveToPosition(which);
+                                    personalStock = PersonalStock.fromCursor(cursor_inner_b);
                                     name_text.setText(personalStock.getPersonalstock_goods_name());
                                     type_text.setText(personalStock.getPersonalstock_goods_type());
                                     spec_text.setText(personalStock.getSpec());
@@ -327,8 +327,11 @@ public class FertilizerFragment extends BaseUploadFragment {
         if(cursor!=null){
             cursor.close();
         }
-        if(cursor_inner!=null){
-            cursor_inner.close();
+        if(cursor_inner_a!=null){
+            cursor_inner_a.close();
+        }
+        if(cursor_inner_b!=null){
+            cursor_inner_b.close();
         }
     }
 

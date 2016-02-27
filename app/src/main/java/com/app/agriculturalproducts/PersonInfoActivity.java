@@ -26,6 +26,7 @@ import com.app.agriculturalproducts.util.InputType;
 import com.app.agriculturalproducts.util.StringUtil;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import butterknife.Bind;
@@ -48,6 +49,7 @@ public class PersonInfoActivity extends BaseActivity {
 
     Uri imgUri;
     Bitmap photo;
+    Uri dataUri;
     private AlertDialog dialog;
     private int crop = 180;
     private static int output_X = 480;
@@ -69,22 +71,22 @@ public class PersonInfoActivity extends BaseActivity {
                 if (dialog == null) {
                     dialog = new AlertDialog.Builder(PersonInfoActivity.this).setTitle("更换头像")
                             .setItems(new String[]{"相机", "相册"}, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            if (which == 0) {
-                                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                                imgUri = Uri.fromFile(new File(Environment
-                                        .getExternalStorageDirectory(), "myapp_" + String.valueOf(System.currentTimeMillis()) + ".png"));
-                                intent.putExtra(MediaStore.EXTRA_OUTPUT, imgUri);
-                                startActivityForResult(intent, CODE_CAMERA_REQUEST);
-                            } else {
-                                Intent intentFromGallery = new Intent();
-                                intentFromGallery.setType("image/*");
-                                intentFromGallery.setAction(Intent.ACTION_GET_CONTENT);
-                                startActivityForResult(intentFromGallery, CODE_GALLERY_REQUEST);
-                            }
-                        }
-                    }).create();
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    if (which == 0) {
+                                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                                        imgUri = Uri.fromFile(new File(Environment
+                                                .getExternalStorageDirectory(), "myapp_" + String.valueOf(System.currentTimeMillis()) + ".png"));
+                                        intent.putExtra(MediaStore.EXTRA_OUTPUT, imgUri);
+                                        startActivityForResult(intent, CODE_CAMERA_REQUEST);
+                                    } else {
+                                        Intent intentFromGallery = new Intent();
+                                        intentFromGallery.setType("image/*");
+                                        intentFromGallery.setAction(Intent.ACTION_GET_CONTENT);
+                                        startActivityForResult(intentFromGallery, CODE_GALLERY_REQUEST);
+                                    }
+                                }
+                            }).create();
                 }
                 if (!dialog.isShowing()) {
                     dialog.show();
@@ -105,9 +107,9 @@ public class PersonInfoActivity extends BaseActivity {
         nameText.setText(employeeInfo.getEmployee_name());
         coopText.setText(employeeInfo.getMember_name());
         {
-            String phone = employeeInfo.getEmployee_passport();
-           // phoneText.setText(StringUtil.getMaskedStr(phone,4,'*'));
-            if(phone == null){
+            String phone = employeeInfo.getEmployee_passport().trim();
+            // phoneText.setText(StringUtil.getMaskedStr(phone,4,'*'));
+            if(phone == null || phone.length() == 0){
                 phoneText.setText("无");
             }else{
                 phoneText.setText(phone);
@@ -115,9 +117,9 @@ public class PersonInfoActivity extends BaseActivity {
 
         }
         {
-            String id =  employeeInfo.getEmployee_tel();
-          //  idText.setText(StringUtil.getMaskedStr(id,8,'*'));
-            if(id == null){
+            String id =  employeeInfo.getEmployee_tel().trim();
+            //  idText.setText(StringUtil.getMaskedStr(id,8,'*'));
+            if(id == null|| id.length() == 0){
                 idText.setText("无");
             }else{
                 idText.setText(id);
@@ -165,7 +167,10 @@ public class PersonInfoActivity extends BaseActivity {
         intent.putExtra("aspectY", 1);
         intent.putExtra("outputX", output_X);
         intent.putExtra("outputY", output_Y);
-        intent.putExtra("return-data", true);
+        intent.putExtra("return-data", false);
+        dataUri = Uri.fromFile(new File(Environment
+                .getExternalStorageDirectory(), "myapp_" + String.valueOf(System.currentTimeMillis()) + ".png"));
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, dataUri);
         Intent i = new Intent(intent);
         ResolveInfo res = list.get(0);
         i.setComponent(new ComponentName(res.activityInfo.packageName,
@@ -182,15 +187,19 @@ public class PersonInfoActivity extends BaseActivity {
         intent.putExtra("aspectY", 1);
         intent.putExtra("outputX", output_X);
         intent.putExtra("outputY", output_Y);
-        intent.putExtra("return-data", true);
+        intent.putExtra("return-data", false);
+        dataUri = Uri.fromFile(new File(Environment
+                .getExternalStorageDirectory(), "myapp_" + String.valueOf(System.currentTimeMillis()) + ".png"));
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, dataUri);
         startActivityForResult(intent, CODE_RESULT_REQUEST);
     }
 
     public void setImgeView(Intent intent){
-        Bundle extras = intent.getExtras();
-        if (extras != null) {
-            photo = extras.getParcelable("data");
+        try {
+            photo = MediaStore.Images.Media.getBitmap(getContentResolver(), dataUri);
             imgView.setImageBitmap(photo);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

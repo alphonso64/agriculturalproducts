@@ -52,7 +52,7 @@ public class PusageCursorAdapter extends BaseAbstractRecycleCursorAdapter<Recycl
         ((PusageViewHolder) holder).title_8.setText("方法:" + pu.getPreventionrecord_method());
 
         ((PusageViewHolder) holder).title_9.setText("防治日期:" + pu.getPreventionrecord_date());
-        ((PusageViewHolder) holder).title_10.setText("xx日期:" + pu.getPreventionrecord_plant_day());
+        ((PusageViewHolder) holder).title_10.setText("安全日期:" + pu.getPreventionrecord_plant_day());
 
         ((PusageViewHolder) holder).title_11.setText("症状:"+pu.getPreventionrecord_symptom());
         ((PusageViewHolder) holder).title_12.setText("处方人:"+pu.getPreventionrecord_medicine_people());

@@ -91,6 +91,63 @@ public class HttpClient {
                 .setMethod(HttpMethods.Post).setHttpBody(new StringBody(object.toString())).setHttpListener(listener));
     }
 
+    public void getStockInfo(String name){
+        JSONObject object = new JSONObject();
+        try {
+            object.put("userinfo_username", name);
+        } catch (JSONException e) {
+            return;
+        }
+        LinkedHashMap<String, String> header = new LinkedHashMap<>();
+        header.put("contentType", "utf-8");
+        header.put("Content-type", "application/x-java-serialized-object");
+        StringRequest stringRequest = new StringRequest(Configure.GET_EMPLOYEE_BY_USERNAME_URL).setHeaders(header)
+                .setMethod(HttpMethods.Post).setHttpBody(new StringBody(object.toString()));
+
+        stringRequest.setUri(Configure.GET_SEED_PERSONALSTOCK_BY_USERNAME_URL);
+        Response<String> result = liteHttp.execute(stringRequest);
+        seedStockList = parsePersonalStock(result.getResult(),0);
+        for (int i = 0; i < seedStockList.size(); i++) {
+            seedStockList.get(i).printfInfo();
+        }
+        // Log.e("testcc", result.getResult());
+
+        stringRequest.setUri(Configure.GET_FERTILIZER_PERSONALSTOCK_BY_USERNAME_URL);
+        result = liteHttp.execute(stringRequest);
+        fStockList = parsePersonalStock(result.getResult(),1);
+        for (int i = 0; i < fStockList.size(); i++) {
+            fStockList.get(i).printfInfo();
+        }
+
+        stringRequest.setUri(Configure.GET_PESTICIDE_PERSONALSTOCK_BY_USERNAME_URL);
+        result = liteHttp.execute(stringRequest);
+        pStcokList = parsePersonalStock(result.getResult(),2);
+        for (int i = 0; i < pStcokList.size(); i++) {
+            pStcokList.get(i).printfInfo();
+        }
+    }
+
+    public void getStockDetailInfo(String name){
+        JSONObject object = new JSONObject();
+        try {
+            object.put("userinfo_username", name);
+        } catch (JSONException e) {
+            return;
+        }
+        LinkedHashMap<String, String> header = new LinkedHashMap<>();
+        header.put("contentType", "utf-8");
+        header.put("Content-type", "application/x-java-serialized-object");
+        StringRequest stringRequest = new StringRequest(Configure.GET_EMPLOYEE_BY_USERNAME_URL).setHeaders(header)
+                .setMethod(HttpMethods.Post).setHttpBody(new StringBody(object.toString()));
+
+        stringRequest.setUri(Configure.GET_ENTERPERSONALSTOCKDETAIL_BY_USERNAME_URL);
+        Response<String> result = liteHttp.execute(stringRequest);
+        stockList = parsePersonalStockDetail(result.getResult());
+        for (int i = 0; i < stockList.size(); i++) {
+            stockList.get(i).printfInfo();
+        }
+    }
+
     public void getAllInfo(String name) {
         JSONObject object = new JSONObject();
         try {
@@ -166,24 +223,24 @@ public class HttpClient {
         stringRequest.setUri(Configure.GET_SEED_PERSONALSTOCK_BY_USERNAME_URL);
         result = liteHttp.execute(stringRequest);
         seedStockList = parsePersonalStock(result.getResult(),0);
-//        for (int i = 0; i < seedStockList.size(); i++) {
-//            seedStockList.get(i).printfInfo();
-//        }
+        for (int i = 0; i < seedStockList.size(); i++) {
+            seedStockList.get(i).printfInfo();
+        }
         // Log.e("testcc", result.getResult());
 
         stringRequest.setUri(Configure.GET_FERTILIZER_PERSONALSTOCK_BY_USERNAME_URL);
         result = liteHttp.execute(stringRequest);
         fStockList = parsePersonalStock(result.getResult(),1);
-//        for (int i = 0; i < fStockList.size(); i++) {
-//            fStockList.get(i).printfInfo();
-//        }
+        for (int i = 0; i < fStockList.size(); i++) {
+            fStockList.get(i).printfInfo();
+        }
 
         stringRequest.setUri(Configure.GET_PESTICIDE_PERSONALSTOCK_BY_USERNAME_URL);
         result = liteHttp.execute(stringRequest);
         pStcokList = parsePersonalStock(result.getResult(),2);
-//        for (int i = 0; i < pStcokList.size(); i++) {
-//            pStcokList.get(i).printfInfo();
-//        }
+        for (int i = 0; i < pStcokList.size(); i++) {
+            pStcokList.get(i).printfInfo();
+        }
     }
 
     public EmployeeInfo parseEmployeeInfo(String val) {

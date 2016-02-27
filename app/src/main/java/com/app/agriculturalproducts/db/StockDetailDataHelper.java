@@ -69,4 +69,8 @@ public class StockDetailDataHelper extends BaseDataHelper implements DBInterface
         return query(getContentUri(), null, null, null, null);
     }
 
+    public void updateByID(ContentValues values,String id){
+        update(values, "personalstockdetail_id = ?", new String[]{id});
+    }
+
 }

@@ -20,6 +20,10 @@ import com.app.agriculturalproducts.bean.PlanterRecord;
 import com.app.agriculturalproducts.bean.PreventionRecord;
 import com.app.agriculturalproducts.bean.Task;
 
+import nl.qbusict.cupboard.Cupboard;
+import nl.qbusict.cupboard.CupboardBuilder;
+import nl.qbusict.cupboard.CupboardFactory;
+
 import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 
 /**
@@ -58,7 +62,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
         @Override
     public void onCreate(SQLiteDatabase db) {
-        cupboard().withDatabase(db).createTables();
+            Cupboard annotatedCupboard = new CupboardBuilder(cupboard()).useAnnotations().build();
+            annotatedCupboard.withDatabase(db).createTables();
     }
 
     @Override
