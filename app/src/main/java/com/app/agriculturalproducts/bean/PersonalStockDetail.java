@@ -9,6 +9,9 @@ import static nl.qbusict.cupboard.CupboardFactory.cupboard;
  * Created by ALPHONSO on 2016/2/25.
  */
 public class PersonalStockDetail {
+    public static String ENTER_TYPE = "enter";
+    public static String OUT_TYPE = "inter";
+
     private String personalstockdetail_id;
     private String personalstockdetail_orderno;
     private String personalstockdetail_goods_id;
@@ -23,6 +26,7 @@ public class PersonalStockDetail {
     private String producer;
     private String employee_name;
     private String member_name;
+    private String type;
 
     public void printfInfo(){
         Log.e("testcc", "personalstockdetail_id" + ":" + personalstockdetail_id
@@ -150,5 +154,13 @@ public class PersonalStockDetail {
 
     public void setMember_name(String member_name) {
         this.member_name = member_name;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

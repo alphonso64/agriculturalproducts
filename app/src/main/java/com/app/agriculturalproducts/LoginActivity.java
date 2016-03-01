@@ -134,7 +134,12 @@ public class LoginActivity extends AppCompatActivity {
                         Intent intent = new Intent(LoginActivity.this, MainDrawlayoutActivity.class);
                         startActivity(intent);
                         finish();
-                }
+                }else{
+                        Toast toast = Toast.makeText(getApplicationContext(),
+                                "用户名或密码错误", Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.CENTER, 0, 0);
+                        toast.show();
+                    }
                 } catch (JSONException e) {
                     return;
                 }

@@ -155,7 +155,8 @@ public class MainDrawlayoutActivity extends BaseActivity {
                     stockDataHelper.bulkInsert(HttpClient.getInstance().pStcokList);
 
                     StockDetailDataHelper stockDetailDataHelper = new StockDetailDataHelper(MainDrawlayoutActivity.this);
-                    stockDetailDataHelper.bulkInsert(HttpClient.getInstance().stockList);
+                    stockDetailDataHelper.bulkInsert(HttpClient.getInstance().enterstockList);
+                    stockDetailDataHelper.bulkInsert(HttpClient.getInstance().outstockList);
                     //保存雇员信息sp中
                     EmployeeInfo employeeInfo = HttpClient.getInstance().employeeInfo;
                     employeeInfoModel.setEmployeeInfo(employeeInfo);

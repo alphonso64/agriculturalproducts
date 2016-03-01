@@ -1,6 +1,7 @@
 package com.app.agriculturalproducts.fragment;
 
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -16,8 +17,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
+import android.widget.TimePicker;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.app.agriculturalproducts.R;
+import com.app.agriculturalproducts.bean.EmployeeInfo;
 import com.app.agriculturalproducts.bean.Field;
 import com.app.agriculturalproducts.bean.FieldInfo;
 import com.app.agriculturalproducts.bean.PersonalStock;
@@ -38,8 +42,10 @@ import com.app.agriculturalproducts.model.UserInfoModel;
 import com.app.agriculturalproducts.util.EditTextUtil;
 import com.app.agriculturalproducts.util.InputType;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.Bind;
@@ -72,13 +78,14 @@ public class PickingFragment extends BaseUploadFragment {
     TextView date_text;
     @Bind(R.id.pick_member_text)
     TextView member_text;
+    @Bind(R.id.pick_person_text)
+    TextView person_text;
 
     @Bind(R.id.pick_area_text)
     EditText area_text;
     @Bind(R.id.pick_num_text)
     EditText num_text;
-    @Bind(R.id.pick_person_text)
-    EditText person_text;
+
 
     boolean flag = false;
     MaterialDialog dialog;
@@ -88,6 +95,7 @@ public class PickingFragment extends BaseUploadFragment {
     ListAdapter adapter;
     Field field;
     PlanterRecord planterRecord;
+    Calendar calendar;
 
     @Override
     public int save() {
@@ -137,7 +145,6 @@ public class PickingFragment extends BaseUploadFragment {
         List<EditText> ls = new ArrayList();
         ls.add(num_text);
         ls.add(area_text);
-        ls.add(person_text);
 
         EditTextUtil.disableEditText(ls);
         fieldImg.setVisibility(View.INVISIBLE);
@@ -166,7 +173,6 @@ public class PickingFragment extends BaseUploadFragment {
         List<EditText> ls = new ArrayList();
         ls.add(num_text);
         ls.add(area_text);
-        ls.add(person_text);
         return  EditTextUtil.isEditEmpty(ls);
     }
 
@@ -195,7 +201,11 @@ public class PickingFragment extends BaseUploadFragment {
         dateImg.setOnClickListener(dateClickListener);
         checkInputType();
         EmployeeInfoModel employeeInfoModel = new EmployeeInfoModel(getActivity());
-        member_text.setText(employeeInfoModel.getEmployeeInfo().getMember_name());
+        EmployeeInfo employeeInfo = employeeInfoModel.getEmployeeInfo();
+        member_text.setText(employeeInfo.getMember_name());
+        person_text.setText(employeeInfo.getEmployee_name());
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        date_text.setText(format.format(new Date()));
     }
     void checkInputType(){
 //        if(object!=null){
@@ -242,13 +252,30 @@ public class PickingFragment extends BaseUploadFragment {
         }
     };
 
-    private DatePickerDialog.OnDateSetListener DatePickerListener = new DatePickerDialog.OnDateSetListener(){
+    private DatePickerDialog.OnDateSetListener DatePickerListener = new DatePickerDialog.OnDateSetListener() {
 
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear,
                               int dayOfMonth) {
-            monthOfYear++;
-            date_text.setText(year+"-"+monthOfYear+"-"+dayOfMonth);
+            calendar = Calendar.getInstance();
+            calendar.set(year,monthOfYear,dayOfMonth);
+            new TimePickerDialog(getActivity(),TimePickerListener,0,0,true).show();
+        }
+    };
+    private TimePickerDialog.OnTimeSetListener TimePickerListener = new TimePickerDialog.OnTimeSetListener(){
+
+        @Override
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            if(hourOfDay>=12){
+                hourOfDay-=12;
+            }else{
+                hourOfDay+=12;
+            }
+            calendar.set(Calendar.HOUR,hourOfDay);
+            calendar.set(Calendar.MINUTE, minute);
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            Date date=calendar.getTime();
+            date_text.setText(format.format(date));
         }
     };
 
@@ -260,6 +287,7 @@ public class PickingFragment extends BaseUploadFragment {
             int iMonth = objTime.get(Calendar.MONTH);
             int iDay = objTime.get(Calendar.DAY_OF_MONTH);
             new DatePickerDialog(getActivity(), DatePickerListener, iYear, iMonth, iDay).show();
+
         }
     };
 

@@ -2,19 +2,19 @@
 <resources>
     <string-array name="titles">
         <item>种植录入</item>
-        <item>农药使用</item>
         <item>化肥使用</item>
+        <item>农药使用</item>
         <item>采摘记录</item>
         <item>其他记录</item>
         <item>生产信息</item>
         <item>库存信息</item>
-        <item>入库信息</item>
+        <item>库存流水</item>
     </string-array>
 
     <string-array name="icons">
         <item>icon_aa</item>
-        <item>icon_ab</item>
         <item>icon_ac</item>
+        <item>icon_ab</item>
         <item>icon_ad</item>
         <item>icon_ae</item>
         <item>icon_af</item>
@@ -24,8 +24,8 @@
 
     <string-array name="class_name">
         <item>com.app.agriculturalproducts.PlantActivity</item>
-        <item>com.app.agriculturalproducts.PesticidesActivity</item>
         <item>com.app.agriculturalproducts.FertilizerActivity</item>
+        <item>com.app.agriculturalproducts.PesticidesActivity</item>
         <item>com.app.agriculturalproducts.PickingActivity</item>
         <item>com.app.agriculturalproducts.OtherInfoActivity</item>
         <item>com.app.agriculturalproducts.ProduceActivity</item>

@@ -39,6 +39,9 @@ public class StockDetailActivity extends BaseActivity implements LoaderManager.L
     @Bind(R.id.ptask_recyclerview)
     RecyclerView mTaskRecyclerView;
 
+    private final int ENTER_CMD = 0;
+    private final int OUT_CMD = 1;
+
     //    private StockDataHelper mDataHelper;
 //    private StockCursorAdapter mAdapter;
     private StockDetailDataHelper mDataHelper;
@@ -56,7 +59,7 @@ public class StockDetailActivity extends BaseActivity implements LoaderManager.L
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
-        setToolBar(tooblbar, "入库库存");
+        setToolBar(tooblbar, "库存流水");
 
         mDataHelper = new StockDetailDataHelper(this);
         mTaskRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -73,7 +76,12 @@ public class StockDetailActivity extends BaseActivity implements LoaderManager.L
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return mDataHelper.getCursorLoader();
+        if(id == ENTER_CMD){
+            return mDataHelper.getEnterCursorLoader();
+        }else if(id == OUT_CMD){
+            return mDataHelper.getOutCursorLoader();
+        }
+        return null;
     }
 
     @Override
@@ -92,29 +100,53 @@ public class StockDetailActivity extends BaseActivity implements LoaderManager.L
         return true;
     }
 
+//    private Toolbar.OnMenuItemClickListener itemClick = new Toolbar.OnMenuItemClickListener() {
+//        @Override
+//        public boolean onMenuItemClick(MenuItem item) {
+////            if (item.getItemId() == R.id.action_update)
+////            {
+////                progressDialog = new ProgressDialog(StockDetailActivity.this);
+////                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+////                progressDialog.setMessage("数据更新中");
+////                progressDialog.setIndeterminate(false);
+////                progressDialog.setCancelable(true);
+////                progressDialog.show();
+////                SharedPreferences sp = getSharedPreferences(InputType.loginInfoDB,
+////                        Activity.MODE_PRIVATE);
+////                final String name = sp.getString("name", null);
+////                new Thread() {
+////                    @Override
+////                    public void run() {
+////                        HttpClient.getInstance().getStockDetailInfo(name);
+////                        for (PersonalStockDetail ps : HttpClient.getInstance().stockList) {
+////                            ContentValues values = cupboard().withEntity(PersonalStockDetail.class).toContentValues(ps);
+////                            mDataHelper.updateByID(values, ps.getPersonalstockdetail_id());
+////                        }
+////                        mHandler.sendEmptyMessage(1);
+////                    }
+////                }.start();
+////            }else
+//            if(item.getItemId() == R.id.action_enter){
+//                setToolBar(tooblbar, "库存流水—入库信息");
+//                item.setChecked(true);
+//            }else if(item.getItemId() == R.id.action_out){
+//                setToolBar(tooblbar, "库存流水—出库信息");
+//                item.setChecked(true);
+//            }
+//            return true;
+//        }
+//    };
+
     private Toolbar.OnMenuItemClickListener itemClick = new Toolbar.OnMenuItemClickListener() {
         @Override
         public boolean onMenuItemClick(MenuItem item) {
-            progressDialog = new ProgressDialog(StockDetailActivity.this);
-            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            progressDialog.setMessage("数据更新中");
-            progressDialog.setIndeterminate(false);
-            progressDialog.setCancelable(true);
-            progressDialog.show();
-            SharedPreferences sp = getSharedPreferences(InputType.loginInfoDB,
-                    Activity.MODE_PRIVATE);
-            final String name = sp.getString("name", null);
-            new Thread() {
-                @Override
-                public void run() {
-                    HttpClient.getInstance().getStockDetailInfo(name);
-                    for(PersonalStockDetail ps:HttpClient.getInstance().stockList){
-                        ContentValues values = cupboard().withEntity(PersonalStockDetail.class).toContentValues(ps);
-                        mDataHelper.updateByID(values, ps.getPersonalstockdetail_id());
-                    }
-                    mHandler.sendEmptyMessage(1);
-                }
-            }.start();
+            if (item.getItemId() == R.id.action_enter) {
+                getSupportLoaderManager().restartLoader(ENTER_CMD,null,StockDetailActivity.this);
+                item.setChecked(true);
+            }else if(item.getItemId()==R.id.action_out){
+                getSupportLoaderManager().restartLoader(OUT_CMD,null,StockDetailActivity.this);
+                item.setChecked(true);
+            }
             return true;
         }
     };

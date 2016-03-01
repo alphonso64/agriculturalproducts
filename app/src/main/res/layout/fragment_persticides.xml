@@ -262,7 +262,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="4"
                     android:layout_height="match_parent">
-                    <EditText
+                    <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
@@ -271,12 +271,69 @@
                         android:padding="5dp"
                         android:textSize="15sp"
                         android:id="@+id/p_method_text"
-                        android:background="@drawable/editext_backgroud"
+                        android:background="@drawable/text_backgroud"
                         android:layout_marginRight="30dp"
                         android:singleLine="true" />
                 </LinearLayout>
             </LinearLayout>
-
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="40dp">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_gravity="center_vertical"
+                    android:text="安全日期"/>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="4"
+                    android:layout_height="match_parent">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:gravity="left|top"
+                        android:inputType="number"
+                        android:padding="5dp"
+                        android:layout_gravity="center_vertical"
+                        android:textSize="15sp"
+                        android:id="@+id/p_pre_day_text"
+                        android:background="@drawable/text_backgroud"
+                        android:singleLine="true"
+                        android:layout_marginRight="30dp"/>
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="40dp">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_gravity="center_vertical"
+                    android:text="症状"/>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="4"
+                    android:layout_height="match_parent">
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:gravity="left|top"
+                        android:padding="5dp"
+                        android:textSize="15sp"
+                        android:id="@+id/p_symptom_text"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/editext_backgroud"
+                        android:layout_weight="1"
+                        android:singleLine="true"
+                        android:layout_marginRight="30dp"/>
+                </LinearLayout>
+            </LinearLayout>
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
@@ -347,66 +404,6 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_gravity="center_vertical"
-                    android:text="安全日期"/>
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="4"
-                    android:layout_height="match_parent">
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:gravity="left|top"
-                        android:inputType="number"
-                        android:padding="5dp"
-                        android:layout_gravity="center_vertical"
-                        android:textSize="15sp"
-                        android:id="@+id/p_pre_day_text"
-                        android:background="@drawable/editext_backgroud"
-                        android:singleLine="true"
-                        android:layout_marginRight="30dp"/>
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="40dp">
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_gravity="center_vertical"
-                    android:text="症状"/>
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="4"
-                    android:layout_height="match_parent">
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:gravity="left|top"
-                        android:padding="5dp"
-                        android:textSize="15sp"
-                        android:id="@+id/p_symptom_text"
-                        android:layout_gravity="center_vertical"
-                        android:background="@drawable/editext_backgroud"
-                        android:layout_weight="1"
-                        android:singleLine="true"
-                        android:layout_marginRight="30dp"/>
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="40dp">
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_gravity="center_vertical"
                     android:text="处方人"/>
                 <LinearLayout
                     android:layout_width="0dp"
@@ -420,36 +417,6 @@
                         android:padding="5dp"
                         android:textSize="15sp"
                         android:id="@+id/p_medicine_person_text"
-                        android:layout_gravity="center_vertical"
-                        android:background="@drawable/editext_backgroud"
-                        android:layout_weight="1"
-                        android:singleLine="true"
-                        android:layout_marginRight="30dp"/>
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="40dp">
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_gravity="center_vertical"
-                    android:text="使用人"/>
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="4"
-                    android:layout_height="match_parent">
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:gravity="left|top"
-                        android:padding="5dp"
-                        android:textSize="15sp"
-                        android:id="@+id/p_use_person_text"
                         android:layout_gravity="center_vertical"
                         android:background="@drawable/editext_backgroud"
                         android:layout_weight="1"
@@ -491,6 +458,36 @@
                         android:layout_marginLeft="5dp"
                         android:layout_gravity="center_vertical"
                         android:src="@drawable/ic_date_range_white_24dp"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="40dp">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_gravity="center_vertical"
+                    android:text="使用人"/>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="4"
+                    android:layout_height="match_parent">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:gravity="left|top"
+                        android:padding="5dp"
+                        android:textSize="15sp"
+                        android:id="@+id/p_use_person_text"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/text_backgroud"
+                        android:layout_weight="1"
+                        android:singleLine="true"
+                        android:layout_marginRight="30dp"/>
                 </LinearLayout>
             </LinearLayout>
 

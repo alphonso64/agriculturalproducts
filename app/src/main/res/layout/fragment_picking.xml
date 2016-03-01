@@ -227,7 +227,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="4"
                     android:layout_height="match_parent">
-                    <EditText
+                    <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
@@ -236,7 +236,7 @@
                         android:textSize="15sp"
                         android:id="@+id/pick_person_text"
                         android:layout_gravity="center_vertical"
-                        android:background="@drawable/editext_backgroud"
+                        android:background="@drawable/text_backgroud"
                         android:layout_weight="1"
                         android:singleLine="true"
                         android:layout_marginRight="30dp"/>

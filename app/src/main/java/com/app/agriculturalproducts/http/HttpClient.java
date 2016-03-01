@@ -44,7 +44,8 @@ public class HttpClient {
     public List<PersonalStock> seedStockList;
     public List<PersonalStock> fStockList;
     public List<PersonalStock> pStcokList;
-    public List<PersonalStockDetail> stockList;
+    public List<PersonalStockDetail> enterstockList;
+    public List<PersonalStockDetail> outstockList;
     //public List
 
     private HttpClient() {
@@ -114,14 +115,14 @@ public class HttpClient {
 
         stringRequest.setUri(Configure.GET_FERTILIZER_PERSONALSTOCK_BY_USERNAME_URL);
         result = liteHttp.execute(stringRequest);
-        fStockList = parsePersonalStock(result.getResult(),1);
+        fStockList = parsePersonalStock(result.getResult(), 1);
         for (int i = 0; i < fStockList.size(); i++) {
             fStockList.get(i).printfInfo();
         }
 
         stringRequest.setUri(Configure.GET_PESTICIDE_PERSONALSTOCK_BY_USERNAME_URL);
         result = liteHttp.execute(stringRequest);
-        pStcokList = parsePersonalStock(result.getResult(),2);
+        pStcokList = parsePersonalStock(result.getResult(), 2);
         for (int i = 0; i < pStcokList.size(); i++) {
             pStcokList.get(i).printfInfo();
         }
@@ -142,11 +143,19 @@ public class HttpClient {
 
         stringRequest.setUri(Configure.GET_ENTERPERSONALSTOCKDETAIL_BY_USERNAME_URL);
         Response<String> result = liteHttp.execute(stringRequest);
-        stockList = parsePersonalStockDetail(result.getResult());
-        for (int i = 0; i < stockList.size(); i++) {
-            stockList.get(i).printfInfo();
+        enterstockList = parsePersonalStockDetail(result.getResult(),0);
+        for (int i = 0; i < enterstockList.size(); i++) {
+            enterstockList.get(i).printfInfo();
+        }
+
+        stringRequest.setUri(Configure.GET_OUTPERSONALSTOCKDETAIL_BY_USERNAME_URL);
+        result = liteHttp.execute(stringRequest);
+        outstockList= parsePersonalStockDetail(result.getResult(),1);
+        for (int i = 0; i < outstockList.size(); i++) {
+            outstockList.get(i).printfInfo();
         }
     }
+
 
     public void getAllInfo(String name) {
         JSONObject object = new JSONObject();
@@ -214,33 +223,38 @@ public class HttpClient {
 
         stringRequest.setUri(Configure.GET_ENTERPERSONALSTOCKDETAIL_BY_USERNAME_URL);
         result = liteHttp.execute(stringRequest);
-        stockList = parsePersonalStockDetail(result.getResult());
+        enterstockList = parsePersonalStockDetail(result.getResult(),0);
 //        Log.e("testcc", result.getResult());
-        for (int i = 0; i < stockList.size(); i++) {
-            stockList.get(i).printfInfo();
-        }
+//        for (int i = 0; i < stockList.size(); i++) {
+//            stockList.get(i).printfInfo();
+//        }
+        stringRequest.setUri(Configure.GET_OUTPERSONALSTOCKDETAIL_BY_USERNAME_URL);
+        result = liteHttp.execute(stringRequest);
+        outstockList = parsePersonalStockDetail(result.getResult(),1);
 
         stringRequest.setUri(Configure.GET_SEED_PERSONALSTOCK_BY_USERNAME_URL);
         result = liteHttp.execute(stringRequest);
         seedStockList = parsePersonalStock(result.getResult(),0);
-        for (int i = 0; i < seedStockList.size(); i++) {
-            seedStockList.get(i).printfInfo();
-        }
-        // Log.e("testcc", result.getResult());
+//        for (int i = 0; i < seedStockList.size(); i++) {
+//            seedStockList.get(i).printfInfo();
+//        }
+        Log.e("testcc", result.getResult());
 
         stringRequest.setUri(Configure.GET_FERTILIZER_PERSONALSTOCK_BY_USERNAME_URL);
         result = liteHttp.execute(stringRequest);
         fStockList = parsePersonalStock(result.getResult(),1);
-        for (int i = 0; i < fStockList.size(); i++) {
-            fStockList.get(i).printfInfo();
-        }
+//        for (int i = 0; i < fStockList.size(); i++) {
+//            fStockList.get(i).printfInfo();
+//        }
+        Log.e("testcc", result.getResult());
 
         stringRequest.setUri(Configure.GET_PESTICIDE_PERSONALSTOCK_BY_USERNAME_URL);
         result = liteHttp.execute(stringRequest);
         pStcokList = parsePersonalStock(result.getResult(),2);
-        for (int i = 0; i < pStcokList.size(); i++) {
-            pStcokList.get(i).printfInfo();
-        }
+//        for (int i = 0; i < pStcokList.size(); i++) {
+//            pStcokList.get(i).printfInfo();
+//        }
+        Log.e("testcc", result.getResult());
     }
 
     public EmployeeInfo parseEmployeeInfo(String val) {
@@ -769,10 +783,26 @@ public class HttpClient {
                         personalStock.setMember_name(value);
                     }
                     if(cmd == 0){
+                        value = (String) jobject.get("breed");
+                        if (!(value.equals("null") && value != null)) {
+                            personalStock.setBreed(value);
+                        }
                         personalStock.setType(PersonalStock.SEED_TYPE);
                     }else if(cmd == 1) {
+                        value = (String) jobject.get("method");
+                        if (!(value.equals("null") && value != null)) {
+                            personalStock.setMethod(value);
+                        }
                         personalStock.setType(PersonalStock.F_TYPE);
                     }else if(cmd == 2) {
+                        value = (String) jobject.get("method");
+                        if (!(value.equals("null") && value != null)) {
+                            personalStock.setMethod(value);
+                        }
+                        value = (String) jobject.get("pesticide_safe_spacing");
+                        if (!(value.equals("null") && value != null)) {
+                            personalStock.setSafe_spacing(value);
+                        }
                         personalStock.setType(PersonalStock.P_TYPE);
                     }
                         ls.add(personalStock);
@@ -785,7 +815,7 @@ public class HttpClient {
         return null;
     }
 
-    public List<PersonalStockDetail> parsePersonalStockDetail(String val) {
+    public List<PersonalStockDetail> parsePersonalStockDetail(String val,int cmd) {
         try {
             List<PersonalStockDetail> ls = new ArrayList<>();
             JSONObject object = new JSONObject(val);
@@ -852,6 +882,11 @@ public class HttpClient {
                     value = (String) jobject.get("member_name");
                     if (!(value.equals("null") && value != null)) {
                         personalStock.setMember_name(value);
+                    }
+                    if(cmd == 0 ){
+                        personalStock.setType(PersonalStockDetail.ENTER_TYPE);
+                    }else if(cmd == 1){
+                        personalStock.setType(PersonalStockDetail.OUT_TYPE);
                     }
                     ls.add(personalStock);
                 }

@@ -1,6 +1,7 @@
 package com.app.agriculturalproducts.fragment;
 
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -16,8 +17,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
+import android.widget.TimePicker;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.app.agriculturalproducts.R;
+import com.app.agriculturalproducts.bean.EmployeeInfo;
 import com.app.agriculturalproducts.bean.Field;
 import com.app.agriculturalproducts.bean.FieldInfo;
 import com.app.agriculturalproducts.bean.OtherInfo;
@@ -33,8 +37,10 @@ import com.app.agriculturalproducts.model.UserInfoModel;
 import com.app.agriculturalproducts.util.EditTextUtil;
 import com.app.agriculturalproducts.util.InputType;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.Bind;
@@ -59,16 +65,17 @@ public class OtherInfoFragment extends BaseUploadFragment {
     TextView date_text;
     @Bind(R.id.o_member_text)
     TextView member_text;
+    @Bind(R.id.o_person_text)
+    TextView person_text;
 
     @Bind(R.id.o_place_text)
     EditText place_text;
-    @Bind(R.id.o_person_text)
-    EditText person_text;
+
     @Bind(R.id.o_situation_text)
     EditText situation_text;
     @Bind(R.id.o_handle_text)
     EditText handle_text;
-
+    Calendar calendar;
     boolean flag = false;
     MaterialDialog dialog;
     MaterialDialog dialog_inner;
@@ -112,7 +119,6 @@ public class OtherInfoFragment extends BaseUploadFragment {
         List<EditText> ls = new ArrayList();
         ls.add(place_text);
         ls.add(situation_text);
-        ls.add(person_text);
         ls.add(handle_text);
         EditTextUtil.disableEditText(ls);
         fieldImg.setVisibility(View.INVISIBLE);
@@ -140,7 +146,6 @@ public class OtherInfoFragment extends BaseUploadFragment {
         List<EditText> ls = new ArrayList();
         ls.add(place_text);
         ls.add(situation_text);
-        ls.add(person_text);
         ls.add(handle_text);
         return  EditTextUtil.isEditEmpty(ls);
     }
@@ -158,7 +163,11 @@ public class OtherInfoFragment extends BaseUploadFragment {
         fieldImg.setOnClickListener(fieldClickListener);
         dateImg.setOnClickListener(dateClickListener);
         EmployeeInfoModel employeeInfoModel = new EmployeeInfoModel(getActivity());
-        member_text.setText(employeeInfoModel.getEmployeeInfo().getMember_name());
+        EmployeeInfo employeeInfo = employeeInfoModel.getEmployeeInfo();
+        member_text.setText(employeeInfo.getMember_name());
+        person_text.setText(employeeInfo.getEmployee_name());
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        date_text.setText(format.format(new Date()));
     }
 
     View.OnClickListener fieldClickListener = new View.OnClickListener() {
@@ -192,13 +201,30 @@ public class OtherInfoFragment extends BaseUploadFragment {
         }
     };
 
-    private DatePickerDialog.OnDateSetListener DatePickerListener = new DatePickerDialog.OnDateSetListener(){
+    private DatePickerDialog.OnDateSetListener DatePickerListener = new DatePickerDialog.OnDateSetListener() {
 
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear,
                               int dayOfMonth) {
-            monthOfYear++;
-            date_text.setText(year+"-"+monthOfYear+"-"+dayOfMonth);
+            calendar = Calendar.getInstance();
+            calendar.set(year,monthOfYear,dayOfMonth);
+            new TimePickerDialog(getActivity(),TimePickerListener,0,0,true).show();
+        }
+    };
+    private TimePickerDialog.OnTimeSetListener TimePickerListener = new TimePickerDialog.OnTimeSetListener(){
+
+        @Override
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            if(hourOfDay>=12){
+                hourOfDay-=12;
+            }else{
+                hourOfDay+=12;
+            }
+            calendar.set(Calendar.HOUR,hourOfDay);
+            calendar.set(Calendar.MINUTE, minute);
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            Date date=calendar.getTime();
+            date_text.setText(format.format(date));
         }
     };
 
@@ -210,9 +236,9 @@ public class OtherInfoFragment extends BaseUploadFragment {
             int iMonth = objTime.get(Calendar.MONTH);
             int iDay = objTime.get(Calendar.DAY_OF_MONTH);
             new DatePickerDialog(getActivity(), DatePickerListener, iYear, iMonth, iDay).show();
+
         }
     };
-
 
     @Override
     public void onResume() {

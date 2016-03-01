@@ -2,6 +2,7 @@ package com.app.agriculturalproducts.fragment;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -43,8 +45,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.Bind;
@@ -74,9 +78,9 @@ public class PlantFragment extends BaseUploadFragment {
     TextView spec_text;
     @Bind(R.id.source_text)
     TextView source_text;
-
     @Bind(R.id.species_text)
-    EditText species_text;
+    TextView species_text;
+
     @Bind(R.id.num_text)
     EditText num_text;
 
@@ -89,6 +93,7 @@ public class PlantFragment extends BaseUploadFragment {
     ListAdapter adapter;
     Field field;
     PersonalStock personalStock;
+    Calendar calendar;
 
     @Override
     public int save() {
@@ -118,7 +123,6 @@ public class PlantFragment extends BaseUploadFragment {
 
     private void disableWidget() {
         List<EditText> ls = new ArrayList();
-        ls.add(species_text);
         ls.add(num_text);
         EditTextUtil.disableEditText(ls);
         fieldImg.setVisibility(View.INVISIBLE);
@@ -138,7 +142,6 @@ public class PlantFragment extends BaseUploadFragment {
 
     boolean isEmpty() {
         List<EditText> ls = new ArrayList();
-        ls.add(species_text);
         ls.add(num_text);
 
         if (TextUtils.isEmpty(field_text.getText().toString().trim())) {
@@ -166,6 +169,9 @@ public class PlantFragment extends BaseUploadFragment {
 
         EmployeeInfoModel employeeInfoModel = new EmployeeInfoModel(getActivity());
         plot_info_text.setText(employeeInfoModel.getEmployeeInfo().getEmployee_name());
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        date_text.setText(format.format(new Date()));
     }
 
     View.OnClickListener fieldClickListener = new View.OnClickListener() {
@@ -190,6 +196,7 @@ public class PlantFragment extends BaseUploadFragment {
                             seed_text.setText(personalStock.getPersonalstock_goods_name());
                             source_text.setText(personalStock.getProducer());
                             spec_text.setText(personalStock.getSpec());
+                            species_text.setText(personalStock.getBreed());
                             dialog_inner.cancel();
                         }
                     }).alwaysCallSingleChoiceCallback().build();
@@ -206,8 +213,25 @@ public class PlantFragment extends BaseUploadFragment {
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear,
                               int dayOfMonth) {
-            monthOfYear++;
-            date_text.setText(year + "-" + monthOfYear + "-" + dayOfMonth);
+            calendar = Calendar.getInstance();
+            calendar.set(year,monthOfYear,dayOfMonth);
+            new TimePickerDialog(getActivity(),TimePickerListener,0,0,true).show();
+        }
+    };
+    private TimePickerDialog.OnTimeSetListener TimePickerListener = new TimePickerDialog.OnTimeSetListener(){
+
+        @Override
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            if(hourOfDay>=12){
+                hourOfDay-=12;
+            }else{
+                hourOfDay+=12;
+            }
+            calendar.set(Calendar.HOUR,hourOfDay);
+            calendar.set(Calendar.MINUTE, minute);
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            Date date=calendar.getTime();
+            date_text.setText(format.format(date));
         }
     };
 
@@ -219,6 +243,7 @@ public class PlantFragment extends BaseUploadFragment {
             int iMonth = objTime.get(Calendar.MONTH);
             int iDay = objTime.get(Calendar.DAY_OF_MONTH);
             new DatePickerDialog(getActivity(), DatePickerListener, iYear, iMonth, iDay).show();
+
         }
     };
 

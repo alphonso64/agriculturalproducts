@@ -8,6 +8,7 @@ import android.support.v4.content.CursorLoader;
 import android.util.Log;
 
 
+import com.app.agriculturalproducts.bean.PersonalStock;
 import com.app.agriculturalproducts.bean.PersonalStockDetail;
 
 import java.util.ArrayList;
@@ -67,6 +68,15 @@ public class StockDetailDataHelper extends BaseDataHelper implements DBInterface
 
     public Cursor getCursor() {
         return query(getContentUri(), null, null, null, null);
+    }
+
+    public CursorLoader getEnterCursorLoader() {
+        return new CursorLoader(getContext(), getContentUri(), null, "type=?",new String[]{PersonalStockDetail.ENTER_TYPE}, null);
+    }
+
+    public CursorLoader getOutCursorLoader() {
+
+        return new CursorLoader(getContext(), getContentUri(), null, "type=?",new String[]{PersonalStockDetail.OUT_TYPE}, null);
     }
 
     public void updateByID(ContentValues values,String id){

@@ -26,6 +26,9 @@ public class PersonalStock {
     private String employee_name;
     private String member_name;
     private String type;
+    private String breed;
+    private String method;
+    private String safe_spacing;
 
     public void printfInfo(){
         Log.e("testcc", "personalstock_id" + ":" + personalstock_id
@@ -120,5 +123,29 @@ public class PersonalStock {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getMethod() {
+        return method;
+    }
+
+    public void setMethod(String method) {
+        this.method = method;
+    }
+
+    public String getBreed() {
+        return breed;
+    }
+
+    public void setBreed(String breed) {
+        this.breed = breed;
+    }
+
+    public String getSafe_spacing() {
+        return safe_spacing;
+    }
+
+    public void setSafe_spacing(String safe_spacing) {
+        this.safe_spacing = safe_spacing;
     }
 }
