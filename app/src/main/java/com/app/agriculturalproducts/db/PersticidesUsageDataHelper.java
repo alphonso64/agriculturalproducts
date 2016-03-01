@@ -63,7 +63,7 @@ public class PersticidesUsageDataHelper extends BaseDataHelper implements DBInte
     }
     @Override
     public CursorLoader getCursorLoader() {
-        return new CursorLoader(getContext(), getContentUri(), null, null, null, null);
+        return new CursorLoader(getContext(), getContentUri(), null, null, null, "_id desc");
     }
 
 }

@@ -58,7 +58,7 @@ public class FertilizerUsageDataHelper extends BaseDataHelper implements DBInter
     }
     @Override
     public CursorLoader getCursorLoader() {
-        return new CursorLoader(getContext(), getContentUri(), null, null, null, null);
+        return new CursorLoader(getContext(), getContentUri(), null, null, null, "_id desc");
     }
 
 }

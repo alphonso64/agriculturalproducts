@@ -66,7 +66,7 @@ public class PlantSpeciesDataHelper extends BaseDataHelper implements DBInterfac
 
     @Override
     public CursorLoader getCursorLoader() {
-        return new CursorLoader(getContext(), getContentUri(), null, null, null, null);
+        return new CursorLoader(getContext(), getContentUri(), null, null, null, "_id desc");
     }
 
     public Cursor getCursor() {

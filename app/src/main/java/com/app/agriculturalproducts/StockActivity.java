@@ -95,7 +95,7 @@ public class StockActivity extends BaseActivity implements LoaderManager.LoaderC
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_update, menu);
+        getMenuInflater().inflate(R.menu.menu_update_, menu);
         return true;
     }
 

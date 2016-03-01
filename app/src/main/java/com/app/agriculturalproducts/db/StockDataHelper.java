@@ -82,7 +82,11 @@ public class StockDataHelper extends BaseDataHelper implements DBInterface<Perso
     }
 
     public void updateByID(ContentValues values,String id){
-        update(values, "personalstock_id = ?", new String[]{id});
+        int val = update(values, "personalstock_id = ?", new String[]{id});
+        Log.e("testcc","updateByID:"+val);
+        if(val==0){
+            insert(values);
+        }
     }
 
 }
