@@ -8,6 +8,7 @@ import android.support.v4.content.CursorLoader;
 import android.util.Log;
 
 
+import com.app.agriculturalproducts.bean.Field;
 import com.app.agriculturalproducts.bean.PersonalStock;
 
 import java.util.ArrayList;
@@ -81,10 +82,18 @@ public class StockDataHelper extends BaseDataHelper implements DBInterface<Perso
         return query(getContentUri(),null, "type=?",new String[]{PersonalStock.P_TYPE}, null);
     }
 
-    public void updateByID(ContentValues values,String id){
-        int val = update(values, "personalstock_id = ?", new String[]{id});
-        Log.e("testcc","updateByID:"+val);
-        if(val==0){
+//    public void updateByID(ContentValues values,String id){
+//        int val = update(values, "personalstock_id = ?", new String[]{id});
+//        Log.e("testcc","updateByID:"+val);
+//        if(val==0){
+//            insert(values);
+//        }
+//    }
+
+    public void replace(List<PersonalStock> listData){
+        delete(null,null);
+        for (PersonalStock item : listData) {
+            ContentValues values = getContentValues(item);
             insert(values);
         }
     }

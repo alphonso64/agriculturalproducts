@@ -143,17 +143,38 @@ public class HttpClient {
 
         stringRequest.setUri(Configure.GET_ENTERPERSONALSTOCKDETAIL_BY_USERNAME_URL);
         Response<String> result = liteHttp.execute(stringRequest);
-        enterstockList = parsePersonalStockDetail(result.getResult(),0);
+        enterstockList = parsePersonalStockDetail(result.getResult(), 0);
         for (int i = 0; i < enterstockList.size(); i++) {
             enterstockList.get(i).printfInfo();
         }
 
         stringRequest.setUri(Configure.GET_OUTPERSONALSTOCKDETAIL_BY_USERNAME_URL);
         result = liteHttp.execute(stringRequest);
-        outstockList= parsePersonalStockDetail(result.getResult(),1);
+        outstockList= parsePersonalStockDetail(result.getResult(), 1);
         for (int i = 0; i < outstockList.size(); i++) {
             outstockList.get(i).printfInfo();
         }
+    }
+
+    public void getFieldInfo(String name){
+        JSONObject object = new JSONObject();
+        try {
+            object.put("userinfo_username", name);
+        } catch (JSONException e) {
+            return;
+        }
+        LinkedHashMap<String, String> header = new LinkedHashMap<>();
+        header.put("contentType", "utf-8");
+        header.put("Content-type", "application/x-java-serialized-object");
+        StringRequest stringRequest = new StringRequest(Configure.GET_FIELD_BY_USERNAME_URL).setHeaders(header)
+                .setMethod(HttpMethods.Post).setHttpBody(new StringBody(object.toString()));
+
+        Response<String> result = liteHttp.execute(stringRequest);
+        fieldList = parseField(result.getResult());
+        for (int i = 0; i < fieldList.size(); i++) {
+            fieldList.get(i).printfInfo();
+        }
+
     }
 
 

@@ -45,9 +45,12 @@ public class PlantCursorAdapter extends BaseAbstractRecycleCursorAdapter<Recycle
         if(uploadState.equals("no")){
             ((PusageViewHolder) holder).title_8.setText("未上传");
             ((PusageViewHolder) holder).title_8.setTextColor(context.getResources().getColor(R.color.text_red));
-        }else {
+        }else if(uploadState.equals("yes")){
             ((PusageViewHolder) holder).title_8.setText("已上传");
             ((PusageViewHolder) holder).title_8.setTextColor(context.getResources().getColor(R.color.text_dark));
+        }else if(uploadState.equals("err")){
+            ((PusageViewHolder) holder).title_8.setText("上传错误");
+            ((PusageViewHolder) holder).title_8.setTextColor(context.getResources().getColor(R.color.colorAccent));
         }
     }
 
@@ -84,8 +87,9 @@ public class PlantCursorAdapter extends BaseAbstractRecycleCursorAdapter<Recycle
                 @Override
                 public void onClick(View v) {
                     Cursor cursor = (Cursor) mAdapter.getItem(getAdapterPosition());
-                    Log.e("testbb", "onClick--> position = " + getAdapterPosition());
+
                     PlanterRecord planterRecord = PlanterRecord.fromCursor(cursor);
+                    Log.e("testbb", "planterRecord " + planterRecord.getPlantrecord_id());
                     if(mAdapter.onItemClickListener!=null){
                         mAdapter.onItemClickListener.onItemClick(planterRecord,getAdapterPosition());
                     }

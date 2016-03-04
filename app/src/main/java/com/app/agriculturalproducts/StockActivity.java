@@ -36,6 +36,8 @@ import com.app.agriculturalproducts.db.StockDetailDataHelper;
 import com.app.agriculturalproducts.http.HttpClient;
 import com.app.agriculturalproducts.util.InputType;
 
+import java.util.ArrayList;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -115,18 +117,11 @@ public class StockActivity extends BaseActivity implements LoaderManager.LoaderC
                 @Override
                 public void run() {
                     HttpClient.getInstance().getStockInfo(name);
-                    for(PersonalStock ps:HttpClient.getInstance().seedStockList){
-                        ContentValues values = cupboard().withEntity(PersonalStock.class).toContentValues(ps);
-                        mDataHelper.updateByID(values, ps.getPersonalstock_id());
-                    }
-                    for(PersonalStock ps:HttpClient.getInstance().fStockList){
-                        ContentValues values = cupboard().withEntity(PersonalStock.class).toContentValues(ps);
-                        mDataHelper.updateByID(values, ps.getPersonalstock_id());
-                    }
-                    for(PersonalStock ps:HttpClient.getInstance().pStcokList){
-                        ContentValues values = cupboard().withEntity(PersonalStock.class).toContentValues(ps);
-                        mDataHelper.updateByID(values, ps.getPersonalstock_id());
-                    }
+                    ArrayList<PersonalStock> ls = new ArrayList<PersonalStock>();
+                    ls.addAll(HttpClient.getInstance().seedStockList);
+                    ls.addAll(HttpClient.getInstance().fStockList);
+                    ls.addAll(HttpClient.getInstance().pStcokList);
+                    mDataHelper.replace(ls);
                     mHandler.sendEmptyMessage(1);
                 }}.start();
             return true;

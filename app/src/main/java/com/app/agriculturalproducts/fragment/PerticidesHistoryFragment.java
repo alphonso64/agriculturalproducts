@@ -90,7 +90,7 @@ public class PerticidesHistoryFragment extends Fragment implements LoaderManager
         public void onItemClick(Object obj, int p) {
             final PreventionRecord preventionRecord = (PreventionRecord) obj;
             String saved = preventionRecord.getSaved();
-            if (!saved.equals("yes")) {
+            if (saved.equals("no")) {
                 new MaterialDialog.Builder(getActivity())
                         .title("上传防治信息?")
                         .positiveText("是")
@@ -113,6 +113,9 @@ public class PerticidesHistoryFragment extends Fragment implements LoaderManager
                                                 .positiveText("好的")
                                                 .show();
                                     } else {
+                                        preventionRecord.setSaved("err");
+                                        ContentValues values = cupboard().withEntity(PreventionRecord.class).toContentValues(preventionRecord);
+                                        mDataHelper.updateByID(values, String.valueOf(preventionRecord.get_id()));
                                         new MaterialDialog.Builder(getActivity())
                                                 .title("上传失败：农药数量不足！")
                                                 .positiveText("好的")
@@ -123,6 +126,16 @@ public class PerticidesHistoryFragment extends Fragment implements LoaderManager
                                 }
                             }
                         }, preventionRecord);
+                    }
+                }).show();
+            }else if(saved.equals("err")){
+                new MaterialDialog.Builder(getActivity())
+                        .title("删除错误信息?")
+                        .positiveText("是")
+                        .negativeText("否").onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(MaterialDialog dialog, DialogAction which) {
+                        mDataHelper.deleteByID(String.valueOf(preventionRecord.get_id()));
                     }
                 }).show();
             }

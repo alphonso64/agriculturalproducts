@@ -12,6 +12,7 @@ public class InputType {
     public final static int INPUT_UPLOAD_OK = 5;
     public final static int INPUT_UPLOAD_ERR = 6;
     public final static int INPUT_UPLOAD_ALREADY = 7;
+    public final static int INPUT_LENGTH_ERR = 8;
 
     public final static int TASK_INPUT = 10;
     public final static int CUSTOM_INPUT = 11;
@@ -20,4 +21,8 @@ public class InputType {
     public static final String INPUT_CHECK_ERR = "ERR";
 
     public static final String loginInfoDB = "LOGIN";
+
+    public static final String UPLOAD_YES = "yes";
+    public static final String UPLOAD_NO = "no";
+    public static final String UPLOAD_ERR = "err";
 }

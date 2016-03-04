@@ -81,7 +81,7 @@ public class OtherInfoHistoryFragment extends Fragment implements LoaderManager.
         public void onItemClick(Object obj, int p) {
             final OtherRecord otherRecord = (OtherRecord) obj;
             String saved = otherRecord.getSaved();
-            if (!saved.equals("yes")) {
+            if (saved.equals("no")) {
                 new MaterialDialog.Builder(getActivity())
                         .title("上传采摘信息?")
                         .positiveText("是")
@@ -114,6 +114,16 @@ public class OtherInfoHistoryFragment extends Fragment implements LoaderManager.
                                 }
                             }
                         }, otherRecord);
+                    }
+                }).show();
+            }else if(saved.equals("err")){
+                new MaterialDialog.Builder(getActivity())
+                        .title("删除错误信息?")
+                        .positiveText("是")
+                        .negativeText("否").onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(MaterialDialog dialog, DialogAction which) {
+                        mDataHelper.deleteByID(String.valueOf(otherRecord.get_id()));
                     }
                 }).show();
             }

@@ -65,9 +65,12 @@ public class PusageCursorAdapter extends BaseAbstractRecycleCursorAdapter<Recycl
         if(uploadState.equals("no")){
             ((PusageViewHolder) holder).title_14.setText("未上传");
             ((PusageViewHolder) holder).title_14.setTextColor(context.getResources().getColor(R.color.text_red));
-        }else {
+        }else if(uploadState.equals("yes")){
             ((PusageViewHolder) holder).title_14.setText("已上传");
             ((PusageViewHolder) holder).title_14.setTextColor(context.getResources().getColor(R.color.text_dark));
+        }else if(uploadState.equals("err")){
+            ((PusageViewHolder) holder).title_14.setText("上传错误");
+            ((PusageViewHolder) holder).title_14.setTextColor(context.getResources().getColor(R.color.colorAccent));
         }
     }
 
@@ -123,6 +126,7 @@ public class PusageCursorAdapter extends BaseAbstractRecycleCursorAdapter<Recycl
                 public void onClick(View v) {
                     Cursor cursor = (Cursor) mAdapter.getItem(getAdapterPosition());
                     PreventionRecord preventionRecord = PreventionRecord.fromCursor(cursor);
+                    Log.e("testcc","preventionRecord:"+preventionRecord.getLocal_plant_id());
                     if(mAdapter.onItemClickListener!=null){
                         mAdapter.onItemClickListener.onItemClick(preventionRecord,getAdapterPosition());
                     }

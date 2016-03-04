@@ -79,10 +79,18 @@ public class StockDetailDataHelper extends BaseDataHelper implements DBInterface
         return new CursorLoader(getContext(), getContentUri(), null, "type=?",new String[]{PersonalStockDetail.OUT_TYPE}, null);
     }
 
-    public void updateByID(ContentValues values,String id){
-        int val = update(values, "personalstockdetail_id = ?", new String[]{id});
-        Log.e("testcc", "updateByID:" + val);
-        if(val==0){
+//    public void updateByID(ContentValues values,String id){
+//        int val = update(values, "personalstockdetail_id = ?", new String[]{id});
+//        Log.e("testcc", "updateByID:" + val);
+//        if(val==0){
+//            insert(values);
+//        }
+//    }
+
+    public void replace(List<PersonalStockDetail> listData){
+        delete(null, null);
+        for (PersonalStockDetail item : listData) {
+            ContentValues values = getContentValues(item);
             insert(values);
         }
     }

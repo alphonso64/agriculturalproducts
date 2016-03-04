@@ -9,6 +9,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,7 +77,7 @@ public class PickingHistoryFragment extends Fragment implements LoaderManager.Lo
         public void onItemClick(Object obj, int p) {
             final PickRecord pickRecord = (PickRecord) obj;
             String saved = pickRecord.getSaved();
-            if (!saved.equals("yes")) {
+            if (saved.equals("no")) {
                 new MaterialDialog.Builder(getActivity())
                         .title("上传采摘信息?")
                         .positiveText("是")
@@ -98,6 +99,9 @@ public class PickingHistoryFragment extends Fragment implements LoaderManager.Lo
                                                 .positiveText("好的")
                                                 .show();
                                     } else {
+                                        pickRecord.setSaved("err");
+                                        ContentValues values = cupboard().withEntity(PickRecord.class).toContentValues(pickRecord);
+                                        mDataHelper.updateByID(values, String.valueOf(pickRecord.get_id()));
                                         new MaterialDialog.Builder(getActivity())
                                                 .title("上传失败：农药安全期未到！")
                                                 .positiveText("好的")
@@ -108,6 +112,16 @@ public class PickingHistoryFragment extends Fragment implements LoaderManager.Lo
                                 }
                             }
                         }, pickRecord);
+                    }
+                }).show();
+            }else if(saved.equals("err")){
+                new MaterialDialog.Builder(getActivity())
+                        .title("删除错误信息?")
+                        .positiveText("是")
+                        .negativeText("否").onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(MaterialDialog dialog, DialogAction which) {
+                        mDataHelper.deleteByID(String.valueOf(pickRecord.get_id()));
                     }
                 }).show();
             }

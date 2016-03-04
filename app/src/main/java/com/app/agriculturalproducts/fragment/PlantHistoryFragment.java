@@ -21,6 +21,7 @@ import com.app.agriculturalproducts.adapter.OnAdpaterItemClickListener;
 import com.app.agriculturalproducts.adapter.PlantCursorAdapter;
 import com.app.agriculturalproducts.adapter.PusageCursorAdapter;
 import com.app.agriculturalproducts.bean.FieldInfo;
+import com.app.agriculturalproducts.bean.PersonalStock;
 import com.app.agriculturalproducts.bean.PlanterRecord;
 import com.app.agriculturalproducts.bean.Task;
 import com.app.agriculturalproducts.db.FieldDataHelper;
@@ -30,6 +31,7 @@ import com.app.agriculturalproducts.http.HttpClient;
 import com.litesuits.http.listener.HttpListener;
 import com.litesuits.http.response.Response;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -85,44 +87,67 @@ public class PlantHistoryFragment extends Fragment implements LoaderManager.Load
         ButterKnife.unbind(this);
     }
 
+    private void checkResult(PlanterRecord planterRecord,String s){
+        try {
+            JSONObject jsonObject = new JSONObject(s);
+            String val = jsonObject.getString("return_code");
+            Log.e("testcc", "upload:"+s);
+            if(val.equals("success")){
+                JSONArray array = jsonObject.getJSONArray("data");
+                for (int i = 0; i < array.length(); i++) {
+                    JSONObject jobject = (JSONObject) array.get(i);
+                    String id = jobject.getString("plantrecord_id");
+                    planterRecord.setPlantrecord_id(id);
+                }
+                planterRecord.setSaved("yes");
+                ContentValues values = cupboard().withEntity(PlanterRecord.class).toContentValues(planterRecord);
+                mDataHelper.updateByID(values, String.valueOf(planterRecord.get_id()));
+                new MaterialDialog.Builder(getActivity())
+                        .title("上传成功！")
+                        .positiveText("好的")
+                        .show();
+            }else{
+                planterRecord.setSaved("err");
+                ContentValues values = cupboard().withEntity(PlanterRecord.class).toContentValues(planterRecord);
+                mDataHelper.updateByID(values, String.valueOf(planterRecord.get_id()));
+                new MaterialDialog.Builder(getActivity())
+                        .title("上传失败：种子数量不足！")
+                        .positiveText("好的")
+                        .show();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
     private OnAdpaterItemClickListener itemClickListener =new  OnAdpaterItemClickListener() {
         @Override
         public void onItemClick(Object obj, int p) {
             final PlanterRecord planterRecord =  (PlanterRecord) obj;
             String saved = planterRecord.getSaved();
-            if(!saved.equals("yes")){
+            if(saved.equals("no")){
                 new MaterialDialog.Builder(getActivity())
                         .title("上传种植信息?")
                         .positiveText("是")
                         .negativeText("否").onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(MaterialDialog dialog, DialogAction which) {
-
                         HttpClient.getInstance().uploadPlant(new HttpListener<String>() {
                             @Override
                             public void onSuccess(String s, Response<String> response) {
-                                try {
-                                    JSONObject jsonObject = new JSONObject(s);
-                                    String val = jsonObject.getString("return_code");
-                                    if(val.equals("success")){
-                                        planterRecord.setSaved("yes");
-                                        ContentValues values = cupboard().withEntity(PlanterRecord.class).toContentValues(planterRecord);
-                                        mDataHelper.updateByID(values, String.valueOf(planterRecord.get_id()));
-                                        new MaterialDialog.Builder(getActivity())
-                                                .title("上传成功！")
-                                                .positiveText("好的")
-                                                .show();
-                                    }else{
-                                        new MaterialDialog.Builder(getActivity())
-                                                .title("上传失败：种子数量不足！")
-                                                .positiveText("好的")
-                                                .show();
-                                    }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
+                                checkResult(planterRecord,s);
                             }
                         },planterRecord);
+                    }
+                }).show();
+            }else if(saved.equals("err")){
+                new MaterialDialog.Builder(getActivity())
+                        .title("删除错误信息?")
+                        .positiveText("是")
+                        .negativeText("否").onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(MaterialDialog dialog, DialogAction which) {
+                        mDataHelper.deleteByID(String.valueOf(planterRecord.get_id()));
                     }
                 }).show();
             }

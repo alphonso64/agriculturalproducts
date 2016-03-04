@@ -55,6 +55,8 @@ public class PlantSpeciesDataHelper extends BaseDataHelper implements DBInterfac
         delete(where,selectionArgs);
     }
 
+
+
     public void insert_(PlanterRecord data){
         ContentValues values = cupboard().withEntity(PlanterRecord.class).toContentValues(data);
         insert(values);
@@ -62,6 +64,10 @@ public class PlantSpeciesDataHelper extends BaseDataHelper implements DBInterfac
 
     public void updateByID(ContentValues values,String id){
         update(values, "_id = ?", new String[]{id});
+    }
+
+    public void deleteByID(String id){
+        delete("_id = ?", new String[]{id});
     }
 
     @Override

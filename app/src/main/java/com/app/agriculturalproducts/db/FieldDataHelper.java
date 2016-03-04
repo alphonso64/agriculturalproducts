@@ -68,4 +68,12 @@ public class FieldDataHelper extends BaseDataHelper implements DBInterface<Field
         return query(getContentUri(), null, null, null, null);
     }
 
+    public void replace(List<Field> listData){
+        delete(null,null);
+        for (Field item : listData) {
+            ContentValues values = getContentValues(item);
+            insert(values);
+        }
+    }
+
 }

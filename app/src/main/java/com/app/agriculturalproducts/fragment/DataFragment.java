@@ -1,5 +1,9 @@
 package com.app.agriculturalproducts.fragment;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.ContentValues;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,7 +12,11 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -17,13 +25,21 @@ import com.app.agriculturalproducts.adapter.FieldCursorAdapter;
 import com.app.agriculturalproducts.adapter.FusageCursorAdapter;
 import com.app.agriculturalproducts.adapter.PickingCursorAdapter;
 import com.app.agriculturalproducts.adapter.PusageCursorAdapter;
+import com.app.agriculturalproducts.bean.Field;
+import com.app.agriculturalproducts.bean.PersonalStock;
 import com.app.agriculturalproducts.db.FertilizerUsageDataHelper;
 import com.app.agriculturalproducts.db.FieldDataHelper;
 import com.app.agriculturalproducts.db.PersticidesUsageDataHelper;
 import com.app.agriculturalproducts.db.PickingDataHelper;
+import com.app.agriculturalproducts.http.HttpClient;
+import com.app.agriculturalproducts.util.InputType;
+
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+
+import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 
 /**
  * Created by ALPHONSO on 2016/1/5.
@@ -84,6 +100,11 @@ public class DataFragment extends Fragment implements LoaderManager.LoaderCallba
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         mAdapter.changeCursor(null);
+    }
+
+    public  void updateData(){
+        Log.e("testcc", "test");
+        mDataHelper.replace(HttpClient.getInstance().fieldList);
     }
 
 }

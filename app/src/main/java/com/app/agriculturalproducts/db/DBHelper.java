@@ -63,7 +63,7 @@ public class DBHelper extends SQLiteOpenHelper {
         @Override
     public void onCreate(SQLiteDatabase db) {
             Cupboard annotatedCupboard = new CupboardBuilder(cupboard()).useAnnotations().build();
-            annotatedCupboard.withDatabase(db).createTables();
+            cupboard().withDatabase(db).createTables();
     }
 
     @Override

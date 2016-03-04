@@ -53,9 +53,12 @@ public class OtherInfoCursorAdapter extends BaseAbstractRecycleCursorAdapter<Rec
         if(uploadState.equals("no")){
             ((PusageViewHolder) holder).title_8.setText("未上传");
             ((PusageViewHolder) holder).title_8.setTextColor(context.getResources().getColor(R.color.text_red));
-        }else {
+        }else if(uploadState.equals("yes")){
             ((PusageViewHolder) holder).title_8.setText("已上传");
             ((PusageViewHolder) holder).title_8.setTextColor(context.getResources().getColor(R.color.text_dark));
+        }else if(uploadState.equals("err")){
+            ((PusageViewHolder) holder).title_8.setText("上传错误");
+            ((PusageViewHolder) holder).title_8.setTextColor(context.getResources().getColor(R.color.colorAccent));
         }
     }
 

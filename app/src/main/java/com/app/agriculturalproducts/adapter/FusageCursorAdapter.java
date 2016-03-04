@@ -56,9 +56,12 @@ public class FusageCursorAdapter extends BaseAbstractRecycleCursorAdapter<Recycl
         if(uploadState.equals("no")){
             ((PusageViewHolder) holder).title_12.setText("未上传");
             ((PusageViewHolder) holder).title_12.setTextColor(context.getResources().getColor(R.color.text_red));
-        }else {
+        }else if(uploadState.equals("yes")){
             ((PusageViewHolder) holder).title_12.setText("已上传");
             ((PusageViewHolder) holder).title_12.setTextColor(context.getResources().getColor(R.color.text_dark));
+        }else if(uploadState.equals("err")){
+            ((PusageViewHolder) holder).title_12.setText("上传错误");
+            ((PusageViewHolder) holder).title_12.setTextColor(context.getResources().getColor(R.color.colorAccent));
         }
     }
 
@@ -104,8 +107,9 @@ public class FusageCursorAdapter extends BaseAbstractRecycleCursorAdapter<Recycl
                 @Override
                 public void onClick(View v) {
                     Cursor cursor = (Cursor) mAdapter.getItem(getAdapterPosition());
-                    Log.e("testbb", "onClick--> position = " + getAdapterPosition());
+
                     FertilizerRecord fertilizerRecord = FertilizerRecord.fromCursor(cursor);
+                    Log.e("testbb", "fertilizerRecord " + fertilizerRecord.getLocal_plant_id());
                     if(mAdapter.onItemClickListener!=null){
                         mAdapter.onItemClickListener.onItemClick(fertilizerRecord,getAdapterPosition());
                     }

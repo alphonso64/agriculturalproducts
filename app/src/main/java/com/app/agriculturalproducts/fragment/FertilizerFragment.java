@@ -148,6 +148,7 @@ public class FertilizerFragment extends BaseUploadFragment {
         fertilizerRecord.setLocal_plant_id(planterRecord.getPlantrecord_id());
         fertilizerRecord.setLocal_stock_id(personalStock.getPersonalstock_id());
         fertilizerRecord.setSaved("no");
+        Log.e("testcc", "save:" + planterRecord.getPlantrecord_id());
         fertilizerUsageDataHelper.insert_(fertilizerRecord);
     }
 
@@ -263,6 +264,7 @@ public class FertilizerFragment extends BaseUploadFragment {
                             planterRecord = PlanterRecord.fromCursor(cursor_inner_a);
                             species_text.setText(planterRecord.getPlantrecord_breed());
                             cursor_inner_b = new StockDataHelper(getActivity()).getCursorFertilizer();
+
                             ListAdapter adapter_inner = new SimpleCursorAdapter(getActivity(),
                                     android.R.layout.simple_list_item_1,
                                     cursor_inner_b, new String[]{"personalstock_goods_name"},

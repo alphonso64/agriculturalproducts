@@ -58,6 +58,11 @@ public class OtherInfoDataHelper extends BaseDataHelper implements DBInterface<O
     public void updateByID(ContentValues values,String id){
         update(values, "_id = ?", new String[]{id});
     }
+
+    public void deleteByID(String id){
+        delete("_id = ?", new String[]{id});
+    }
+
     @Override
     public CursorLoader getCursorLoader() {
         return new CursorLoader(getContext(), getContentUri(), null, null, null, "_id desc");

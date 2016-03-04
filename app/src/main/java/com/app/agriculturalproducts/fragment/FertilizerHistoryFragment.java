@@ -89,7 +89,7 @@ public class FertilizerHistoryFragment extends Fragment implements LoaderManager
         public void onItemClick(Object obj, int p) {
             final FertilizerRecord fertilizerRecord = (FertilizerRecord) obj;
             String saved = fertilizerRecord.getSaved();
-            if (!saved.equals("yes")) {
+            if (saved.equals("no")) {
                 new MaterialDialog.Builder(getActivity())
                         .title("上传化肥信息?")
                         .positiveText("是")
@@ -113,6 +113,9 @@ public class FertilizerHistoryFragment extends Fragment implements LoaderManager
                                                 .positiveText("好的")
                                                 .show();
                                     } else {
+                                        fertilizerRecord.setSaved("err");
+                                        ContentValues values = cupboard().withEntity(FertilizerRecord.class).toContentValues(fertilizerRecord);
+                                        mDataHelper.updateByID(values, String.valueOf(fertilizerRecord.get_id()));
                                         new MaterialDialog.Builder(getActivity())
                                                 .title("上传失败：化肥数量不足！")
                                                 .positiveText("好的")
@@ -123,6 +126,16 @@ public class FertilizerHistoryFragment extends Fragment implements LoaderManager
                                 }
                             }
                         }, fertilizerRecord);
+                    }
+                }).show();
+            }else if(saved.equals("err")){
+                new MaterialDialog.Builder(getActivity())
+                        .title("删除错误信息?")
+                        .positiveText("是")
+                        .negativeText("否").onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(MaterialDialog dialog, DialogAction which) {
+                        mDataHelper.deleteByID(String.valueOf(fertilizerRecord.get_id()));
                     }
                 }).show();
             }

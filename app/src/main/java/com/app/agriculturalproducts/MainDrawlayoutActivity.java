@@ -2,6 +2,7 @@ package com.app.agriculturalproducts;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ContentValues;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -22,6 +23,7 @@ import android.widget.TextView;
 import com.app.agriculturalproducts.app.AppApplication;
 import com.app.agriculturalproducts.bean.EmployeeInfo;
 import com.app.agriculturalproducts.bean.FieldInfo;
+import com.app.agriculturalproducts.bean.PersonalStock;
 import com.app.agriculturalproducts.bean.PickRecord;
 import com.app.agriculturalproducts.db.DBHelper;
 import com.app.agriculturalproducts.db.FertilizerUsageDataHelper;
@@ -43,6 +45,8 @@ import com.app.agriculturalproducts.view.UserInfoSimpleView;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static nl.qbusict.cupboard.CupboardFactory.cupboard;
+
 public class MainDrawlayoutActivity extends BaseActivity {
 
     private UserInfoPresenter mUserInfoPresenter;
@@ -51,18 +55,25 @@ public class MainDrawlayoutActivity extends BaseActivity {
     TextView mCOOPText;
     private FieldDataHelper filedDataHelper;
     private ProgressDialog progressDialog;
+    private DataFragment dataFragment;
     private Handler mHandler = new Handler() {
 
         @Override
         public void handleMessage(Message msg) {
-            SharedPreferences sp = AppApplication.getContext().getSharedPreferences(InputType.loginInfoDB,
-                    Activity.MODE_PRIVATE);
-            String name = sp.getString("name", null);
-            SharedPreferences.Editor editor = sp.edit();
-            editor.putString(name, "no");
-            editor.commit();
-            progressDialog.dismiss();
-            setPersonINfo();
+            if(msg.what==1){
+                SharedPreferences sp = AppApplication.getContext().getSharedPreferences(InputType.loginInfoDB,
+                        Activity.MODE_PRIVATE);
+                String name = sp.getString("name", null);
+                SharedPreferences.Editor editor = sp.edit();
+                editor.putString(name, "no");
+                editor.commit();
+                progressDialog.dismiss();
+                setPersonINfo();
+            }else{
+                progressDialog.dismiss();
+                dataFragment.updateData();
+            }
+
         }
     };
     @Override
@@ -90,14 +101,18 @@ public class MainDrawlayoutActivity extends BaseActivity {
                     case R.id.item_one:
                         getSupportFragmentManager().beginTransaction().replace(R.id.frame_content, new WorkFragment()).commit();
                         mToolbar.setTitle(R.string.mainPage);
+                        mToolbar.getMenu().clear();
                         break;
                     case R.id.item_two:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.frame_content, new DataFragment()).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.frame_content, new DataFragment(),"data").commit();
                         mToolbar.setTitle("地块信息");
+                        mToolbar.getMenu().clear();
+                        mToolbar.inflateMenu(R.menu.menu_update_);
                         break;
                     case R.id.item_three:
                         getSupportFragmentManager().beginTransaction().replace(R.id.frame_content, new MineFragment()).commit();
                         mToolbar.setTitle(R.string.set);
+                        mToolbar.getMenu().clear();
                         break;
                 }
                 menuItem.setChecked(true);//点击了把它设为选中状态
@@ -169,6 +184,7 @@ public class MainDrawlayoutActivity extends BaseActivity {
         mImgView = (CircleImageView)header.findViewById(R.id.headerImgView);
         mNameText = (TextView)header.findViewById(R.id.headNameText);
         mCOOPText = (TextView)header.findViewById(R.id.headCOOPText);
+        mToolbar.setOnMenuItemClickListener(itemClick);
     }
     @Override
     protected int getContentView() {
@@ -192,5 +208,30 @@ public class MainDrawlayoutActivity extends BaseActivity {
             mImgView.setImageBitmap(picture);
         }
     }
+
+    private Toolbar.OnMenuItemClickListener itemClick = new Toolbar.OnMenuItemClickListener() {
+        @Override
+        public boolean onMenuItemClick(MenuItem item) {
+            if(item.getItemId()==R.id.action_update){
+                progressDialog = new ProgressDialog(MainDrawlayoutActivity.this);
+                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                progressDialog.setMessage("数据更新中");
+                progressDialog.setIndeterminate(false);
+                progressDialog.setCancelable(true);
+                progressDialog.show();
+                dataFragment = (DataFragment)getSupportFragmentManager().findFragmentByTag("data");
+                SharedPreferences sp = getSharedPreferences(InputType.loginInfoDB,
+                        Activity.MODE_PRIVATE);
+                final String name = sp.getString("name", null);
+                new Thread(){
+                    @Override
+                    public void run() {
+                        HttpClient.getInstance().getFieldInfo(name);
+                        mHandler.sendEmptyMessage(2);
+                    }}.start();
+            }
+            return true;
+        }
+    };
 
 }
