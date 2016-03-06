@@ -20,11 +20,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.app.agriculturalproducts.app.AppApplication;
 import com.app.agriculturalproducts.bean.EmployeeInfo;
 import com.app.agriculturalproducts.bean.FieldInfo;
 import com.app.agriculturalproducts.bean.PersonalStock;
 import com.app.agriculturalproducts.bean.PickRecord;
+import com.app.agriculturalproducts.bean.PreventionRecord;
 import com.app.agriculturalproducts.db.DBHelper;
 import com.app.agriculturalproducts.db.FertilizerUsageDataHelper;
 import com.app.agriculturalproducts.db.FieldDataHelper;
@@ -42,6 +45,11 @@ import com.app.agriculturalproducts.model.EmployeeInfoModel;
 import com.app.agriculturalproducts.presenter.UserInfoPresenter;
 import com.app.agriculturalproducts.util.InputType;
 import com.app.agriculturalproducts.view.UserInfoSimpleView;
+import com.litesuits.http.listener.HttpListener;
+import com.litesuits.http.response.Response;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -102,6 +110,7 @@ public class MainDrawlayoutActivity extends BaseActivity {
                         getSupportFragmentManager().beginTransaction().replace(R.id.frame_content, new WorkFragment()).commit();
                         mToolbar.setTitle(R.string.mainPage);
                         mToolbar.getMenu().clear();
+                        mToolbar.inflateMenu(R.menu.menu_update_single);
                         break;
                     case R.id.item_two:
                         getSupportFragmentManager().beginTransaction().replace(R.id.frame_content, new DataFragment(),"data").commit();
@@ -130,53 +139,10 @@ public class MainDrawlayoutActivity extends BaseActivity {
                 Activity.MODE_PRIVATE);
         final String name = sp.getString("name", null);
         final String isFirstLogin = sp.getString(name,null);
-        final EmployeeInfoModel employeeInfoModel = new EmployeeInfoModel(getApplicationContext());
         //Log.e("testcc", name + isFirstLogin);
         if(isFirstLogin==null)
         {
-            progressDialog = new ProgressDialog(this);
-            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            progressDialog.setMessage("初始化");
-            progressDialog.setIndeterminate(false);
-            progressDialog.setCancelable(true);
-            progressDialog.show();
-            new Thread(){
-
-                @Override
-                public void run() {
-                    HttpClient.getInstance().getAllInfo(name);
-                    //保存地块信息至数据库
-                    FieldDataHelper fieldDataHelper = new FieldDataHelper(MainDrawlayoutActivity.this);
-                    fieldDataHelper.bulkInsert(HttpClient.getInstance().fieldList);
-
-                    PlantSpeciesDataHelper plantSpeciesDataHelper = new PlantSpeciesDataHelper(MainDrawlayoutActivity.this);
-                    plantSpeciesDataHelper.bulkInsert(HttpClient.getInstance().planterList);
-
-                    FertilizerUsageDataHelper fertilizerUsageDataHelper = new FertilizerUsageDataHelper(MainDrawlayoutActivity.this);
-                    fertilizerUsageDataHelper.bulkInsert(HttpClient.getInstance().fertiList);
-
-                    PersticidesUsageDataHelper persticidesUsageDataHelper = new PersticidesUsageDataHelper(MainDrawlayoutActivity.this);
-                    persticidesUsageDataHelper.bulkInsert(HttpClient.getInstance().preventionList);
-
-                    PickingDataHelper pickingDataHelper = new PickingDataHelper(MainDrawlayoutActivity.this);
-                    pickingDataHelper.bulkInsert(HttpClient.getInstance().pickList);
-
-                    OtherInfoDataHelper otherInfoDataHelper = new OtherInfoDataHelper(MainDrawlayoutActivity.this);
-                    otherInfoDataHelper.bulkInsert(HttpClient.getInstance().otherList);
-
-                    StockDataHelper stockDataHelper = new StockDataHelper(MainDrawlayoutActivity.this);
-                    stockDataHelper.bulkInsert(HttpClient.getInstance().seedStockList);
-                    stockDataHelper.bulkInsert(HttpClient.getInstance().fStockList);
-                    stockDataHelper.bulkInsert(HttpClient.getInstance().pStcokList);
-
-                    StockDetailDataHelper stockDetailDataHelper = new StockDetailDataHelper(MainDrawlayoutActivity.this);
-                    stockDetailDataHelper.bulkInsert(HttpClient.getInstance().enterstockList);
-                    stockDetailDataHelper.bulkInsert(HttpClient.getInstance().outstockList);
-                    //保存雇员信息sp中
-                    EmployeeInfo employeeInfo = HttpClient.getInstance().employeeInfo;
-                    employeeInfoModel.setEmployeeInfo(employeeInfo);
-                    mHandler.sendEmptyMessage(1);
-                }}.start();
+            updateALLDB();
         }
 
         View header = LayoutInflater.from(this).inflate(R.layout.draw_header, null);
@@ -209,6 +175,12 @@ public class MainDrawlayoutActivity extends BaseActivity {
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_update_single, menu);
+        return true;
+    }
+
     private Toolbar.OnMenuItemClickListener itemClick = new Toolbar.OnMenuItemClickListener() {
         @Override
         public boolean onMenuItemClick(MenuItem item) {
@@ -229,9 +201,72 @@ public class MainDrawlayoutActivity extends BaseActivity {
                         HttpClient.getInstance().getFieldInfo(name);
                         mHandler.sendEmptyMessage(2);
                     }}.start();
+            }if(item.getItemId()==R.id.action_update_single){
+                //updateALLDB();
+                new MaterialDialog.Builder(MainDrawlayoutActivity.this)
+                        .title("更新数据会删除未上传数据！")
+                        .positiveText("是")
+                        .negativeText("否").onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(MaterialDialog dialog, DialogAction which) {
+                        updateALLDB();
+                    }
+                }).show();
             }
             return true;
         }
     };
+
+
+    private void updateALLDB(){
+        SharedPreferences sp = AppApplication.getContext().getSharedPreferences(InputType.loginInfoDB,
+                Activity.MODE_PRIVATE);
+        final String name = sp.getString("name", null);
+        final EmployeeInfoModel employeeInfoModel = new EmployeeInfoModel(getApplicationContext());
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setMessage("更新数据中");
+        progressDialog.setIndeterminate(false);
+        progressDialog.setCancelable(true);
+        progressDialog.show();
+        new Thread(){
+
+            @Override
+            public void run() {
+                HttpClient.getInstance().getAllInfo(name);
+                //保存地块信息至数据库
+                FieldDataHelper fieldDataHelper = new FieldDataHelper(MainDrawlayoutActivity.this);
+                fieldDataHelper.replace(HttpClient.getInstance().fieldList);
+
+                PlantSpeciesDataHelper plantSpeciesDataHelper = new PlantSpeciesDataHelper(MainDrawlayoutActivity.this);
+                plantSpeciesDataHelper.repalceInfo(HttpClient.getInstance().planterList);
+
+                FertilizerUsageDataHelper fertilizerUsageDataHelper = new FertilizerUsageDataHelper(MainDrawlayoutActivity.this);
+                fertilizerUsageDataHelper.repalceInfo(HttpClient.getInstance().fertiList);
+
+                PersticidesUsageDataHelper persticidesUsageDataHelper = new PersticidesUsageDataHelper(MainDrawlayoutActivity.this);
+                persticidesUsageDataHelper.repalceInfo(HttpClient.getInstance().preventionList);
+
+                PickingDataHelper pickingDataHelper = new PickingDataHelper(MainDrawlayoutActivity.this);
+                pickingDataHelper.repalceInfo(HttpClient.getInstance().pickList);
+
+                OtherInfoDataHelper otherInfoDataHelper = new OtherInfoDataHelper(MainDrawlayoutActivity.this);
+                otherInfoDataHelper.repalceInfo(HttpClient.getInstance().otherList);
+
+                StockDataHelper stockDataHelper = new StockDataHelper(MainDrawlayoutActivity.this);
+                stockDataHelper.replace(HttpClient.getInstance().seedStockList);
+                stockDataHelper.bulkInsert(HttpClient.getInstance().fStockList);
+                stockDataHelper.bulkInsert(HttpClient.getInstance().pStcokList);
+
+                StockDetailDataHelper stockDetailDataHelper = new StockDetailDataHelper(MainDrawlayoutActivity.this);
+                stockDetailDataHelper.replace(HttpClient.getInstance().enterstockList);
+                stockDetailDataHelper.bulkInsert(HttpClient.getInstance().outstockList);
+                //保存雇员信息sp中
+                EmployeeInfo employeeInfo = HttpClient.getInstance().employeeInfo;
+                employeeInfoModel.setEmployeeInfo(employeeInfo);
+                mHandler.sendEmptyMessage(1);
+            }}.start();
+    }
 
 }

@@ -70,6 +70,18 @@ public class PlantSpeciesDataHelper extends BaseDataHelper implements DBInterfac
         delete("_id = ?", new String[]{id});
     }
 
+    public void repalceInfo(List<PlanterRecord> listData){
+        //delete_("saved = ?", new String[]{"yes"});
+        delete(null,null);
+        bulkInsert(listData);
+    }
+
+    public String queryPlantID(String id){
+        Cursor cursor = query(null,"_id = ?", new String[]{id},null);
+        PlanterRecord planterRecord = PlanterRecord.fromCursor(cursor);
+        return planterRecord.getPlantrecord_id();
+    }
+
     @Override
     public CursorLoader getCursorLoader() {
         return new CursorLoader(getContext(), getContentUri(), null, null, null, "_id desc");

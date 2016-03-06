@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.support.v4.content.CursorLoader;
 
 import com.app.agriculturalproducts.bean.FertilizerUsage;
+import com.app.agriculturalproducts.bean.OtherRecord;
 import com.app.agriculturalproducts.bean.PickRecord;
 
 import java.util.ArrayList;
@@ -62,6 +63,12 @@ public class PickingDataHelper extends BaseDataHelper implements DBInterface<Pic
 
     public void deleteByID(String id){
         delete("_id = ?", new String[]{id});
+    }
+
+    public void repalceInfo(List<PickRecord> listData){
+       //delete_("saved = ?", new String[]{"yes"});
+        delete(null,null);
+        bulkInsert(listData);
     }
 
     @Override

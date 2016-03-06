@@ -146,6 +146,7 @@ public class FertilizerFragment extends BaseUploadFragment {
         fertilizerRecord.setEmployee_name(employee_text.getText().toString());
         fertilizerRecord.setFertilizerecord_people(member_text.getText().toString());
         fertilizerRecord.setLocal_plant_id(planterRecord.getPlantrecord_id());
+        fertilizerRecord.setLocal_plant_table_index(String.valueOf(planterRecord.get_id()));
         fertilizerRecord.setLocal_stock_id(personalStock.getPersonalstock_id());
         fertilizerRecord.setSaved("no");
         Log.e("testcc", "save:" + planterRecord.getPlantrecord_id());

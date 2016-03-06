@@ -29,6 +29,7 @@ public class PreventionRecord {
     private String saved;
     private String local_stock_id;
     private String local_plant_id;
+    private String local_plant_table_index;
     private Long _id;
 
 
@@ -215,6 +216,14 @@ public class PreventionRecord {
 
     public void set_id(Long _id) {
         this._id = _id;
+    }
+
+    public String getLocal_plant_table_index() {
+        return local_plant_table_index;
+    }
+
+    public void setLocal_plant_table_index(String local_plant_table_index) {
+        this.local_plant_table_index = local_plant_table_index;
     }
 
 //    public void printfInfo(){

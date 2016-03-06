@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.support.v4.content.CursorLoader;
 
 import com.app.agriculturalproducts.bean.OtherRecord;
+import com.app.agriculturalproducts.bean.PreventionRecord;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +62,12 @@ public class OtherInfoDataHelper extends BaseDataHelper implements DBInterface<O
 
     public void deleteByID(String id){
         delete("_id = ?", new String[]{id});
+    }
+
+    public void repalceInfo(List<OtherRecord> listData){
+       // delete_("saved = ?", new String[]{"yes"});
+        delete(null,null);
+        bulkInsert(listData);
     }
 
     @Override

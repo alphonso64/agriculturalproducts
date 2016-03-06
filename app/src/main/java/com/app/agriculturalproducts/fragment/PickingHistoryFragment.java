@@ -22,8 +22,10 @@ import com.app.agriculturalproducts.adapter.OnAdpaterItemClickListener;
 import com.app.agriculturalproducts.adapter.PickingCursorAdapter;
 import com.app.agriculturalproducts.bean.PickRecord;
 import com.app.agriculturalproducts.bean.PlanterRecord;
+import com.app.agriculturalproducts.bean.PreventionRecord;
 import com.app.agriculturalproducts.db.FertilizerUsageDataHelper;
 import com.app.agriculturalproducts.db.PickingDataHelper;
+import com.app.agriculturalproducts.db.PlantSpeciesDataHelper;
 import com.app.agriculturalproducts.http.HttpClient;
 import com.litesuits.http.listener.HttpListener;
 import com.litesuits.http.response.Response;
@@ -71,6 +73,27 @@ public class PickingHistoryFragment extends Fragment implements LoaderManager.Lo
         mRecyclerView.setAdapter(mAdapter);
     }
 
+    private boolean checkPlantSaved(PickRecord pickRecord){
+        String id = pickRecord.getLocal_plant_id();
+        if(id==null ||id.length() == 0){
+            return false;
+        }
+        return true;
+    }
+
+    private String getPlantID(PickRecord pickRecord) {
+        String id = pickRecord.getLocal_plant_table_index();
+        if (id == null || id.length() == 0) {
+            return null;
+        }
+        PlantSpeciesDataHelper plantSpeciesDataHelper = new PlantSpeciesDataHelper(getActivity());
+        String plantID = plantSpeciesDataHelper.queryPlantID(id);
+        if (plantID == null || plantID.length() == 0) {
+            return null;
+        }
+        return plantID;
+    }
+
 
     private OnAdpaterItemClickListener itemClickListener = new OnAdpaterItemClickListener() {
         @Override
@@ -84,6 +107,17 @@ public class PickingHistoryFragment extends Fragment implements LoaderManager.Lo
                         .negativeText("否").onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(MaterialDialog dialog, DialogAction which) {
+                        if(!checkPlantSaved(pickRecord)){
+                            String val = getPlantID(pickRecord);
+                            if(val == null){
+                                new MaterialDialog.Builder(getActivity())
+                                        .title("种植记录未上传：请先上传种植记录！")
+                                        .positiveText("好的")
+                                        .show();
+                                return;
+                            }
+                            pickRecord.setLocal_plant_id(val);
+                        }
                         HttpClient.getInstance().uploadPick(new HttpListener<String>() {
                             @Override
                             public void onSuccess(String s, Response<String> response) {
@@ -102,8 +136,9 @@ public class PickingHistoryFragment extends Fragment implements LoaderManager.Lo
                                         pickRecord.setSaved("err");
                                         ContentValues values = cupboard().withEntity(PickRecord.class).toContentValues(pickRecord);
                                         mDataHelper.updateByID(values, String.valueOf(pickRecord.get_id()));
+                                        String res = jsonObject.getString("return_msg");
                                         new MaterialDialog.Builder(getActivity())
-                                                .title("上传失败：农药安全期未到！")
+                                                .title(res)
                                                 .positiveText("好的")
                                                 .show();
                                     }

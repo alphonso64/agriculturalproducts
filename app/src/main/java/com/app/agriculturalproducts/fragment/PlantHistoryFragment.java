@@ -91,6 +91,7 @@ public class PlantHistoryFragment extends Fragment implements LoaderManager.Load
         try {
             JSONObject jsonObject = new JSONObject(s);
             String val = jsonObject.getString("return_code");
+
             Log.e("testcc", "upload:"+s);
             if(val.equals("success")){
                 JSONArray array = jsonObject.getJSONArray("data");
@@ -110,8 +111,9 @@ public class PlantHistoryFragment extends Fragment implements LoaderManager.Load
                 planterRecord.setSaved("err");
                 ContentValues values = cupboard().withEntity(PlanterRecord.class).toContentValues(planterRecord);
                 mDataHelper.updateByID(values, String.valueOf(planterRecord.get_id()));
+                String res = jsonObject.getString("return_msg");
                 new MaterialDialog.Builder(getActivity())
-                        .title("上传失败：种子数量不足！")
+                        .title(res)
                         .positiveText("好的")
                         .show();
             }

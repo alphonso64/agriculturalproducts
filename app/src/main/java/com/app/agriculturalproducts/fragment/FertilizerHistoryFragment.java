@@ -9,6 +9,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,6 +85,27 @@ public class FertilizerHistoryFragment extends Fragment implements LoaderManager
         ButterKnife.unbind(this);
     }
 
+    private boolean checkPlantSaved(FertilizerRecord fertilizerRecord){
+        String id = fertilizerRecord.getLocal_plant_id();
+        if(id==null ||id.length() == 0){
+            return false;
+        }
+        return true;
+    }
+
+    private String getPlantID(FertilizerRecord fertilizerRecord) {
+        String id = fertilizerRecord.getLocal_plant_table_index();
+        if (id == null || id.length() == 0) {
+            return null;
+        }
+        PlantSpeciesDataHelper plantSpeciesDataHelper = new PlantSpeciesDataHelper(getActivity());
+        String plantID = plantSpeciesDataHelper.queryPlantID(id);
+        if (plantID == null || plantID.length() == 0) {
+            return null;
+        }
+        return plantID;
+    }
+
     private OnAdpaterItemClickListener itemClickListener = new OnAdpaterItemClickListener() {
         @Override
         public void onItemClick(Object obj, int p) {
@@ -96,8 +118,18 @@ public class FertilizerHistoryFragment extends Fragment implements LoaderManager
                         .negativeText("否").onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(MaterialDialog dialog, DialogAction which) {
-
-
+                        if(!checkPlantSaved(fertilizerRecord)){
+                            String val = getPlantID(fertilizerRecord);
+                            if(val == null){
+                                new MaterialDialog.Builder(getActivity())
+                                        .title("种植记录未上传：请先上传种植记录！")
+                                        .positiveText("好的")
+                                        .show();
+                                return;
+                            }
+                            fertilizerRecord.setLocal_plant_id(val);
+                        }
+                        Log.e("testcc","check:"+fertilizerRecord.getLocal_plant_id());
                         HttpClient.getInstance().uploadFertilizer(new HttpListener<String>() {
                             @Override
                             public void onSuccess(String s, Response<String> response) {
@@ -116,8 +148,9 @@ public class FertilizerHistoryFragment extends Fragment implements LoaderManager
                                         fertilizerRecord.setSaved("err");
                                         ContentValues values = cupboard().withEntity(FertilizerRecord.class).toContentValues(fertilizerRecord);
                                         mDataHelper.updateByID(values, String.valueOf(fertilizerRecord.get_id()));
+                                        String res = jsonObject.getString("return_msg");
                                         new MaterialDialog.Builder(getActivity())
-                                                .title("上传失败：化肥数量不足！")
+                                                .title(res)
                                                 .positiveText("好的")
                                                 .show();
                                     }

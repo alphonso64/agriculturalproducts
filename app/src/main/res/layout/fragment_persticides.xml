@@ -357,6 +357,7 @@
                         android:layout_marginLeft="10dp"
                         android:layout_gravity="center_vertical"
                         android:gravity="left|top"
+                        android:inputType="number"
                         android:padding="5dp"
                         android:maxLength="30"
                         android:textSize="15sp"

@@ -7,6 +7,7 @@ import android.support.v4.content.CursorLoader;
 import android.util.Log;
 
 
+import com.app.agriculturalproducts.bean.FertilizerRecord;
 import com.app.agriculturalproducts.bean.PreventionRecord;
 
 import java.util.ArrayList;
@@ -66,6 +67,12 @@ public class PersticidesUsageDataHelper extends BaseDataHelper implements DBInte
         delete("_id = ?", new String[]{id});
     }
 
+
+    public void repalceInfo(List<PreventionRecord> listData){
+       // delete_("saved = ?", new String[]{"yes"});
+        delete(null,null);
+        bulkInsert(listData);
+    }
 
     @Override
     public CursorLoader getCursorLoader() {

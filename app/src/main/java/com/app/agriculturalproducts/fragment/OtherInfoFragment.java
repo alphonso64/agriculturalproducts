@@ -109,7 +109,7 @@ public class OtherInfoFragment extends BaseUploadFragment {
         otherRecord.setPlantrecord_breed(species_text.getText().toString());
         otherRecord.setField_name(field_text.getText().toString());
         otherRecord.setMember_name(member_text.getText().toString());
-
+        otherRecord.setLocal_plant_table_index(String.valueOf(planterRecord.get_id()));
         otherRecord.setSaved("no");
         otherRecord.setLocal_plant_id(planterRecord.getPlantrecord_id());
         otherInfoDataHelper.insert_(otherRecord);

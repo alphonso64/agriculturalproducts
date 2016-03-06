@@ -19,10 +19,12 @@ import com.app.agriculturalproducts.R;
 import com.app.agriculturalproducts.adapter.OnAdpaterItemClickListener;
 import com.app.agriculturalproducts.adapter.OtherInfoCursorAdapter;
 import com.app.agriculturalproducts.adapter.PickingCursorAdapter;
+import com.app.agriculturalproducts.bean.FertilizerRecord;
 import com.app.agriculturalproducts.bean.OtherRecord;
 import com.app.agriculturalproducts.bean.PickRecord;
 import com.app.agriculturalproducts.db.OtherInfoDataHelper;
 import com.app.agriculturalproducts.db.PickingDataHelper;
+import com.app.agriculturalproducts.db.PlantSpeciesDataHelper;
 import com.app.agriculturalproducts.http.HttpClient;
 import com.litesuits.http.listener.HttpListener;
 import com.litesuits.http.response.Response;
@@ -76,6 +78,27 @@ public class OtherInfoHistoryFragment extends Fragment implements LoaderManager.
         getLoaderManager().initLoader(0, null, this);
     }
 
+    private boolean checkPlantSaved(OtherRecord otherRecord){
+        String id = otherRecord.getLocal_plant_id();
+        if(id==null ||id.length() == 0){
+            return false;
+        }
+        return true;
+    }
+
+    private String getPlantID(OtherRecord otherRecord) {
+        String id = otherRecord.getLocal_plant_table_index();
+        if (id == null || id.length() == 0) {
+            return null;
+        }
+        PlantSpeciesDataHelper plantSpeciesDataHelper = new PlantSpeciesDataHelper(getActivity());
+        String plantID = plantSpeciesDataHelper.queryPlantID(id);
+        if (plantID == null || plantID.length() == 0) {
+            return null;
+        }
+        return plantID;
+    }
+
     private OnAdpaterItemClickListener itemClickListener = new OnAdpaterItemClickListener() {
         @Override
         public void onItemClick(Object obj, int p) {
@@ -83,11 +106,23 @@ public class OtherInfoHistoryFragment extends Fragment implements LoaderManager.
             String saved = otherRecord.getSaved();
             if (saved.equals("no")) {
                 new MaterialDialog.Builder(getActivity())
-                        .title("上传采摘信息?")
+                        .title("上传其他信息?")
                         .positiveText("是")
                         .negativeText("否").onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(MaterialDialog dialog, DialogAction which) {
+
+                        if(!checkPlantSaved(otherRecord)){
+                            String val = getPlantID(otherRecord);
+                            if(val == null){
+                                new MaterialDialog.Builder(getActivity())
+                                        .title("种植记录未上传：请先上传种植记录！")
+                                        .positiveText("好的")
+                                        .show();
+                                return;
+                            }
+                            otherRecord.setLocal_plant_id(val);
+                        }
 
                         HttpClient.getInstance().uploadOther(new HttpListener<String>() {
                             @Override
@@ -104,8 +139,9 @@ public class OtherInfoHistoryFragment extends Fragment implements LoaderManager.
                                                 .positiveText("好的")
                                                 .show();
                                     } else {
+                                        String res = jsonObject.getString("return_msg");
                                         new MaterialDialog.Builder(getActivity())
-                                                .title("上传失败：格式错误！")
+                                                .title(res)
                                                 .positiveText("好的")
                                                 .show();
                                     }

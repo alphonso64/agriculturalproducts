@@ -70,10 +70,7 @@ public class FieldDataHelper extends BaseDataHelper implements DBInterface<Field
 
     public void replace(List<Field> listData){
         delete(null,null);
-        for (Field item : listData) {
-            ContentValues values = getContentValues(item);
-            insert(values);
-        }
+        bulkInsert(listData);
     }
 
 }

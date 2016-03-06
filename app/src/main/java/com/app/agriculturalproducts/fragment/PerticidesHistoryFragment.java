@@ -30,6 +30,7 @@ import com.app.agriculturalproducts.bean.PreventionRecord;
 import com.app.agriculturalproducts.bean.Task;
 import com.app.agriculturalproducts.db.FertilizerUsageDataHelper;
 import com.app.agriculturalproducts.db.PersticidesUsageDataHelper;
+import com.app.agriculturalproducts.db.PlantSpeciesDataHelper;
 import com.app.agriculturalproducts.http.HttpClient;
 import com.app.agriculturalproducts.view.NoScrollGridLayoutManager;
 import com.litesuits.http.listener.HttpListener;
@@ -85,6 +86,27 @@ public class PerticidesHistoryFragment extends Fragment implements LoaderManager
         getLoaderManager().initLoader(0, null, this);
     }
 
+    private boolean checkPlantSaved(PreventionRecord preventionRecord){
+        String id = preventionRecord.getLocal_plant_id();
+        if(id==null ||id.length() == 0){
+            return false;
+        }
+        return true;
+    }
+
+    private String getPlantID(PreventionRecord preventionRecord) {
+        String id = preventionRecord.getLocal_plant_table_index();
+        if (id == null || id.length() == 0) {
+            return null;
+        }
+        PlantSpeciesDataHelper plantSpeciesDataHelper = new PlantSpeciesDataHelper(getActivity());
+        String plantID = plantSpeciesDataHelper.queryPlantID(id);
+        if (plantID == null || plantID.length() == 0) {
+            return null;
+        }
+        return plantID;
+    }
+
     private OnAdpaterItemClickListener itemClickListener = new OnAdpaterItemClickListener() {
         @Override
         public void onItemClick(Object obj, int p) {
@@ -97,6 +119,17 @@ public class PerticidesHistoryFragment extends Fragment implements LoaderManager
                         .negativeText("否").onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(MaterialDialog dialog, DialogAction which) {
+                        if(!checkPlantSaved(preventionRecord)){
+                            String val = getPlantID(preventionRecord);
+                            if(val == null){
+                                new MaterialDialog.Builder(getActivity())
+                                        .title("种植记录未上传：请先上传种植记录！")
+                                        .positiveText("好的")
+                                        .show();
+                                return;
+                            }
+                            preventionRecord.setLocal_plant_id(val);
+                        }
                         HttpClient.getInstance().uploadPrevention(new HttpListener<String>() {
                             @Override
                             public void onSuccess(String s, Response<String> response) {
@@ -116,8 +149,9 @@ public class PerticidesHistoryFragment extends Fragment implements LoaderManager
                                         preventionRecord.setSaved("err");
                                         ContentValues values = cupboard().withEntity(PreventionRecord.class).toContentValues(preventionRecord);
                                         mDataHelper.updateByID(values, String.valueOf(preventionRecord.get_id()));
+                                        String res = jsonObject.getString("return_msg");
                                         new MaterialDialog.Builder(getActivity())
-                                                .title("上传失败：农药数量不足！")
+                                                .title(res)
                                                 .positiveText("好的")
                                                 .show();
                                     }

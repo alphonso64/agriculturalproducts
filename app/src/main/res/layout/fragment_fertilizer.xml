@@ -292,6 +292,7 @@
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="30dp"
                         android:maxLength="30"
+                        android:inputType="number"
                         android:background="@drawable/editext_backgroud"
                         android:gravity="left|top"
                         android:padding="5dp"

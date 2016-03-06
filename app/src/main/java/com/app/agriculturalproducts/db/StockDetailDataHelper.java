@@ -89,10 +89,7 @@ public class StockDetailDataHelper extends BaseDataHelper implements DBInterface
 
     public void replace(List<PersonalStockDetail> listData){
         delete(null, null);
-        for (PersonalStockDetail item : listData) {
-            ContentValues values = getContentValues(item);
-            insert(values);
-        }
+        bulkInsert(listData);
     }
 
 }

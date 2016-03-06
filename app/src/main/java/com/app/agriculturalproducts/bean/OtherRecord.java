@@ -20,6 +20,7 @@ public class OtherRecord {
     private String saved;
     private String local_plant_id;
     private Long _id;
+    private String local_plant_table_index;
 
     public static OtherRecord fromCursor(Cursor cursor) {
         OtherRecord otherRecord= cupboard().withCursor(cursor).get(OtherRecord.class);
@@ -120,5 +121,13 @@ public class OtherRecord {
 
     public void set_id(Long _id) {
         this._id = _id;
+    }
+
+    public String getLocal_plant_table_index() {
+        return local_plant_table_index;
+    }
+
+    public void setLocal_plant_table_index(String local_plant_table_index) {
+        this.local_plant_table_index = local_plant_table_index;
     }
 }

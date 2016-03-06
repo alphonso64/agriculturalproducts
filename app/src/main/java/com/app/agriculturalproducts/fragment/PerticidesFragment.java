@@ -158,7 +158,7 @@ public class PerticidesFragment extends BaseUploadFragment {
         preventionRecord.setPlantrecord_breed(species_text.getText().toString());
         preventionRecord.setPlantrecord_plant_date(plant_date_text.getText().toString());
         preventionRecord.setMember_name(member_text.getText().toString());
-
+        preventionRecord.setLocal_plant_table_index(String.valueOf(planterRecord.get_id()));
         preventionRecord.setLocal_plant_id(planterRecord.getPlantrecord_id());
         preventionRecord.setLocal_stock_id(personalStock.getPersonalstock_id());
         preventionRecord.setSaved("no");

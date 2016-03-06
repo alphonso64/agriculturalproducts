@@ -138,6 +138,7 @@ public class PickingFragment extends BaseUploadFragment {
         picking.setMember_name(member_text.getText().toString());
         picking.setSaved("no");
         picking.setLocal_plant_id(planterRecord.getPlantrecord_id());
+        picking.setLocal_plant_table_index(String.valueOf(planterRecord.get_id()));
         pickingDataHelper.insert_(picking);
     }
 

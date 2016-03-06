@@ -5,6 +5,8 @@ import android.content.Context;
 import android.net.Uri;
 import android.support.v4.content.CursorLoader;
 import com.app.agriculturalproducts.bean.FertilizerRecord;
+import com.app.agriculturalproducts.bean.PlanterRecord;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,6 +58,13 @@ public class FertilizerUsageDataHelper extends BaseDataHelper implements DBInter
     public void updateByID(ContentValues values,String id){
         update(values, "_id = ?", new String[]{id});
     }
+
+    public void repalceInfo(List<FertilizerRecord> listData){
+        //delete_("saved = ?", new String[]{"yes"});
+        delete(null,null);
+        bulkInsert(listData);
+    }
+
 
     public void deleteByID(String id){
         delete("_id = ?", new String[]{id});
