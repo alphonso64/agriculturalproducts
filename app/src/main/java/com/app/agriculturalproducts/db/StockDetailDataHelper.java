@@ -8,6 +8,7 @@ import android.support.v4.content.CursorLoader;
 import android.util.Log;
 
 
+import com.app.agriculturalproducts.StockDetailActivity;
 import com.app.agriculturalproducts.bean.PersonalStock;
 import com.app.agriculturalproducts.bean.PersonalStockDetail;
 
@@ -52,7 +53,7 @@ public class StockDetailDataHelper extends BaseDataHelper implements DBInterface
     }
 
     public void delete_(String where, String[] selectionArgs ){
-        delete(where,selectionArgs);
+        delete(where, selectionArgs);
     }
 
     public void insert_(PersonalStockDetail data){
@@ -70,13 +71,32 @@ public class StockDetailDataHelper extends BaseDataHelper implements DBInterface
         return query(getContentUri(), null, null, null, null);
     }
 
-    public CursorLoader getEnterCursorLoader() {
-        return new CursorLoader(getContext(), getContentUri(), null, "type=?",new String[]{PersonalStockDetail.ENTER_TYPE}, null);
+    public CursorLoader getEnterCursorLoader(int cmd) {
+//        return new CursorLoader(getContext(), getContentUri(), null, "type=? and (personalstockdetail_goods_type = ? or personalstockdetail_goods_type = ?)",new String[]{PersonalStockDetail.ENTER_TYPE,"农药","种子"}, null);
+        if(cmd == StockDetailActivity.ENTER_CMD_ALL){
+            return new CursorLoader(getContext(), getContentUri(), null, "type=? ",new String[]{PersonalStockDetail.ENTER_TYPE}, null);
+        }else if(cmd == StockDetailActivity.ENTER_CMD_SEED){
+            return new CursorLoader(getContext(), getContentUri(), null, "type=? and personalstockdetail_goods_type = ?",new String[]{PersonalStockDetail.ENTER_TYPE,"种子"}, null);
+        }else if(cmd == StockDetailActivity.ENTER_CMD_F){
+            return new CursorLoader(getContext(), getContentUri(), null, "type=? and personalstockdetail_goods_type = ?",new String[]{PersonalStockDetail.ENTER_TYPE,"化肥"}, null);
+        }else if(cmd == StockDetailActivity.ENTER_CMD_P){
+            return new CursorLoader(getContext(), getContentUri(), null, "type=? and (personalstockdetail_goods_type = ? or personalstockdetail_goods_type = ?)",new String[]{PersonalStockDetail.ENTER_TYPE,"农药","高毒高残"}, null);
+        }
+        return  null;
     }
 
-    public CursorLoader getOutCursorLoader() {
 
-        return new CursorLoader(getContext(), getContentUri(), null, "type=?",new String[]{PersonalStockDetail.OUT_TYPE}, null);
+    public CursorLoader getOutCursorLoader(int cmd) {
+        if(cmd == StockDetailActivity.OUT_CMD_ALL){
+            return new CursorLoader(getContext(), getContentUri(), null, "type=? ",new String[]{PersonalStockDetail.OUT_TYPE}, null);
+        }else if(cmd == StockDetailActivity.OUT_CMD_SEED){
+            return new CursorLoader(getContext(), getContentUri(), null, "type=? and personalstockdetail_goods_type = ?",new String[]{PersonalStockDetail.OUT_TYPE,"种子"}, null);
+        }else if(cmd == StockDetailActivity.OUT_CMD_F){
+            return new CursorLoader(getContext(), getContentUri(), null, "type=? and personalstockdetail_goods_type = ?",new String[]{PersonalStockDetail.OUT_TYPE,"化肥"}, null);
+        }else if(cmd == StockDetailActivity.OUT_CMD_P){
+            return new CursorLoader(getContext(), getContentUri(), null, "type=? and (personalstockdetail_goods_type = ? or personalstockdetail_goods_type = ?)",new String[]{PersonalStockDetail.OUT_TYPE,"农药","高毒高残"}, null);
+        }
+        return  null;
     }
 
 //    public void updateByID(ContentValues values,String id){

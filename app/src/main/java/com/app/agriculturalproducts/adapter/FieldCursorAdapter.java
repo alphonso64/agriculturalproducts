@@ -35,9 +35,9 @@ public class FieldCursorAdapter extends BaseAbstractRecycleCursorAdapter<Recycle
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, Cursor cursor) {
         Field field = Field.fromCursor(cursor);
-        ((PusageViewHolder) holder).title_1.setText(field.getField_name());
-        ((PusageViewHolder) holder).title_3.setText(field.getField_type());
-        ((PusageViewHolder) holder).title_2.setText(field.getField_status());
+        ((PusageViewHolder) holder).title_1.setText("名称："+field.getField_name());
+        ((PusageViewHolder) holder).title_3.setText("类型："+field.getField_type());
+        ((PusageViewHolder) holder).title_2.setText("面积："+field.getField_area());
     }
 
     @Override

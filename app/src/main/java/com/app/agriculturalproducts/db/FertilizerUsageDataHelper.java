@@ -59,9 +59,16 @@ public class FertilizerUsageDataHelper extends BaseDataHelper implements DBInter
         update(values, "_id = ?", new String[]{id});
     }
 
+    public void updatePlantIDByID(String plantID,String id){
+        ContentValues values = new ContentValues();
+        values.put("local_plant_id",plantID);
+        update(values, "local_plant_table_index = ?", new String[]{id});
+    }
+
+
     public void repalceInfo(List<FertilizerRecord> listData){
-        //delete_("saved = ?", new String[]{"yes"});
-        delete(null,null);
+        delete_("saved = ?", new String[]{"yes"});
+        //delete(null,null);
         bulkInsert(listData);
     }
 

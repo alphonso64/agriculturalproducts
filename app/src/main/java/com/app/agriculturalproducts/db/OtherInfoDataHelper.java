@@ -65,9 +65,15 @@ public class OtherInfoDataHelper extends BaseDataHelper implements DBInterface<O
     }
 
     public void repalceInfo(List<OtherRecord> listData){
-       // delete_("saved = ?", new String[]{"yes"});
-        delete(null,null);
+        delete_("saved = ?", new String[]{"yes"});
+       // delete(null,null);
         bulkInsert(listData);
+    }
+
+    public void updatePlantIDByID(String plantID,String id){
+        ContentValues values = new ContentValues();
+        values.put("local_plant_id", plantID);
+        update(values, "local_plant_table_index = ?", new String[]{id});
     }
 
     @Override

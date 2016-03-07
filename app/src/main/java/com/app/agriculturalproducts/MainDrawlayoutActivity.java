@@ -202,16 +202,16 @@ public class MainDrawlayoutActivity extends BaseActivity {
                         mHandler.sendEmptyMessage(2);
                     }}.start();
             }if(item.getItemId()==R.id.action_update_single){
-                //updateALLDB();
-                new MaterialDialog.Builder(MainDrawlayoutActivity.this)
-                        .title("更新数据会删除未上传数据！")
-                        .positiveText("是")
-                        .negativeText("否").onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(MaterialDialog dialog, DialogAction which) {
-                        updateALLDB();
-                    }
-                }).show();
+                updateALLDB();
+//                new MaterialDialog.Builder(MainDrawlayoutActivity.this)
+//                        .title("更新数据会删除未上传数据！")
+//                        .positiveText("是")
+//                        .negativeText("否").onPositive(new MaterialDialog.SingleButtonCallback() {
+//                    @Override
+//                    public void onClick(MaterialDialog dialog, DialogAction which) {
+//                        updateALLDB();
+//                    }
+//                }).show();
             }
             return true;
         }

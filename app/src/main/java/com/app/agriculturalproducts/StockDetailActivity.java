@@ -41,8 +41,16 @@ public class StockDetailActivity extends BaseActivity implements LoaderManager.L
     @Bind(R.id.ptask_recyclerview)
     RecyclerView mTaskRecyclerView;
 
-    private final int ENTER_CMD = 0;
-    private final int OUT_CMD = 1;
+    public static final int ENTER_CMD_ALL = 0;
+    public static final int ENTER_CMD_SEED = 1;
+    public static final int ENTER_CMD_F = 2;
+    public static final int ENTER_CMD_P = 3;
+
+    public static final int OUT_CMD_ALL = 4;
+    public static final int OUT_CMD_SEED = 5;
+    public static final int OUT_CMD_F = 6;
+    public static final int OUT_CMD_P = 7;
+
 
     //    private StockDataHelper mDataHelper;
 //    private StockCursorAdapter mAdapter;
@@ -61,7 +69,7 @@ public class StockDetailActivity extends BaseActivity implements LoaderManager.L
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
-        setToolBar(tooblbar, "库存流水");
+        setToolBar(tooblbar, "入库信息—所有");
 
         mDataHelper = new StockDetailDataHelper(this);
         mTaskRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -77,11 +85,23 @@ public class StockDetailActivity extends BaseActivity implements LoaderManager.L
     }
 
     @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        if (id == ENTER_CMD) {
-            return mDataHelper.getEnterCursorLoader();
-        } else if (id == OUT_CMD) {
-            return mDataHelper.getOutCursorLoader();
+    public Loader<Cursor> onCreateLoader(int cmd, Bundle args) {
+        if(cmd == StockDetailActivity.ENTER_CMD_ALL){
+            return mDataHelper.getEnterCursorLoader(ENTER_CMD_ALL);
+        }else if(cmd == StockDetailActivity.ENTER_CMD_SEED){
+            return mDataHelper.getEnterCursorLoader(ENTER_CMD_SEED);
+        }else if(cmd == StockDetailActivity.ENTER_CMD_F){
+            return mDataHelper.getEnterCursorLoader(ENTER_CMD_F);
+        }else if(cmd == StockDetailActivity.ENTER_CMD_P){
+            return mDataHelper.getEnterCursorLoader(ENTER_CMD_P);
+        }else  if(cmd == StockDetailActivity.OUT_CMD_ALL){
+            return mDataHelper.getOutCursorLoader(OUT_CMD_ALL);
+        }else if(cmd == StockDetailActivity.OUT_CMD_SEED){
+            return mDataHelper.getOutCursorLoader(OUT_CMD_SEED);
+        }else if(cmd == StockDetailActivity.OUT_CMD_F){
+            return mDataHelper.getOutCursorLoader(OUT_CMD_F);
+        }else if(cmd == StockDetailActivity.OUT_CMD_P){
+            return mDataHelper.getOutCursorLoader(OUT_CMD_P);
         }
         return null;
     }
@@ -142,12 +162,30 @@ public class StockDetailActivity extends BaseActivity implements LoaderManager.L
     private Toolbar.OnMenuItemClickListener itemClick = new Toolbar.OnMenuItemClickListener() {
         @Override
         public boolean onMenuItemClick(MenuItem item) {
-            if (item.getItemId() == R.id.action_enter) {
-                getSupportLoaderManager().restartLoader(ENTER_CMD, null, StockDetailActivity.this);
-                item.setChecked(true);
-            } else if (item.getItemId() == R.id.action_out) {
-                getSupportLoaderManager().restartLoader(OUT_CMD, null, StockDetailActivity.this);
-                item.setChecked(true);
+            if (item.getItemId() == R.id.action_enter_all) {
+                tooblbar.setTitle("入库信息—所有");
+               getSupportLoaderManager().restartLoader(ENTER_CMD_ALL, null, StockDetailActivity.this);
+            } else if (item.getItemId() == R.id.action_enter_seed) {
+                tooblbar.setTitle("入库信息—种子");
+                getSupportLoaderManager().restartLoader(ENTER_CMD_SEED, null, StockDetailActivity.this);
+            } else if (item.getItemId() == R.id.action_enter_fertilizer) {
+                tooblbar.setTitle("入库信息—化肥");
+                getSupportLoaderManager().restartLoader(ENTER_CMD_F, null, StockDetailActivity.this);
+            } else if (item.getItemId() == R.id.action_enter_persticides) {
+                tooblbar.setTitle("入库信息—农药");
+                getSupportLoaderManager().restartLoader(ENTER_CMD_P, null, StockDetailActivity.this);
+            } else if (item.getItemId() == R.id.action_out_all) {
+                tooblbar.setTitle("出库信息—所有");
+                getSupportLoaderManager().restartLoader(OUT_CMD_ALL, null, StockDetailActivity.this);
+            } else if (item.getItemId() == R.id.action_out_seed) {
+                tooblbar.setTitle("出库信息—种子");
+                getSupportLoaderManager().restartLoader(OUT_CMD_SEED, null, StockDetailActivity.this);
+            } else if (item.getItemId() == R.id.action_out_fertilizer) {
+                tooblbar.setTitle("出库信息—化肥");
+                getSupportLoaderManager().restartLoader(OUT_CMD_F, null, StockDetailActivity.this);
+            } else if (item.getItemId() == R.id.action_out_persticides) {
+                tooblbar.setTitle("出库信息—农药");
+                getSupportLoaderManager().restartLoader(OUT_CMD_P, null, StockDetailActivity.this);
             } else if (item.getItemId() == R.id.action_update) {
                 progressDialog = new ProgressDialog(StockDetailActivity.this);
                 progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);

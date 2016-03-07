@@ -44,6 +44,12 @@ public class PersticidesUsageDataHelper extends BaseDataHelper implements DBInte
         bulkInsert(contentValues.toArray(valueArray));
     }
 
+    public void updatePlantIDByID(String plantID,String id){
+        ContentValues values = new ContentValues();
+        values.put("local_plant_id",plantID);
+        update(values, "local_plant_table_index = ?", new String[]{id});
+    }
+
     @Override
     public ContentValues getContentValues(PreventionRecord data) {
         ContentValues values = cupboard().withEntity(PreventionRecord.class).toContentValues(data);
@@ -69,8 +75,8 @@ public class PersticidesUsageDataHelper extends BaseDataHelper implements DBInte
 
 
     public void repalceInfo(List<PreventionRecord> listData){
-       // delete_("saved = ?", new String[]{"yes"});
-        delete(null,null);
+        delete_("saved = ?", new String[]{"yes"});
+        //delete(null,null);
         bulkInsert(listData);
     }
 

@@ -94,18 +94,18 @@ public class PerticidesHistoryFragment extends Fragment implements LoaderManager
         return true;
     }
 
-    private String getPlantID(PreventionRecord preventionRecord) {
-        String id = preventionRecord.getLocal_plant_table_index();
-        if (id == null || id.length() == 0) {
-            return null;
-        }
-        PlantSpeciesDataHelper plantSpeciesDataHelper = new PlantSpeciesDataHelper(getActivity());
-        String plantID = plantSpeciesDataHelper.queryPlantID(id);
-        if (plantID == null || plantID.length() == 0) {
-            return null;
-        }
-        return plantID;
-    }
+//    private String getPlantID(PreventionRecord preventionRecord) {
+//        String id = preventionRecord.getLocal_plant_table_index();
+//        if (id == null || id.length() == 0) {
+//            return null;
+//        }
+//        PlantSpeciesDataHelper plantSpeciesDataHelper = new PlantSpeciesDataHelper(getActivity());
+//        String plantID = plantSpeciesDataHelper.queryPlantID(id);
+//        if (plantID == null || plantID.length() == 0) {
+//            return null;
+//        }
+//        return plantID;
+//    }
 
     private OnAdpaterItemClickListener itemClickListener = new OnAdpaterItemClickListener() {
         @Override
@@ -120,15 +120,20 @@ public class PerticidesHistoryFragment extends Fragment implements LoaderManager
                     @Override
                     public void onClick(MaterialDialog dialog, DialogAction which) {
                         if(!checkPlantSaved(preventionRecord)){
-                            String val = getPlantID(preventionRecord);
-                            if(val == null){
-                                new MaterialDialog.Builder(getActivity())
-                                        .title("种植记录未上传：请先上传种植记录！")
-                                        .positiveText("好的")
-                                        .show();
-                                return;
-                            }
-                            preventionRecord.setLocal_plant_id(val);
+//                            String val = getPlantID(preventionRecord);
+//                            if(val == null){
+//                                new MaterialDialog.Builder(getActivity())
+//                                        .title("种植记录未上传：请先上传种植记录！")
+//                                        .positiveText("好的")
+//                                        .show();
+////                                return;
+//                            }
+//                            preventionRecord.setLocal_plant_id(val);
+                            new MaterialDialog.Builder(getActivity())
+                                    .title("种植记录未上传：请先上传种植记录！")
+                                    .positiveText("好的")
+                                    .show();
+                            return;
                         }
                         HttpClient.getInstance().uploadPrevention(new HttpListener<String>() {
                             @Override

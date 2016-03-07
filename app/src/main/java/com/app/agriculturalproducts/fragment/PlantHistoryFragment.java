@@ -24,8 +24,11 @@ import com.app.agriculturalproducts.bean.FieldInfo;
 import com.app.agriculturalproducts.bean.PersonalStock;
 import com.app.agriculturalproducts.bean.PlanterRecord;
 import com.app.agriculturalproducts.bean.Task;
+import com.app.agriculturalproducts.db.FertilizerUsageDataHelper;
 import com.app.agriculturalproducts.db.FieldDataHelper;
+import com.app.agriculturalproducts.db.OtherInfoDataHelper;
 import com.app.agriculturalproducts.db.PersticidesUsageDataHelper;
+import com.app.agriculturalproducts.db.PickingDataHelper;
 import com.app.agriculturalproducts.db.PlantSpeciesDataHelper;
 import com.app.agriculturalproducts.http.HttpClient;
 import com.litesuits.http.listener.HttpListener;
@@ -87,11 +90,21 @@ public class PlantHistoryFragment extends Fragment implements LoaderManager.Load
         ButterKnife.unbind(this);
     }
 
+    private void savedPlantIDtoDB(String pid,String id){
+        FertilizerUsageDataHelper fertilizerUsageDataHelper = new FertilizerUsageDataHelper(getActivity());
+        fertilizerUsageDataHelper.updatePlantIDByID(pid,id);
+        PersticidesUsageDataHelper persticidesUsageDataHelper = new PersticidesUsageDataHelper(getActivity());
+        persticidesUsageDataHelper.updatePlantIDByID(pid,id);
+        PickingDataHelper pickingDataHelper = new PickingDataHelper(getActivity());
+        pickingDataHelper.updatePlantIDByID(pid,id);
+        OtherInfoDataHelper otherInfoDataHelper = new OtherInfoDataHelper(getActivity());
+        otherInfoDataHelper.updatePlantIDByID(pid,id);
+    }
+
     private void checkResult(PlanterRecord planterRecord,String s){
         try {
             JSONObject jsonObject = new JSONObject(s);
             String val = jsonObject.getString("return_code");
-
             Log.e("testcc", "upload:"+s);
             if(val.equals("success")){
                 JSONArray array = jsonObject.getJSONArray("data");
@@ -100,6 +113,7 @@ public class PlantHistoryFragment extends Fragment implements LoaderManager.Load
                     String id = jobject.getString("plantrecord_id");
                     planterRecord.setPlantrecord_id(id);
                 }
+                savedPlantIDtoDB(planterRecord.getPlantrecord_id(),String.valueOf(planterRecord.get_id()));
                 planterRecord.setSaved("yes");
                 ContentValues values = cupboard().withEntity(PlanterRecord.class).toContentValues(planterRecord);
                 mDataHelper.updateByID(values, String.valueOf(planterRecord.get_id()));

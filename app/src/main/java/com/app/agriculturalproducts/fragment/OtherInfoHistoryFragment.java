@@ -86,18 +86,18 @@ public class OtherInfoHistoryFragment extends Fragment implements LoaderManager.
         return true;
     }
 
-    private String getPlantID(OtherRecord otherRecord) {
-        String id = otherRecord.getLocal_plant_table_index();
-        if (id == null || id.length() == 0) {
-            return null;
-        }
-        PlantSpeciesDataHelper plantSpeciesDataHelper = new PlantSpeciesDataHelper(getActivity());
-        String plantID = plantSpeciesDataHelper.queryPlantID(id);
-        if (plantID == null || plantID.length() == 0) {
-            return null;
-        }
-        return plantID;
-    }
+//    private String getPlantID(OtherRecord otherRecord) {
+//        String id = otherRecord.getLocal_plant_table_index();
+//        if (id == null || id.length() == 0) {
+//            return null;
+//        }
+//        PlantSpeciesDataHelper plantSpeciesDataHelper = new PlantSpeciesDataHelper(getActivity());
+//        String plantID = plantSpeciesDataHelper.queryPlantID(id);
+//        if (plantID == null || plantID.length() == 0) {
+//            return null;
+//        }
+//        return plantID;
+//    }
 
     private OnAdpaterItemClickListener itemClickListener = new OnAdpaterItemClickListener() {
         @Override
@@ -113,15 +113,20 @@ public class OtherInfoHistoryFragment extends Fragment implements LoaderManager.
                     public void onClick(MaterialDialog dialog, DialogAction which) {
 
                         if(!checkPlantSaved(otherRecord)){
-                            String val = getPlantID(otherRecord);
-                            if(val == null){
-                                new MaterialDialog.Builder(getActivity())
-                                        .title("种植记录未上传：请先上传种植记录！")
-                                        .positiveText("好的")
-                                        .show();
-                                return;
-                            }
-                            otherRecord.setLocal_plant_id(val);
+//                            String val = getPlantID(otherRecord);
+//                            if(val == null){
+//                                new MaterialDialog.Builder(getActivity())
+//                                        .title("种植记录未上传：请先上传种植记录！")
+//                                        .positiveText("好的")
+//                                        .show();
+//                                return;
+//                            }
+//                            otherRecord.setLocal_plant_id(val);
+                            new MaterialDialog.Builder(getActivity())
+                                    .title("种植记录未上传：请先上传种植记录！")
+                                    .positiveText("好的")
+                                    .show();
+                            return;
                         }
 
                         HttpClient.getInstance().uploadOther(new HttpListener<String>() {

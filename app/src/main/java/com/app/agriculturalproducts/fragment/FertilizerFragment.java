@@ -255,9 +255,9 @@ public class FertilizerFragment extends BaseUploadFragment {
                     field_area_text.setText(field.getField_area());
                     cursor_inner_a = new PlantSpeciesDataHelper(getActivity()).getCursor();
                     ListAdapter adapter_inner = new SimpleCursorAdapter(getActivity(),
-                            android.R.layout.simple_list_item_1,
-                            cursor_inner_a, new String[]{"plantrecord_breed"},
-                            new int[]{android.R.id.text1}, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
+                            android.R.layout.simple_list_item_2,
+                            cursor_inner_a, new String[]{"plantrecord_breed","plantrecord_plant_date"},
+                            new int[]{android.R.id.text1,android.R.id.text2}, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
                     dialog_inner = new MaterialDialog.Builder(getActivity()).title("品种选择").adapter(adapter_inner, new MaterialDialog.ListCallback() {
                         @Override
                         public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {

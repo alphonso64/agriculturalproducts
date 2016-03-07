@@ -43,6 +43,12 @@ public class PickingDataHelper extends BaseDataHelper implements DBInterface<Pic
         bulkInsert(contentValues.toArray(valueArray));
     }
 
+    public void updatePlantIDByID(String plantID,String id){
+        ContentValues values = new ContentValues();
+        values.put("local_plant_id",plantID);
+        update(values, "local_plant_table_index = ?", new String[]{id});
+    }
+
     @Override
     public ContentValues getContentValues(PickRecord data) {
         ContentValues values = cupboard().withEntity(PickRecord.class).toContentValues(data);
@@ -66,8 +72,8 @@ public class PickingDataHelper extends BaseDataHelper implements DBInterface<Pic
     }
 
     public void repalceInfo(List<PickRecord> listData){
-       //delete_("saved = ?", new String[]{"yes"});
-        delete(null,null);
+       delete_("saved = ?", new String[]{"yes"});
+       // delete(null,null);
         bulkInsert(listData);
     }
 

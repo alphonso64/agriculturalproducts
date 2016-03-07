@@ -71,8 +71,8 @@ public class PlantSpeciesDataHelper extends BaseDataHelper implements DBInterfac
     }
 
     public void repalceInfo(List<PlanterRecord> listData){
-        //delete_("saved = ?", new String[]{"yes"});
-        delete(null,null);
+        delete_("saved = ?", new String[]{"yes"});
+        //delete(null,null);
         bulkInsert(listData);
     }
 

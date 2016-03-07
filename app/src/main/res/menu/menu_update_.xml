@@ -9,4 +9,29 @@
         android:title="action_update"
         android:icon="@drawable/ic_cached_white_24dp"
         app:showAsAction="ifRoom"/>
+
+        <item
+            android:id="@+id/action_all_info"
+            android:orderInCategory="60"
+            android:title="所有信息"
+            android:checked="true"
+            app:showAsAction="collapseActionView"/>
+
+        <item
+            android:id="@+id/action_seed_info"
+            android:orderInCategory="70"
+            android:title="种子信息"
+            app:showAsAction="collapseActionView"/>
+
+        <item
+            android:id="@+id/action_fertilizer_info"
+            android:orderInCategory="80"
+            android:title="化肥信息"
+            app:showAsAction="collapseActionView"/>
+
+        <item
+            android:id="@+id/action_persticides_info"
+            android:orderInCategory="90"
+            android:title="农药信息"
+            app:showAsAction="collapseActionView"/>
 </menu>

@@ -82,6 +82,18 @@ public class StockDataHelper extends BaseDataHelper implements DBInterface<Perso
         return query(getContentUri(),null, "type=?",new String[]{PersonalStock.P_TYPE}, null);
     }
 
+    public CursorLoader getSeedCursorLoader() {
+        return new CursorLoader(getContext(), getContentUri(), null, "type=?",new String[]{PersonalStock.SEED_TYPE},null);
+    }
+
+    public CursorLoader getFertilizerCursorLoader() {
+        return new CursorLoader(getContext(), getContentUri(), null, "type=?",new String[]{PersonalStock.F_TYPE}, null);
+    }
+
+    public CursorLoader getPreventionCursorLoader() {
+        return new CursorLoader(getContext(), getContentUri(), null, "type=?",new String[]{PersonalStock.P_TYPE}, null);
+    }
+
 //    public void updateByID(ContentValues values,String id){
 //        int val = update(values, "personalstock_id = ?", new String[]{id});
 //        Log.e("testcc","updateByID:"+val);
