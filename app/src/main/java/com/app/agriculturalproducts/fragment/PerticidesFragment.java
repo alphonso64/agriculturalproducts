@@ -50,6 +50,7 @@ import java.util.Objects;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 
@@ -199,8 +200,8 @@ public class PerticidesFragment extends BaseUploadFragment {
         List<EditText> ls = new ArrayList();
         ls.add(num_text);
         ls.add(area_text);
-        ls.add(medicine_person_text);
-        ls.add(symptom_text);
+//        ls.add(medicine_person_text);
+//        ls.add(symptom_text);
         return  EditTextUtil.isEditEmpty(ls);
     }
 
@@ -377,5 +378,11 @@ public class PerticidesFragment extends BaseUploadFragment {
     public String toString() {
         return super.toString();
     }
+
+    @OnClick(R.id.upload_button)
+    void click(){
+        uploadClick();
+    }
+
 }
 

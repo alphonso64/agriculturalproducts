@@ -50,6 +50,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 
@@ -314,5 +315,11 @@ public class PickingFragment extends BaseUploadFragment {
     public String toString() {
         return super.toString();
     }
+
+    @OnClick(R.id.upload_button)
+    void click(){
+        uploadClick();
+    }
+
 }
 

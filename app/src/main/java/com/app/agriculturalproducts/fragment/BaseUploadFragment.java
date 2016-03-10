@@ -2,6 +2,7 @@ package com.app.agriculturalproducts.fragment;
 
 import android.support.v4.app.Fragment;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.app.agriculturalproducts.util.InputType;
 
 import java.util.Objects;
@@ -20,4 +21,25 @@ public class BaseUploadFragment extends Fragment implements Upload {
     public int save() {
         return InputType.INPUT_SAVE_OK;
     }
+
+    public void uploadClick(){
+        int val = save();
+        if(val == InputType.INPUT_EMPTY){
+            new MaterialDialog.Builder(getActivity())
+                    .title("内容不能为空！")
+                    .positiveText("好的")
+                    .show();
+        }else if(val == InputType.INPUT_SAVE_OK){
+            new MaterialDialog.Builder(getActivity())
+                    .title("保存成功！")
+                    .positiveText("好的")
+                    .show();
+        }else if(val == InputType.INPUT_SAVE_ALREADY){
+            new MaterialDialog.Builder(getActivity())
+                    .title("已经保存！")
+                    .positiveText("好的")
+                    .show();
+        }
+    }
+
 }

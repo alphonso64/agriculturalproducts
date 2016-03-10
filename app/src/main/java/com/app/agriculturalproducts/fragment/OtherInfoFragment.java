@@ -45,6 +45,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by ALPHONSO on 2016/1/5.
@@ -261,5 +262,11 @@ public class OtherInfoFragment extends BaseUploadFragment {
     public String toString() {
         return super.toString();
     }
+
+    @OnClick(R.id.upload_button)
+    void click(){
+        uploadClick();
+    }
+
 }
 

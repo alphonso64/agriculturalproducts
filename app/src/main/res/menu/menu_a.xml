@@ -9,6 +9,7 @@ tools:context=".MainActivity" >
     android:orderInCategory="80"
     android:title="action_save"
     android:icon="@drawable/ic_save_white_24dp"
+    android:visible="false"
     app:showAsAction="ifRoom"/>
 
 <item

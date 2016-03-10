@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -53,6 +54,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by ALPHONSO on 2016/1/5.
@@ -273,5 +275,11 @@ public class PlantFragment extends BaseUploadFragment {
     public String toString() {
         return super.toString();
     }
+
+    @OnClick(R.id.upload_button)
+    void click(){
+        uploadClick();
+    }
+
 }
 
