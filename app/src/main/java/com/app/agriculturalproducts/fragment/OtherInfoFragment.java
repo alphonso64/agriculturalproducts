@@ -141,7 +141,7 @@ public class OtherInfoFragment extends BaseUploadFragment {
         if(TextUtils.isEmpty(field_text.getText().toString().trim())){
             return true;
         }
-        if(TextUtils.isEmpty(date_text.getText().toString().trim())){
+        if(TextUtils.isEmpty(species_text.getText().toString().trim())){
             return true;
         }
         List<EditText> ls = new ArrayList();
@@ -180,7 +180,7 @@ public class OtherInfoFragment extends BaseUploadFragment {
                     cursor.moveToPosition(which);
                     field = Field.fromCursor(cursor);
                     field_text.setText(field.getField_name());
-                    cursor_inner = new PlantSpeciesDataHelper(getActivity()).getCursor();
+                    cursor_inner = new PlantSpeciesDataHelper(getActivity()).getCursorByFiledID(field.getField_id());
                     ListAdapter adapter_inner = new SimpleCursorAdapter(getActivity(),
                             android.R.layout.simple_list_item_2,
                             cursor_inner, new String[]{"plantrecord_breed","plantrecord_plant_date"},

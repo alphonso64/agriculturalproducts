@@ -68,6 +68,8 @@ public class PlantFragment extends BaseUploadFragment {
     @Bind(R.id.field_img)
     ImageView fieldImg;
 
+    @Bind(R.id.field_area_text)
+    TextView plot_area_text;
     @Bind(R.id.plot_info_text)
     TextView plot_info_text;
     @Bind(R.id.field_text)
@@ -85,6 +87,8 @@ public class PlantFragment extends BaseUploadFragment {
 
     @Bind(R.id.num_text)
     EditText num_text;
+    @Bind(R.id.plant_area_text)
+    EditText plant_area;
 
     boolean flag = false;
     boolean flag_upload = false;
@@ -113,6 +117,7 @@ public class PlantFragment extends BaseUploadFragment {
             planterRecord.setPlantrecord_seed_number(num_text.getText().toString());
             planterRecord.setPlantrecord_seed_source(source_text.getText().toString());
             planterRecord.setSaved("no");
+            planterRecord.setField_plant_area(plant_area.getText().toString());
             planterRecord.setLocal_field_id(field.getField_id());
             planterRecord.setLocal_stock_id(personalStock.getPersonalstock_id());
             plantSpeciesDataHelper.insert_(planterRecord);
@@ -145,7 +150,7 @@ public class PlantFragment extends BaseUploadFragment {
     boolean isEmpty() {
         List<EditText> ls = new ArrayList();
         ls.add(num_text);
-
+        ls.add(plant_area);
         if (TextUtils.isEmpty(field_text.getText().toString().trim())) {
             return true;
         }
@@ -185,6 +190,7 @@ public class PlantFragment extends BaseUploadFragment {
                     cursor.moveToPosition(which);
                     field = Field.fromCursor(cursor);
                     field_text.setText(field.getField_name());
+                    plot_area_text.setText(field.getField_area());
                     cursor_inner = new StockDataHelper(getActivity()).getCursorSeed();
                     ListAdapter adapter_inner = new SimpleCursorAdapter(getActivity(),
                             android.R.layout.simple_list_item_1,

@@ -91,4 +91,8 @@ public class PlantSpeciesDataHelper extends BaseDataHelper implements DBInterfac
         return query(getContentUri(), null, null, null, null);
     }
 
+    public Cursor getCursorByFiledID(String id) {
+        return query(getContentUri(), null, "local_field_id = ?", new String[]{id}, null);
+    }
+
 }

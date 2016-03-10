@@ -18,6 +18,7 @@ public class PlanterRecord {
     private String plantrecord_seed_number;
     private String plantrecord_plant_date;
     private String field_name;
+    private String field_plant_area;
     private String employee_name;
     private String saved;
     private String local_stock_id;
@@ -139,5 +140,13 @@ public class PlanterRecord {
 
     public void setLocal_field_id(String local_field_id) {
         this.local_field_id = local_field_id;
+    }
+
+    public String getField_plant_area() {
+        return field_plant_area;
+    }
+
+    public void setField_plant_area(String field_plant_area) {
+        this.field_plant_area = field_plant_area;
     }
 }

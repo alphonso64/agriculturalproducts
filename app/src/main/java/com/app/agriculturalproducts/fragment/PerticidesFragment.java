@@ -91,6 +91,8 @@ public class PerticidesFragment extends BaseUploadFragment {
     TextView use_person_text;
     @Bind(R.id.p_method_text)
     TextView method_text;
+    @Bind(R.id.p_plant_area_text)
+    TextView  plant_area_text;
 
     @Bind(R.id.p_area_text)
     EditText area_text;
@@ -194,7 +196,10 @@ public class PerticidesFragment extends BaseUploadFragment {
         if(TextUtils.isEmpty(field_text.getText().toString().trim())){
             return true;
         }
-        if(TextUtils.isEmpty(date_text.getText().toString().trim())){
+        if(TextUtils.isEmpty(species_text.getText().toString().trim())){
+            return true;
+        }
+        if(TextUtils.isEmpty(perticides_text.getText().toString().trim())){
             return true;
         }
         List<EditText> ls = new ArrayList();
@@ -307,7 +312,7 @@ public class PerticidesFragment extends BaseUploadFragment {
                     field = Field.fromCursor(cursor);
                     field_text.setText(field.getField_name());
                     field_area_text.setText(field.getField_area());
-                    cursor_inner_a = new PlantSpeciesDataHelper(getActivity()).getCursor();
+                    cursor_inner_a = new PlantSpeciesDataHelper(getActivity()).getCursorByFiledID(field.getField_id());
                     ListAdapter adapter_inner = new SimpleCursorAdapter(getActivity(),
                             android.R.layout.simple_list_item_2,
                             cursor_inner_a, new String[]{"plantrecord_breed","plantrecord_plant_date"},
@@ -319,6 +324,7 @@ public class PerticidesFragment extends BaseUploadFragment {
                             planterRecord = PlanterRecord.fromCursor(cursor_inner_a);
                             species_text.setText(planterRecord.getPlantrecord_breed());
                             plant_date_text.setText(planterRecord.getPlantrecord_plant_date());
+                            plant_area_text.setText(planterRecord.getField_plant_area());
                             cursor_inner_b = new StockDataHelper(getActivity()).getCursorPrevention();
                             ListAdapter adapter_inner = new SimpleCursorAdapter(getActivity(),
                                     android.R.layout.simple_list_item_1,

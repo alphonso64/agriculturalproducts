@@ -237,34 +237,46 @@ public class MainDrawlayoutActivity extends BaseActivity {
                 HttpClient.getInstance().getAllInfo(name);
                 //保存地块信息至数据库
                 FieldDataHelper fieldDataHelper = new FieldDataHelper(MainDrawlayoutActivity.this);
-                fieldDataHelper.replace(HttpClient.getInstance().fieldList);
+                if(HttpClient.getInstance().fieldList!=null)
+                    fieldDataHelper.replace(HttpClient.getInstance().fieldList);
 
                 PlantSpeciesDataHelper plantSpeciesDataHelper = new PlantSpeciesDataHelper(MainDrawlayoutActivity.this);
-                plantSpeciesDataHelper.repalceInfo(HttpClient.getInstance().planterList);
+                if(HttpClient.getInstance().planterList!=null)
+                    plantSpeciesDataHelper.repalceInfo(HttpClient.getInstance().planterList);
 
                 FertilizerUsageDataHelper fertilizerUsageDataHelper = new FertilizerUsageDataHelper(MainDrawlayoutActivity.this);
-                fertilizerUsageDataHelper.repalceInfo(HttpClient.getInstance().fertiList);
+                if(HttpClient.getInstance().fertiList!=null)
+                    fertilizerUsageDataHelper.repalceInfo(HttpClient.getInstance().fertiList);
 
                 PersticidesUsageDataHelper persticidesUsageDataHelper = new PersticidesUsageDataHelper(MainDrawlayoutActivity.this);
-                persticidesUsageDataHelper.repalceInfo(HttpClient.getInstance().preventionList);
+                if(HttpClient.getInstance().preventionList!=null)
+                    persticidesUsageDataHelper.repalceInfo(HttpClient.getInstance().preventionList);
 
                 PickingDataHelper pickingDataHelper = new PickingDataHelper(MainDrawlayoutActivity.this);
-                pickingDataHelper.repalceInfo(HttpClient.getInstance().pickList);
+                if(HttpClient.getInstance().pickList!=null)
+                    pickingDataHelper.repalceInfo(HttpClient.getInstance().pickList);
 
                 OtherInfoDataHelper otherInfoDataHelper = new OtherInfoDataHelper(MainDrawlayoutActivity.this);
-                otherInfoDataHelper.repalceInfo(HttpClient.getInstance().otherList);
+                if(HttpClient.getInstance().otherList!=null)
+                    otherInfoDataHelper.repalceInfo(HttpClient.getInstance().otherList);
 
                 StockDataHelper stockDataHelper = new StockDataHelper(MainDrawlayoutActivity.this);
-                stockDataHelper.replace(HttpClient.getInstance().seedStockList);
-                stockDataHelper.bulkInsert(HttpClient.getInstance().fStockList);
-                stockDataHelper.bulkInsert(HttpClient.getInstance().pStcokList);
+                if(HttpClient.getInstance().seedStockList!=null)
+                    stockDataHelper.replace(HttpClient.getInstance().seedStockList);
+                if(HttpClient.getInstance().fStockList!=null)
+                    stockDataHelper.bulkInsert(HttpClient.getInstance().fStockList);
+                if(HttpClient.getInstance().pStcokList!=null)
+                 stockDataHelper.bulkInsert(HttpClient.getInstance().pStcokList);
 
                 StockDetailDataHelper stockDetailDataHelper = new StockDetailDataHelper(MainDrawlayoutActivity.this);
-                stockDetailDataHelper.replace(HttpClient.getInstance().enterstockList);
-                stockDetailDataHelper.bulkInsert(HttpClient.getInstance().outstockList);
+                if(HttpClient.getInstance().enterstockList!=null)
+                    stockDetailDataHelper.replace(HttpClient.getInstance().enterstockList);
+                if(HttpClient.getInstance().outstockList!=null)
+                    stockDetailDataHelper.bulkInsert(HttpClient.getInstance().outstockList);
                 //保存雇员信息sp中
                 EmployeeInfo employeeInfo = HttpClient.getInstance().employeeInfo;
-                employeeInfoModel.setEmployeeInfo(employeeInfo);
+                if(employeeInfo!=null)
+                    employeeInfoModel.setEmployeeInfo(employeeInfo);
                 mHandler.sendEmptyMessage(1);
             }}.start();
     }

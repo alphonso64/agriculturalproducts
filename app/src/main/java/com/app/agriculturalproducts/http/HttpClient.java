@@ -194,12 +194,12 @@ public class HttpClient {
         Response<String> result = liteHttp.execute(stringRequest);
         employeeInfo = parseEmployeeInfo(result.getResult());
 //        Log.e("testcc", result.getResult());
-        employeeInfo.printfInfo();
+//        employeeInfo.printfInfo();
 
         stringRequest.setUri(Configure.GET_FIELD_BY_USERNAME_URL);
         result = liteHttp.execute(stringRequest);
         fieldList = parseField(result.getResult());
-//        Log.e("testcc", result.getResult() + fieldList.size());
+        Log.e("testcc", result.getResult() + fieldList.size());
 //        for(int i=0;i<fieldList.size();i++){
 //            fieldList.get(i).printfInfo();
 //        }
@@ -207,7 +207,7 @@ public class HttpClient {
         stringRequest.setUri(Configure.GET_PLANTRECORD_BY_USERNAME_URL);
         result = liteHttp.execute(stringRequest);
         planterList = parsePlant(result.getResult());
-//        Log.e("testcc", result.getResult()+planterList.size());
+        Log.e("testcc", result.getResult()+planterList.size());
 //        for(int i=0;i<planterList.size();i++){
 //            planterList.get(i).printfInfo();
 //        }
@@ -415,6 +415,10 @@ public class HttpClient {
                     if (!(value.equals("null") && value != null)) {
                         plant.setPlantrecord_specifications(value);
                     }
+                    value = (String) jobject.get("field_id");
+                    if (!(value.equals("null") && value != null)) {
+                        plant.setLocal_field_id(value);
+                    };
                     value = (String) jobject.get("plantrecord_seed_number");
                     if (!(value.equals("null") && value != null)) {
                         plant.setPlantrecord_seed_number(value);
@@ -427,6 +431,10 @@ public class HttpClient {
                     value = (String) jobject.get("field_name");
                     if (!(value.equals("null") && value != null)) {
                         plant.setField_name(value);
+                    }
+                    value = (String) jobject.get("plantrecord_area");
+                    if (!(value.equals("null") && value != null)) {
+                        plant.setField_plant_area(value);
                     }
                     value = (String) jobject.get("employee_name");
                     if (!(value.equals("null") && value != null)) {
@@ -930,6 +938,7 @@ public class HttpClient {
             object.put("plantrecord_seed_number", planterRecord.getPlantrecord_seed_number());
             object.put("plantrecord_plant_date", planterRecord.getPlantrecord_plant_date());
             object.put("field_id", planterRecord.getLocal_field_id());
+            object.put("plantrecord_area",planterRecord.getField_plant_area());
             Log.e("testcc",object.toString());
         } catch (JSONException e) {
             return 0;

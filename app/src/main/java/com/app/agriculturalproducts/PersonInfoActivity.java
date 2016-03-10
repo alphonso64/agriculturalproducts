@@ -107,22 +107,23 @@ public class PersonInfoActivity extends BaseActivity {
         nameText.setText(employeeInfo.getEmployee_name());
         coopText.setText(employeeInfo.getMember_name());
         {
-            String phone = employeeInfo.getEmployee_passport().trim();
+            String phone = employeeInfo.getEmployee_passport();
+
             // phoneText.setText(StringUtil.getMaskedStr(phone,4,'*'));
             if(phone == null || phone.length() == 0){
                 phoneText.setText("无");
             }else{
-                phoneText.setText(phone);
+                phoneText.setText(phone.trim());
             }
 
         }
         {
-            String id =  employeeInfo.getEmployee_tel().trim();
+            String id =  employeeInfo.getEmployee_tel();
             //  idText.setText(StringUtil.getMaskedStr(id,8,'*'));
             if(id == null|| id.length() == 0){
                 idText.setText("无");
             }else{
-                idText.setText(id);
+                idText.setText(id.trim());
             }
         }
 

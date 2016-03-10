@@ -87,6 +87,8 @@ public class FertilizerFragment extends BaseUploadFragment {
     TextView employee_text;
     @Bind(R.id.f_method_text)
     TextView method_text;
+    @Bind(R.id.f_plant_area_text)
+    TextView plant_area_text;
 
     @Bind(R.id.f_num_text)
     EditText num_text;
@@ -145,7 +147,7 @@ public class FertilizerFragment extends BaseUploadFragment {
         fertilizerRecord.setMember_name(member_text.getText().toString());
         fertilizerRecord.setPlantrecord_breed(species_text.getText().toString());
         fertilizerRecord.setEmployee_name(employee_text.getText().toString());
-        fertilizerRecord.setFertilizerecord_people(member_text.getText().toString());
+        fertilizerRecord.setFertilizerecord_people(employee_text.getText().toString());
         fertilizerRecord.setLocal_plant_id(planterRecord.getPlantrecord_id());
         fertilizerRecord.setLocal_plant_table_index(String.valueOf(planterRecord.get_id()));
         fertilizerRecord.setLocal_stock_id(personalStock.getPersonalstock_id());
@@ -178,7 +180,10 @@ public class FertilizerFragment extends BaseUploadFragment {
         if(TextUtils.isEmpty(field_text.getText().toString().trim())){
             return true;
         }
-        if(TextUtils.isEmpty(date_text.getText().toString().trim())){
+        if(TextUtils.isEmpty(species_text.getText().toString().trim())){
+            return true;
+        }
+        if(TextUtils.isEmpty(name_text.getText().toString().trim())){
             return true;
         }
         List<EditText> ls = new ArrayList();
@@ -254,7 +259,7 @@ public class FertilizerFragment extends BaseUploadFragment {
                     field = Field.fromCursor(cursor);
                     field_text.setText(field.getField_name());
                     field_area_text.setText(field.getField_area());
-                    cursor_inner_a = new PlantSpeciesDataHelper(getActivity()).getCursor();
+                    cursor_inner_a = new PlantSpeciesDataHelper(getActivity()).getCursorByFiledID(field.getField_id());
                     ListAdapter adapter_inner = new SimpleCursorAdapter(getActivity(),
                             android.R.layout.simple_list_item_2,
                             cursor_inner_a, new String[]{"plantrecord_breed","plantrecord_plant_date"},
@@ -265,6 +270,7 @@ public class FertilizerFragment extends BaseUploadFragment {
                             cursor_inner_a.moveToPosition(which);
                             planterRecord = PlanterRecord.fromCursor(cursor_inner_a);
                             species_text.setText(planterRecord.getPlantrecord_breed());
+                            plant_area_text.setText(planterRecord.getField_plant_area());
                             cursor_inner_b = new StockDataHelper(getActivity()).getCursorFertilizer();
 
                             ListAdapter adapter_inner = new SimpleCursorAdapter(getActivity(),

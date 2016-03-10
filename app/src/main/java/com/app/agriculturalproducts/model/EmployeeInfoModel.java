@@ -51,7 +51,8 @@ public class EmployeeInfoModel {
             sp = context.getSharedPreferences(name,
                     Activity.MODE_PRIVATE);
             SharedPreferences.Editor editor = sp.edit();
-            editor.putString("employee_id",employeeInfo.getEmployee_id());
+            if(employeeInfo.getEmployee_id()!=null)
+                editor.putString("employee_id",employeeInfo.getEmployee_id());
             editor.putString("member_id",employeeInfo.getMember_id());
             editor.putString("employee_name",employeeInfo.getEmployee_name());
             editor.putString("employee_sex",employeeInfo.getEmployee_sex());

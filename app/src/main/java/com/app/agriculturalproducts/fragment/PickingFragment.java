@@ -81,6 +81,9 @@ public class PickingFragment extends BaseUploadFragment {
     TextView member_text;
     @Bind(R.id.pick_person_text)
     TextView person_text;
+    @Bind(R.id.pick_plant_area_text)
+    TextView plant_area_text;
+
 
     @Bind(R.id.pick_area_text)
     EditText area_text;
@@ -169,7 +172,7 @@ public class PickingFragment extends BaseUploadFragment {
         if(TextUtils.isEmpty(field_text.getText().toString().trim())){
             return true;
         }
-        if(TextUtils.isEmpty(date_text.getText().toString().trim())){
+        if(TextUtils.isEmpty(species_text.getText().toString().trim())){
             return true;
         }
         List<EditText> ls = new ArrayList();
@@ -231,7 +234,7 @@ public class PickingFragment extends BaseUploadFragment {
                     field = Field.fromCursor(cursor);
                     field_text.setText(field.getField_name());
                     field_area_text.setText(field.getField_area());
-                    cursor_inner = new PlantSpeciesDataHelper(getActivity()).getCursor();
+                    cursor_inner = new PlantSpeciesDataHelper(getActivity()).getCursorByFiledID(field.getField_id());
                     ListAdapter adapter_inner = new SimpleCursorAdapter(getActivity(),
                             android.R.layout.simple_list_item_2,
                             cursor_inner, new String[]{"plantrecord_breed","plantrecord_plant_date"},
@@ -243,6 +246,7 @@ public class PickingFragment extends BaseUploadFragment {
                             planterRecord = PlanterRecord.fromCursor(cursor_inner);
                             species_text.setText(planterRecord.getPlantrecord_breed());
                             plant_date_text.setText(planterRecord.getPlantrecord_plant_date());
+                            plant_area_text.setText(planterRecord.getField_plant_area());
                             dialog_inner.cancel();
                         }
                     }).alwaysCallSingleChoiceCallback().build();
