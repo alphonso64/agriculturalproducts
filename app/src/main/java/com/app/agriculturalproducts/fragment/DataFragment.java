@@ -103,7 +103,6 @@ public class DataFragment extends Fragment implements LoaderManager.LoaderCallba
     }
 
     public  void updateData(){
-        Log.e("testcc", "test");
         mDataHelper.replace(HttpClient.getInstance().fieldList);
     }
 

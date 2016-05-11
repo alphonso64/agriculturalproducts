@@ -1,10 +1,13 @@
 package com.app.agriculturalproducts.fragment;
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -12,12 +15,14 @@ import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -33,8 +38,11 @@ import com.app.agriculturalproducts.bean.Field;
 import com.app.agriculturalproducts.bean.FieldInfo;
 import com.app.agriculturalproducts.bean.MyIcon;
 import com.app.agriculturalproducts.bean.Task;
+import com.app.agriculturalproducts.bean.TaskRecord;
 import com.app.agriculturalproducts.db.FieldDataHelper;
 import com.app.agriculturalproducts.db.TaskDataHelper;
+import com.app.agriculturalproducts.http.HttpClient;
+import com.app.agriculturalproducts.util.InputType;
 import com.app.agriculturalproducts.view.NoScrollGridLayoutManager;
 import com.litesuits.http.listener.HttpListener;
 import com.litesuits.http.request.StringRequest;
@@ -74,6 +82,21 @@ public class WorkFragment extends Fragment implements LoaderManager.LoaderCallba
         super.onCreate(savedInstanceState);
 
     }
+
+    private Handler mHandler = new Handler() {
+
+        @Override
+        public void handleMessage(Message msg) {
+            if(msg.what==1){
+                mDataHelper.replace(HttpClient.getInstance().taskList);
+            }else if(msg.what == -1){
+                Toast toast = Toast.makeText(getActivity(),
+                        "网络未连接", Toast.LENGTH_SHORT);
+                toast.setGravity(Gravity.CENTER, 0, 0);
+                toast.show();
+            }
+        }
+    };
 
     @Nullable
     @Override
@@ -122,54 +145,29 @@ public class WorkFragment extends Fragment implements LoaderManager.LoaderCallba
     private View.OnClickListener update_onclickListner = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Task icon = new Task();
-            Cursor cursor = mFieldDataHelper.getCursor();
-            if (cursor.moveToFirst()) {
-                Field fieldInfo = Field.fromCursor(cursor);
-                icon.setField(fieldInfo.getField_name());
-                icon.setSpecies(fieldInfo.getField_type());
-            }
-            cursor.close();
-            icon.setTitle("化肥任务");
-            icon.setImgPath("t_a");
-            icon.setDetail("这是一个化肥任务");
-            icon.setIsDone("false");
-            icon.setF_area("化肥面积");
-            icon.setF_method("化肥方法");
-            icon.setF_spec("化肥规格");
-            icon.setF_name("化肥名称");
-            icon.setF_type("化肥类型");
-
-            SimpleDateFormat formatter = new SimpleDateFormat("yy:MM:dd HH:mm:ss");
-            Date curDate = new Date(System.currentTimeMillis());//获取当前时间
-            String str = formatter.format(curDate);
-            icon.setDate(str);
-            mDataHelper.insert_(icon);
-
-            icon.setTitle("农药任务");
-            icon.setImgPath("tb");
-            icon.setDetail("这是一个农药任务");
-            icon.setP_area("农药面积");
-            icon.setP_spec("农药规格");
-            icon.setP_name("农药名称");
-            icon.setP_type("农药类型");
-            mDataHelper.insert_(icon);
-
-            icon.setTitle("采摘任务");
-            icon.setPick_area("采摘面积");
-            icon.setImgPath("tc");
-            icon.setDetail("这是一个采摘任务");
-            mDataHelper.insert_(icon);
+            SharedPreferences sp = getActivity().getSharedPreferences(InputType.loginInfoDB,
+                    Activity.MODE_PRIVATE);
+            final String name = sp.getString("name", null);
+            new Thread(){
+                @Override
+                public void run() {
+                    int val = HttpClient.getInstance().getTaskInfo(name);
+                    if(val == -1){
+                        mHandler.sendEmptyMessage(-1);
+                    }else if(val == 0) {
+                        mHandler.sendEmptyMessage(1);
+                    }
+                }}.start();
         }
     };
 
     private OnAdpaterItemClickListener task_adpaterItemClickListener =new  OnAdpaterItemClickListener() {
         @Override
         public void onItemClick(Object obj, int p) {
-            final Task task =  (Task) obj;
+            TaskRecord taskRecord = (TaskRecord)obj;
             new MaterialDialog.Builder(getActivity())
-                    .title(task.getTitle())
-                    .content(task.getDetail())
+                    .title(taskRecord.getWorktask_name())
+                    .content(taskRecord.getWorktask_content())
                     .positiveText("接受")
                     .negativeText("暂不").onPositive(new MaterialDialog.SingleButtonCallback() {
                 @Override

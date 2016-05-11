@@ -2,6 +2,7 @@ package com.app.agriculturalproducts.http;
 
 import android.util.Log;
 
+import com.app.agriculturalproducts.app.AppApplication;
 import com.app.agriculturalproducts.bean.EmployeeInfo;
 import com.app.agriculturalproducts.bean.FertilizerRecord;
 import com.app.agriculturalproducts.bean.Field;
@@ -11,7 +12,9 @@ import com.app.agriculturalproducts.bean.PersonalStockDetail;
 import com.app.agriculturalproducts.bean.PickRecord;
 import com.app.agriculturalproducts.bean.PlanterRecord;
 import com.app.agriculturalproducts.bean.PreventionRecord;
+import com.app.agriculturalproducts.bean.TaskRecord;
 import com.app.agriculturalproducts.util.Configure;
+import com.litesuits.http.HttpConfig;
 import com.litesuits.http.LiteHttp;
 import com.litesuits.http.exception.HttpException;
 import com.litesuits.http.listener.HttpListener;
@@ -46,13 +49,16 @@ public class HttpClient {
     public List<PersonalStock> pStcokList;
     public List<PersonalStockDetail> enterstockList;
     public List<PersonalStockDetail> outstockList;
+    public List<TaskRecord> taskList;
     //public List
 
     private HttpClient() {
-        liteHttp = LiteHttp.newApacheHttpClient(null);
-    }
 
-    ;
+//        HttpConfig config = new HttpConfig(AppApplication.getContext()) // configuration quickly
+//                .setDetectNetwork(true);
+        liteHttp = LiteHttp.newApacheHttpClient(null);
+
+    }
 
     public static HttpClient getInstance() {
         if (single == null) {
@@ -171,10 +177,31 @@ public class HttpClient {
 
         Response<String> result = liteHttp.execute(stringRequest);
         fieldList = parseField(result.getResult());
-        for (int i = 0; i < fieldList.size(); i++) {
-            fieldList.get(i).printfInfo();
-        }
+    }
 
+    public int getTaskInfo(String name)
+    {
+        JSONObject object = new JSONObject();
+        try {
+            object.put("userinfo_username", name);
+        } catch (JSONException e) {
+            return -2;
+        }
+        LinkedHashMap<String, String> header = new LinkedHashMap<>();
+        header.put("contentType", "utf-8");
+        header.put("Content-type", "application/x-java-serialized-object");
+        StringRequest stringRequest = new StringRequest(Configure.GET_WORKTASK_BY_USERNAME_URL).setHeaders(header)
+                .setMethod(HttpMethods.Post).setHttpBody(new StringBody(object.toString()));
+        try {
+            Response<String> result = liteHttp.execute(stringRequest);
+            taskList = parseTask(result.getResult());
+        } catch (Exception e) {
+            return -1;
+        }
+        for (int i = 0; i < taskList.size(); i++) {
+            taskList.get(i).printfInfo();
+        }
+        return 0;
     }
 
 
@@ -335,6 +362,77 @@ public class HttpClient {
                 }
                 return employeeInfo;
             }
+        } catch (JSONException e) {
+            // e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<TaskRecord> parseTask(String val) {
+        try {
+            List<TaskRecord> ls = new ArrayList<>();
+            JSONObject object = new JSONObject(val);
+            String result = (String) object.get("return_code");
+            if (result.equals("success")) {
+                JSONArray array = object.getJSONArray("data");
+                for (int i = 0; i < array.length(); i++) {
+                    JSONObject jobject = (JSONObject) array.get(i);
+
+                    TaskRecord task = new TaskRecord();
+                    String value = (String) jobject.get("worktasklist_id");
+                    if (!(value.equals("null") && value != null)) {
+                        task.setWorktasklist_id(value);
+                    }
+
+                    value = (String) jobject.get("worktasklist_ischeck");
+                    if (!(value.equals("null") && value != null)) {
+                        task.setWorktasklist_ischeck(value);
+                    }
+                    value = (String) jobject.get("worktasklist_status");
+                    if (!(value.equals("null") && value != null)) {
+                        task.setWorktasklist_status(value);
+                    }
+                    value = (String) jobject.get("worktask_name");
+                    if (!(value.equals("null") && value != null)) {
+                        task.setWorktask_name(value);
+                    }
+                    value = (String) jobject.get("worktask_type");
+                    if (!(value.equals("null") && value != null)) {
+                        task.setWorktask_type(value);
+                    }
+                    value = (String) jobject.get("worktask_content");
+                    if (!(value.equals("null") && value != null)) {
+                        task.setWorktask_content(value);
+                    }
+
+                    value = (String) jobject.get("worktask_publish_people");
+                    if (!(value.equals("null") && value != null)) {
+                        task.setWorktask_publish_people(value);
+                    }
+                    value = (String) jobject.get("worktask_publish_date");
+                    if (!(value.equals("null") && value != null)) {
+                        task.setWorktask_publish_date(value);
+                    }
+
+                    value = (String) jobject.get("worktask_finish_date");
+                    if (!(value.equals("null") && value != null)) {
+                        task.setWorktask_finish_date(value);
+                    }
+                    value = (String) jobject.get("employee_name");
+                    if (!(value.equals("null") && value != null)) {
+                        task.setEmployee_name(value);
+                    }
+
+                    value = (String) jobject.get("employee_card");
+                    if (!(value.equals("null") && value != null)) {
+                        task.setEmployee_card(value);
+                    }
+
+
+                    ls.add(task);
+                }
+            }
+            return ls;
         } catch (JSONException e) {
             // e.printStackTrace();
         }

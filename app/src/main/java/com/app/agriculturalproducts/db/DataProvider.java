@@ -30,6 +30,7 @@ import com.app.agriculturalproducts.bean.PlantSpecies;
 import com.app.agriculturalproducts.bean.PlanterRecord;
 import com.app.agriculturalproducts.bean.PreventionRecord;
 import com.app.agriculturalproducts.bean.Task;
+import com.app.agriculturalproducts.bean.TaskRecord;
 import com.app.agriculturalproducts.util.InputType;
 
 import static nl.qbusict.cupboard.CupboardFactory.cupboard;
@@ -40,8 +41,6 @@ public class DataProvider extends ContentProvider {
     public static final String SCHEME = "content://";
 
     private static final int TASK_TABLE = 0;
-    private static final int TASK_Detail_TABLE = 100;
-    private static final int TASK_Done_TABLE = 101;
     private static final int PUSAGE_TABLE  = 1;
     private static final int FUSAGE_TABLE  = 2;
     private static final int PLANT_TABLE = 3;
@@ -64,8 +63,6 @@ public class DataProvider extends ContentProvider {
     public static final String PATH_STOCK_DETAIL_TABLE =  "/personalstockdetail";
 
     public static final Uri TASK_TABLE_CONTENT_URI = Uri.parse(SCHEME + AUTHORITY + PATH_TASK_TABLE);
-    public static final Uri TASK_DETAIL_CONTENT_URI = Uri.parse(SCHEME + AUTHORITY + PATH_TASK_DETAIL_TABLE);
-    public static final Uri TASK_DONE_CONTENT_URI = Uri.parse(SCHEME + AUTHORITY + PATH_TASK_DONE_TABLE);
     public static final Uri PUSAGE_TABLE_CONTENT_URI = Uri.parse(SCHEME + AUTHORITY + PATH_PUSAGE_TABLE);
     public static final Uri FUSAGE_TABLE_CONTENT_URI = Uri.parse(SCHEME + AUTHORITY + PATH_FUSAGE_TABLE);
     public static final Uri PLANT_TABLE_CONTENT_URI = Uri.parse(SCHEME + AUTHORITY + PATH_PLANT_TABLE);
@@ -76,8 +73,6 @@ public class DataProvider extends ContentProvider {
     public static final Uri STOCK_DETAIL_TABLE_CONTENT_URI = Uri.parse(SCHEME + AUTHORITY + PATH_STOCK_DETAIL_TABLE);
 
     public static final String TASK_TABLE_CONTENT_TYPE = "com.task";
-    public static final String TASK_DETAIL_TABLE_CONTENT_TYPE = "com.task.detail";
-    public static final String TASK_DONE_TABLE_CONTENT_TYPE = "com.task.done";
     public static final String PUSAGE_TABLE_CONTENT_TYPE = "com.pusage";
     public static final String FUSAGE_TABLE_CONTENT_TYPE = "com.fusage";
     public static final String PLANT_TABLE_CONTENT_TYPE = "com.plant";
@@ -96,8 +91,6 @@ public class DataProvider extends ContentProvider {
         addURI(AUTHORITY,"pickrecord",PICK_TABLE);
         addURI(AUTHORITY,"otherrecord",OTHERINFO_TABLE);
         addURI(AUTHORITY,"field",FIELD_TABLE);
-        addURI(AUTHORITY,"taskd",TASK_Detail_TABLE);
-        addURI(AUTHORITY,"taskud",TASK_Done_TABLE);
         addURI(AUTHORITY,"personalstock",STOCK_TABLE);
         addURI(AUTHORITY,"personalstockdetail",STOCK_DETAIL_TABLE);
     }};
@@ -132,26 +125,10 @@ public class DataProvider extends ContentProvider {
             Log.e("testbb","query + "+uri);
             switch (sUriMATCHER.match(uri)) {
                 case TASK_TABLE://Demo列表
-                    cursor =  cupboard().withDatabase(db).query(Task.class).
-                            withProjection(projection).
-                            withSelection("isDone = ?", "false").
-                            orderBy("_id DESC").
-                            getCursor();
-                    cursor.setNotificationUri(getContext().getContentResolver(), uri);
-                    break;
-                case TASK_Detail_TABLE://Demo列表
-                    cursor =  cupboard().withDatabase(db).query(Task.class).
+                    cursor =  cupboard().withDatabase(db).query(TaskRecord.class).
                             withProjection(projection).
                             withSelection(selection).
-                            orderBy("_id DESC").
-                            getCursor();
-                    cursor.setNotificationUri(getContext().getContentResolver(), uri);
-                    break;
-                case TASK_Done_TABLE://Demo列表
-                    cursor =  cupboard().withDatabase(db).query(Task.class).
-                            withProjection(projection).
-                            withSelection("isDone = ?", "true").
-                            orderBy("_id DESC").
+                            orderBy(sortOrder).
                             getCursor();
                     cursor.setNotificationUri(getContext().getContentResolver(), uri);
                     break;
@@ -234,12 +211,6 @@ public class DataProvider extends ContentProvider {
             case TASK_TABLE://Demo列表
                 table = TaskDataHelper.TABLE_NAME;
                 break;
-            case TASK_Detail_TABLE://Demo列表
-                table = TaskDataHelper.TABLE_NAME;
-                break;
-            case TASK_Done_TABLE://Demo列表
-                table = TaskDataHelper.TABLE_NAME;
-                break;
             case PUSAGE_TABLE:
                 table = PersticidesUsageDataHelper.TABLE_NAME;
                 break;
@@ -273,24 +244,20 @@ public class DataProvider extends ContentProvider {
     @Override
     public String getType(Uri uri) {
         switch (sUriMATCHER.match(uri)) {
-            case TASK_TABLE://Demo列表
+            case TASK_TABLE:
                 return TASK_TABLE_CONTENT_TYPE;
-            case PUSAGE_TABLE://Demo列表
+            case PUSAGE_TABLE:
                 return PUSAGE_TABLE_CONTENT_TYPE;
-            case FUSAGE_TABLE://Demo列表
+            case FUSAGE_TABLE:
                 return FUSAGE_TABLE_CONTENT_TYPE;
-            case PLANT_TABLE://Demo列表
+            case PLANT_TABLE:
                 return PLANT_TABLE_CONTENT_TYPE;
-            case PICK_TABLE://Demo列表
+            case PICK_TABLE:
                 return PICK_TABLE_CONTENT_TYPE;
-            case OTHERINFO_TABLE://Demo列表
+            case OTHERINFO_TABLE:
                 return OTHER_TABLE_CONTENT_TYPE;
-            case FIELD_TABLE://Demo列表
+            case FIELD_TABLE:
                 return FIELD_TABLE_CONTENT_TYPE;
-            case TASK_Detail_TABLE://Demo列表
-                return TASK_DETAIL_TABLE_CONTENT_TYPE;
-            case TASK_Done_TABLE://Demo列表
-                return TASK_DONE_TABLE_CONTENT_TYPE;
             case STOCK_DETAIL_TABLE:
                 return STOCK_DETAIL_TABLE_CONTENT_TYPE;
             case STOCK_TABLE:
@@ -307,7 +274,6 @@ public class DataProvider extends ContentProvider {
             long rowId = 0;
             db.beginTransaction();
             try {
-                Log.e("testbbb", "insert2:" + uri.toString());
                 rowId = db.insert(matchTable(uri), null, values);
                 db.setTransactionSuccessful();
             } catch (Exception e) {
@@ -331,9 +297,8 @@ public class DataProvider extends ContentProvider {
             db.beginTransaction();
             try {
                 for (ContentValues contentValues : values) {
-                    Log.e("testcc", "bulkInsert:" + uri.toString());
+//                    Log.e("testcc", "bulkInsert:" + uri.toString());
                     db.insertWithOnConflict(matchTable(uri), BaseColumns._ID, contentValues, SQLiteDatabase.CONFLICT_IGNORE);
-                    //db.replace(matchTable(uri), BaseColumns._ID, contentValues);
                 }
                 db.setTransactionSuccessful();
                 getContext().getContentResolver().notifyChange(uri, null);

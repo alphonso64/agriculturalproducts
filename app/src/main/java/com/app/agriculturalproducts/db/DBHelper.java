@@ -19,6 +19,7 @@ import com.app.agriculturalproducts.bean.PlantSpecies;
 import com.app.agriculturalproducts.bean.PlanterRecord;
 import com.app.agriculturalproducts.bean.PreventionRecord;
 import com.app.agriculturalproducts.bean.Task;
+import com.app.agriculturalproducts.bean.TaskRecord;
 
 import nl.qbusict.cupboard.Cupboard;
 import nl.qbusict.cupboard.CupboardBuilder;
@@ -43,7 +44,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     static {
-        cupboard().register(Task.class);
+        cupboard().register(TaskRecord.class);
         cupboard().register(Field.class);
         cupboard().register(PlanterRecord.class);
         cupboard().register(FertilizerRecord.class);

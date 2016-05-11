@@ -8,7 +8,9 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 import android.support.v4.content.CursorLoader;
 
+import com.app.agriculturalproducts.bean.PersonalStockDetail;
 import com.app.agriculturalproducts.bean.Task;
+import com.app.agriculturalproducts.bean.TaskRecord;
 import com.app.agriculturalproducts.db.database.Column;
 import com.app.agriculturalproducts.db.database.SQLiteTable;
 
@@ -18,13 +20,13 @@ import java.util.List;
 import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 
 
-public class TaskDataHelper extends BaseDataHelper implements DBInterface<Task> {
+public class TaskDataHelper extends BaseDataHelper implements DBInterface<TaskRecord> {
 
     public TaskDataHelper(Context context) {
         super(context);
     }
 
-    public static final String TABLE_NAME = "task";
+    public static final String TABLE_NAME = "TaskRecord";
     @Override
     protected Uri getContentUri() {
         return DataProvider.TASK_TABLE_CONTENT_URI;
@@ -36,9 +38,9 @@ public class TaskDataHelper extends BaseDataHelper implements DBInterface<Task> 
     }
 
     @Override
-    public void bulkInsert(List<Task> listData) {
+    public void bulkInsert(List<TaskRecord> listData) {
         ArrayList<ContentValues> contentValues = new ArrayList<>();
-        for (Task item : listData) {
+        for (TaskRecord item : listData) {
             ContentValues values = getContentValues(item);
             contentValues.add(values);
         }
@@ -47,12 +49,12 @@ public class TaskDataHelper extends BaseDataHelper implements DBInterface<Task> 
     }
 
     @Override
-    public ContentValues getContentValues(Task data) {
+    public ContentValues getContentValues(TaskRecord data) {
 //        ContentValues values = new ContentValues();
 //        values.put(ItemsDBInfo.ID, data.getIconID());
 //        values.put(ItemsDBInfo.TITLE, data.getTitle());
 //        values.put(ItemsDBInfo.DETAIL, data.getDetail());
-        ContentValues values = cupboard().withEntity(Task.class).toContentValues(data);
+        ContentValues values = cupboard().withEntity(TaskRecord.class).toContentValues(data);
         return values;
     }
 
@@ -68,6 +70,10 @@ public class TaskDataHelper extends BaseDataHelper implements DBInterface<Task> 
     public void updateTask(ContentValues values,String id){
         update(values, "_id = ?", new String[]{id});
     }
+    public void replace(List<TaskRecord> listData){
+        delete(null, null);
+        bulkInsert(listData);
+    }
 
     @Override
     public CursorLoader getCursorLoader() {
@@ -75,11 +81,11 @@ public class TaskDataHelper extends BaseDataHelper implements DBInterface<Task> 
     }
 
     public CursorLoader getDetailCursorLoader() {
-        return new CursorLoader(getContext(), DataProvider.TASK_DETAIL_CONTENT_URI, null, null, null, null);
+        return new CursorLoader(getContext(), getContentUri(), null, null, null, null);
     }
 
     public CursorLoader getDoneCursorLoader() {
-        return new CursorLoader(getContext(), DataProvider.TASK_DONE_CONTENT_URI, null, null, null, null);
+        return new CursorLoader(getContext(),getContentUri(), null, null, null, null);
     }
 
 }

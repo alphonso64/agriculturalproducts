@@ -7,10 +7,9 @@ package com.app.agriculturalproducts.util;
  */
 
 public class Configure {
-
 	//域名
 	private static final String DOMAIN_NAME = "http://211.149.152.49/";
-	
+
 	//登陆判断
 	public static final String LOGIN_URL = DOMAIN_NAME + "supervise/loginFromPhone.do";
 	//修改密码
@@ -35,9 +34,9 @@ public class Configure {
 	public static final String GET_OUTPERSONALSTOCKDETAIL_BY_USERNAME_URL = DOMAIN_NAME + "supervise/getOutPersonalStockDetailByUsernameFromPhone.do";
 	//通过帐号获取入库库存信息
 	public static final String GET_ENTERPERSONALSTOCKDETAIL_BY_USERNAME_URL = DOMAIN_NAME + "supervise/getEnterPersonalStockDetailByUsernameFromPhone.do";
-	//通过帐号获取库存种子信息
+	//通过帐号获取库存品种信息
 	public static final String GET_SEED_PERSONALSTOCK_BY_USERNAME_URL = DOMAIN_NAME + "supervise/getSeedFromPersonalStockByUsernameFromPhone.do";
-	//通过帐号获取库存化肥信息
+	//通过帐号获取库存肥料信息
 	public static final String GET_FERTILIZER_PERSONALSTOCK_BY_USERNAME_URL = DOMAIN_NAME + "supervise/getFertilizerFromPersonalStockByUsernameFromPhone.do";
 	//通过帐号获取库存农药信息
 	public static final String GET_PESTICIDE_PERSONALSTOCK_BY_USERNAME_URL = DOMAIN_NAME + "supervise/getPesticideFromPersonalStockByUsernameFromPhone.do";
@@ -51,4 +50,8 @@ public class Configure {
 	public static final String ADD_PICKRECORD_URL = DOMAIN_NAME + "supervise/addPickRecordFromPhone.do";
 	//添加其他信息
 	public static final String ADD_OTHERRECORD_URL = DOMAIN_NAME + "supervise/addOtherRecordFromPhone.do";
+	//通过帐号获取任务信息
+	public static final String GET_WORKTASK_BY_USERNAME_URL = DOMAIN_NAME + "supervise/getWorkTaskByUsernameFromPhone.do";
+	//修改密码
+	public static final String UPDATE_WORKTASKLIST_STATUS_URL = DOMAIN_NAME + "supervise/updateWorkTaskListStatusFromPhone.do";
 }

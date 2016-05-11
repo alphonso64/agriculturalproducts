@@ -2,7 +2,7 @@
 <resources>
     <string-array name="titles">
         <item>种植录入</item>
-        <item>化肥使用</item>
+        <item>肥料施用</item>
         <item>农药使用</item>
         <item>采摘记录</item>
         <item>其他记录</item>

@@ -25,19 +25,8 @@ public class AppApplication extends Application {
     public void onCreate() {
         super.onCreate();
         sContext = getApplicationContext();
-       // SDKInitializer.initialize(this);
-//        if(isFirstLogin()){
-//            DBHelper dbHelper =new DBHelper(getApplicationContext());
-//            FieldTest fieldTest = new FieldTest(getApplicationContext());
-//            fieldTest.test();
-//        }
-//        HttpClient.getInstance().test();
         Log.e("testcc", "onCreate");
     }
-
-//    public void setUserName(){
-//        name =
-//    }
 
     public static Context getContext() {
         return sContext;
@@ -45,19 +34,7 @@ public class AppApplication extends Application {
 
     @Override
     public void onTerminate() {
-        // 程序终止的时候执行
-        Log.e("testcc", "onTerminate");
         super.onTerminate();
     }
 
-//    private boolean isFirstLogin(){
-//        SharedPreferences sp = getSharedPreferences("loginTest", Activity.MODE_PRIVATE);
-//        if(sp.getString("login",null)==null){
-//            SharedPreferences.Editor editor = sp.edit();
-//            editor.putString("login", "ok");
-//            editor.commit();
-//            return  true;
-//        }
-//        return  false;
-//    }
 }

@@ -57,11 +57,9 @@ import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 
 public class MainDrawlayoutActivity extends BaseActivity {
 
-    private UserInfoPresenter mUserInfoPresenter;
     CircleImageView mImgView;
     TextView mNameText;
     TextView mCOOPText;
-    private FieldDataHelper filedDataHelper;
     private ProgressDialog progressDialog;
     private DataFragment dataFragment;
     private Handler mHandler = new Handler() {
@@ -116,7 +114,7 @@ public class MainDrawlayoutActivity extends BaseActivity {
                         getSupportFragmentManager().beginTransaction().replace(R.id.frame_content, new DataFragment(),"data").commit();
                         mToolbar.setTitle("地块信息");
                         mToolbar.getMenu().clear();
-                        mToolbar.inflateMenu(R.menu.menu_update_);
+                        mToolbar.inflateMenu(R.menu.menu_update_single_icon);
                         break;
                     case R.id.item_three:
                         getSupportFragmentManager().beginTransaction().replace(R.id.frame_content, new MineFragment()).commit();
@@ -184,7 +182,7 @@ public class MainDrawlayoutActivity extends BaseActivity {
     private Toolbar.OnMenuItemClickListener itemClick = new Toolbar.OnMenuItemClickListener() {
         @Override
         public boolean onMenuItemClick(MenuItem item) {
-            if(item.getItemId()==R.id.action_update){
+            if(item.getItemId()==R.id.action_update_icon){
                 progressDialog = new ProgressDialog(MainDrawlayoutActivity.this);
                 progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
                 progressDialog.setMessage("数据更新中");

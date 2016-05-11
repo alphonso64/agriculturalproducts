@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.app.agriculturalproducts.R;
 import com.app.agriculturalproducts.bean.Task;
+import com.app.agriculturalproducts.bean.TaskRecord;
 import com.app.agriculturalproducts.util.StringUtil;
 
 import java.text.SimpleDateFormat;
@@ -36,12 +37,29 @@ public class TaskCursorAdapter extends BaseAbstractRecycleCursorAdapter<Recycler
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, Cursor cursor) {
-        Task task = Task.fromCursor(cursor);
-        ((TaskViewHolder) holder).title.setText(task.getTitle());
-        ((TaskViewHolder) holder).detail.setText(task.getDetail());
-        int resId = context.getResources().getIdentifier(task.getImgPath(), "drawable", context.getPackageName());
-        ((TaskViewHolder) holder).icon.setImageResource(resId);
-        ((TaskViewHolder) holder).time.setText(task.getDate());
+        TaskRecord record = TaskRecord.fromCursor(cursor);
+        ((TaskViewHolder) holder).title.setText(record.getWorktask_name());
+        ((TaskViewHolder) holder).detail.setText(record.getWorktask_content());
+       String type = record.getWorktask_type();
+        if(type.equals("种植录入")){
+            int resId = context.getResources().getIdentifier("t_a", "drawable", context.getPackageName());
+            ((TaskViewHolder) holder).icon.setImageResource(resId);
+        }else if(type.equals("肥料施用")){
+            int resId = context.getResources().getIdentifier("tb", "drawable", context.getPackageName());
+            ((TaskViewHolder) holder).icon.setImageResource(resId);
+        }else if(type.equals("农药使用")){
+            int resId = context.getResources().getIdentifier("tc", "drawable", context.getPackageName());
+            ((TaskViewHolder) holder).icon.setImageResource(resId);
+        }else if(type.equals("其他记录")){
+            int resId = context.getResources().getIdentifier("td", "drawable", context.getPackageName());
+            ((TaskViewHolder) holder).icon.setImageResource(resId);
+        }else if(type.equals("采摘记录")){
+            int resId = context.getResources().getIdentifier("te", "drawable", context.getPackageName());
+            ((TaskViewHolder) holder).icon.setImageResource(resId);
+        }
+//
+//
+        ((TaskViewHolder) holder).time.setText(record.getWorktask_publish_date());
     }
 
     @Override
@@ -69,7 +87,7 @@ public class TaskCursorAdapter extends BaseAbstractRecycleCursorAdapter<Recycler
                 @Override
                 public void onClick(View v) {
                     Cursor cursor = (Cursor) mAdapter.getItem(getAdapterPosition());
-                    Task task = Task.fromCursor(cursor);
+                    TaskRecord task = TaskRecord.fromCursor(cursor);
                     if(mAdapter.onItemClickListener!=null){
                         mAdapter.onItemClickListener.onItemClick(task,getAdapterPosition());
                     }
