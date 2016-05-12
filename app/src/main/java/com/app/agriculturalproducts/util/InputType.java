@@ -21,6 +21,7 @@ public class InputType {
     public static final String INPUT_CHECK_ERR = "ERR";
 
     public static final String loginInfoDB = "LOGIN";
+    public static final String unUploadDB = "UNTASK";
 
     public static final String UPLOAD_YES = "yes";
     public static final String UPLOAD_NO = "no";

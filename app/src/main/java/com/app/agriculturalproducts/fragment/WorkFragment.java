@@ -43,6 +43,7 @@ import com.app.agriculturalproducts.bean.TaskRecord;
 import com.app.agriculturalproducts.db.FieldDataHelper;
 import com.app.agriculturalproducts.db.TaskDataHelper;
 import com.app.agriculturalproducts.http.HttpClient;
+import com.app.agriculturalproducts.model.UnuploadTaskModel;
 import com.app.agriculturalproducts.util.InputType;
 import com.app.agriculturalproducts.view.NoScrollGridLayoutManager;
 import com.litesuits.http.listener.HttpListener;
@@ -56,6 +57,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -127,13 +129,6 @@ public class WorkFragment extends Fragment implements LoaderManager.LoaderCallba
         mTaskRecyclerView.setAdapter(mAdapter);
 
         update_btn.setOnClickListener(update_onclickListner);
-//        more_btn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                mDataHelper.delete_("title=?", new String[]{"任务"});
-//            }
-//        });
-
         more_btn.setVisibility(View.INVISIBLE);
         mDataHelper = new TaskDataHelper(getActivity().getApplicationContext());
         mFieldDataHelper = new FieldDataHelper(getActivity().getApplicationContext());
@@ -152,10 +147,12 @@ public class WorkFragment extends Fragment implements LoaderManager.LoaderCallba
             SharedPreferences sp = getActivity().getSharedPreferences(InputType.loginInfoDB,
                     Activity.MODE_PRIVATE);
             final String name = sp.getString("name", null);
+            UnuploadTaskModel taskModel = new UnuploadTaskModel(getActivity());
+            final HashMap<String,String> map = taskModel.getUnuploadTask();
             new Thread(){
                 @Override
                 public void run() {
-                    int val = HttpClient.getInstance().getTaskInfo(name);
+                    int val = HttpClient.getInstance().getTaskInfo(name,map);
                     if(val == -1){
                         mHandler.sendEmptyMessage(-1);
                     }else if(val == 0) {
@@ -174,6 +171,9 @@ public class WorkFragment extends Fragment implements LoaderManager.LoaderCallba
                 HttpClient.getInstance().uploadTask(null, taskRecord);
             }
 
+            UnuploadTaskModel taskModel = new UnuploadTaskModel(getActivity());
+            taskModel.setUnuploadTask(taskRecord);
+
             new MaterialDialog.Builder(getActivity())
                     .title(taskRecord.getWorktask_name())
                     .content(taskRecord.getWorktask_content())
@@ -182,6 +182,10 @@ public class WorkFragment extends Fragment implements LoaderManager.LoaderCallba
                 @Override
                 public void onClick(MaterialDialog dialog, DialogAction which) {
                     if(taskRecord.getWorktask_type().equals("农药使用")){
+
+                        UnuploadTaskModel taskModel = new UnuploadTaskModel(getActivity());
+                        taskModel.removeUnuploadTask(taskRecord);
+
                         Intent intent = new Intent(getActivity(), PesticidesActivity.class);
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("task", taskRecord);

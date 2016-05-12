@@ -52,11 +52,18 @@ public class TaskDetailCursorAdapter extends BaseAbstractRecycleCursorAdapter<Re
             ((TaskViewHolder) holder).icon.setImageResource(resId);
         }
         String val = record.getWorktasklist_status();
-        if(val.equals("已完成")){
-            ((TaskViewHolder) holder).state.setText("完成");
-        }else {
-            ((TaskViewHolder) holder).state.setText("未完成");
-            ((TaskViewHolder) holder).state.setTextColor(context.getResources().getColor(R.color.text_red));
+        String sync = record.getSync();
+        if(sync.equals("false"))
+        {
+            ((TaskViewHolder) holder).state.setText("完成(未上传)");
+            ((TaskViewHolder) holder).state.setTextColor(context.getResources().getColor(R.color.colorPrimary));
+        }else{
+            if(val.equals("已完成")){
+                ((TaskViewHolder) holder).state.setText("完成");
+            }else {
+                ((TaskViewHolder) holder).state.setText("未完成");
+                ((TaskViewHolder) holder).state.setTextColor(context.getResources().getColor(R.color.text_red));
+            }
         }
         ((TaskViewHolder) holder).time.setText(record.getWorktask_publish_date());
 

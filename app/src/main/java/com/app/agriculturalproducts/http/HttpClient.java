@@ -28,6 +28,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -179,7 +180,7 @@ public class HttpClient {
         fieldList = parseField(result.getResult());
     }
 
-    public int getTaskInfo(String name)
+    public int getTaskInfo(String name,HashMap<String,String> map)
     {
         JSONObject object = new JSONObject();
         try {
@@ -194,7 +195,7 @@ public class HttpClient {
                 .setMethod(HttpMethods.Post).setHttpBody(new StringBody(object.toString()));
         try {
             Response<String> result = liteHttp.execute(stringRequest);
-            taskList = parseTask(result.getResult());
+            taskList = parseTask(result.getResult(),map);
         } catch (Exception e) {
             return -1;
         }
@@ -368,7 +369,7 @@ public class HttpClient {
         return null;
     }
 
-    public List<TaskRecord> parseTask(String val) {
+    public List<TaskRecord> parseTask(String val,HashMap<String,String> map) {
         try {
             List<TaskRecord> ls = new ArrayList<>();
             JSONObject object = new JSONObject(val);
@@ -377,7 +378,6 @@ public class HttpClient {
                 JSONArray array = object.getJSONArray("data");
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject jobject = (JSONObject) array.get(i);
-
                     TaskRecord task = new TaskRecord();
                     String value = (String) jobject.get("worktasklist_id");
                     if (!(value.equals("null") && value != null)) {
@@ -428,7 +428,11 @@ public class HttpClient {
                         task.setEmployee_card(value);
                     }
 
-
+                    if(map.containsKey(task.getWorktasklist_id())) {
+                        task.setSync("false");
+                    }else{
+                        task.setSync("true");
+                    }
                     ls.add(task);
                 }
             }

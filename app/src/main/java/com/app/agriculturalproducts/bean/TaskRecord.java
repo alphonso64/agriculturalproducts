@@ -22,6 +22,7 @@ public class TaskRecord implements Serializable {
     private String worktask_finish_date;
     private String employee_name;
     private String employee_card;
+    private String sync;
     private Long _id;
 
     public void printfInfo(){
@@ -30,7 +31,8 @@ public class TaskRecord implements Serializable {
                 + " " + "worktask_name" + ":" + worktask_name + " " + "worktask_type" + ":" + worktask_type
                 + " " + "worktask_content" + ":" + worktask_content + " " + "worktask_publish_people" + ":" + worktask_publish_people
                 + " " + "worktask_publish_date" + ":" + worktask_publish_date + " " + "worktask_finish_date" + ":" + worktask_finish_date
-                + " " + "employee_name" + ":" + employee_name + " " + "employee_card" + ":" + employee_card);
+                + " " + "employee_name" + ":" + employee_name + " " + "employee_card" + ":" + employee_card
+                + " " + "sync" + ":" + sync);
     }
 
         public static TaskRecord fromCursor(Cursor cursor) {
@@ -124,5 +126,13 @@ public class TaskRecord implements Serializable {
 
     public void setWorktasklist_id(String worktasklist_id) {
         this.worktasklist_id = worktasklist_id;
+    }
+
+    public String getSync() {
+        return sync;
+    }
+
+    public void setSync(String sync) {
+        this.sync = sync;
     }
 }
