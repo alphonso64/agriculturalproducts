@@ -3,12 +3,14 @@ package com.app.agriculturalproducts.bean;
 import android.database.Cursor;
 import android.util.Log;
 
+import java.io.Serializable;
+
 import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 
 /**
  * Created by ALPHONSO on 2016/2/25.
  */
-public class TaskRecord {
+public class TaskRecord implements Serializable {
     private String worktasklist_id;
     private String worktasklist_ischeck;
     private String worktasklist_status;

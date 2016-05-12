@@ -1116,7 +1116,6 @@ public class HttpClient {
             object.put("pickrecord_number", pickRecord.getPickrecord_number());
             object.put("pickrecord_area", pickRecord.getPickrecord_area());
             object.put("pickrecord_people", pickRecord.getPickrecord_people());
-            Log.e("testcc",object.toString());
         } catch (JSONException e) {
             return 0;
         }
@@ -1139,7 +1138,7 @@ public class HttpClient {
             object.put("otherrecord_place", otherRecord.getOtherrecord_place());
             object.put("otherrecord_people", otherRecord.getOtherrecord_people());
             object.put("plantrecord_id", otherRecord.getLocal_plant_id());
-            Log.e("testcc",object.toString());
+
         } catch (JSONException e) {
             return 0;
         }
@@ -1147,6 +1146,25 @@ public class HttpClient {
         header.put("contentType", "utf-8");
         header.put("Content-type", "application/x-java-serialized-object");
         StringRequest stringRequest = new StringRequest(Configure.ADD_OTHERRECORD_URL).setHeaders(header)
+                .setMethod(HttpMethods.Post).setHttpBody(new StringBody(object.toString()));
+        stringRequest.setHttpListener(listener);
+        liteHttp.executeAsync(stringRequest);
+        return 0;
+    }
+
+    public int uploadTask(HttpListener<String> listener,TaskRecord taskRecord){
+        JSONObject object = new JSONObject();
+        try {
+            object.put("worktasklist_id", taskRecord.getWorktasklist_id());
+            object.put("worktasklist_status", taskRecord.getWorktasklist_status());
+        } catch (JSONException e) {
+            return 0;
+        }
+        Log.e("testcc", object.toString());
+        LinkedHashMap<String, String> header = new LinkedHashMap<>();
+        header.put("contentType", "utf-8");
+        header.put("Content-type", "application/x-java-serialized-object");
+        StringRequest stringRequest = new StringRequest(Configure.UPDATE_WORKTASKLIST_STATUS_URL).setHeaders(header)
                 .setMethod(HttpMethods.Post).setHttpBody(new StringBody(object.toString()));
         stringRequest.setHttpListener(listener);
         liteHttp.executeAsync(stringRequest);

@@ -127,7 +127,7 @@ public class DataProvider extends ContentProvider {
                 case TASK_TABLE://Demo列表
                     cursor =  cupboard().withDatabase(db).query(TaskRecord.class).
                             withProjection(projection).
-                            withSelection(selection).
+                            withSelection(selection, selectionArgs).
                             orderBy(sortOrder).
                             getCursor();
                     cursor.setNotificationUri(getContext().getContentResolver(), uri);

@@ -77,6 +77,7 @@ public class TaskDataHelper extends BaseDataHelper implements DBInterface<TaskRe
 
     @Override
     public CursorLoader getCursorLoader() {
+//        return new CursorLoader(getContext(), getContentUri(), null, "worktasklist_status=? or worktasklist_status=?",new String[]{"已查看","未查看"}, null);
         return new CursorLoader(getContext(), getContentUri(), null, null, null, null);
     }
 
@@ -85,7 +86,7 @@ public class TaskDataHelper extends BaseDataHelper implements DBInterface<TaskRe
     }
 
     public CursorLoader getDoneCursorLoader() {
-        return new CursorLoader(getContext(),getContentUri(), null, null, null, null);
+        return new CursorLoader(getContext(),getContentUri(), null, "worktasklist_status=?", new String[]{"已完成"}, null);
     }
 
 }

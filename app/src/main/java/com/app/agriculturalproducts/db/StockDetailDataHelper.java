@@ -5,11 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.v4.content.CursorLoader;
-import android.util.Log;
-
-
 import com.app.agriculturalproducts.StockDetailActivity;
-import com.app.agriculturalproducts.bean.PersonalStock;
 import com.app.agriculturalproducts.bean.PersonalStockDetail;
 
 import java.util.ArrayList;
@@ -57,7 +53,6 @@ public class StockDetailDataHelper extends BaseDataHelper implements DBInterface
     }
 
     public void insert_(PersonalStockDetail data){
-        Log.e("tetstbb", "insert_");
         ContentValues values = cupboard().withEntity(PersonalStockDetail.class).toContentValues(data);
         insert(values);
     }

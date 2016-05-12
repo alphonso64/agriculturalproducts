@@ -128,14 +128,14 @@ public class PerticidesFragment extends BaseUploadFragment {
                 return InputType.INPUT_SAVE_OK;
             }
         }else{
-            if(!isEmpty_()){
+            if(!isEmpty()){
                 saveInfo();
                 flag = true;
                 disableWidget();
-                Task task = (Task)object;
-                task.setIsDone("true");
-                ContentValues values = cupboard().withEntity(Task.class).toContentValues(task);
-                taskDataHelper.updateTask(values, String.valueOf(task.get_id()));
+//                Task task = (Task)object;
+//                task.setIsDone("true");
+//                ContentValues values = cupboard().withEntity(Task.class).toContentValues(task);
+//                taskDataHelper.updateTask(values, String.valueOf(task.get_id()));
                 return InputType.INPUT_SAVE_OK;
             }
         }
@@ -244,7 +244,7 @@ public class PerticidesFragment extends BaseUploadFragment {
     }
 
     void checkInputType(){
-        if(object!=null){
+//        if(object!=null){
 //            fieldImg.setVisibility(View.INVISIBLE);
 //            perticides_text.setBackgroundResource(R.drawable.text_backgroud);
 //            perticides_text.setFocusable(false);
@@ -261,7 +261,7 @@ public class PerticidesFragment extends BaseUploadFragment {
 //            spec_text.setText(task.getP_spec());
 //            type_text.setText(task.getP_type());
 //            area_text.setText(task.getP_area());
-        }
+//        }
     }
 
     private DatePickerDialog.OnDateSetListener DatePickerListener = new DatePickerDialog.OnDateSetListener() {

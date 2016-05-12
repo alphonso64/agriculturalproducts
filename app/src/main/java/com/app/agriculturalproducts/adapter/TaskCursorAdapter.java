@@ -57,8 +57,6 @@ public class TaskCursorAdapter extends BaseAbstractRecycleCursorAdapter<Recycler
             int resId = context.getResources().getIdentifier("te", "drawable", context.getPackageName());
             ((TaskViewHolder) holder).icon.setImageResource(resId);
         }
-//
-//
         ((TaskViewHolder) holder).time.setText(record.getWorktask_publish_date());
     }
 

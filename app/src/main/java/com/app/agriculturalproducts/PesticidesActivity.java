@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.app.agriculturalproducts.bean.PersticidesUsage;
 import com.app.agriculturalproducts.bean.Task;
+import com.app.agriculturalproducts.bean.TaskRecord;
 import com.app.agriculturalproducts.db.PersticidesUsageDataHelper;
 import com.app.agriculturalproducts.fragment.DataFragment;
 import com.app.agriculturalproducts.fragment.PerticidesFragment;
@@ -48,7 +49,7 @@ public class PesticidesActivity extends BaseUploadActivity {
         editFragment = new PerticidesFragment();
         dataFragment = new PerticidesHistoryFragment();
         currentFragment = editFragment;
-        Task task = (Task)getIntent().getSerializableExtra("task");
+        TaskRecord task = (TaskRecord)getIntent().getSerializableExtra("task");
         if(task!=null){
             editFragment.object = task;
         }

@@ -68,7 +68,6 @@ public class FertilizerUsageDataHelper extends BaseDataHelper implements DBInter
 
     public void repalceInfo(List<FertilizerRecord> listData){
         delete_("saved = ?", new String[]{"yes"});
-        //delete(null,null);
         bulkInsert(listData);
     }
 
