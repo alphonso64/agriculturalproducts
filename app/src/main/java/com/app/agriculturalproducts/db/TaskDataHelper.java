@@ -59,17 +59,38 @@ public class TaskDataHelper extends BaseDataHelper implements DBInterface<TaskRe
     }
 
     public void delete_(String where, String[] selectionArgs ){
-        delete(where,selectionArgs);
+        delete(where, selectionArgs);
     }
 
-    public void insert_(Task data){
-        ContentValues values = cupboard().withEntity(Task.class).toContentValues(data);
+    public void insert_(TaskRecord data){
+        ContentValues values = cupboard().withEntity(TaskRecord.class).toContentValues(data);
         insert(values);
     }
 
     public void updateTask(ContentValues values,String id){
-        update(values, "_id = ?", new String[]{id});
+        update(values, "worktasklist_id = ?", new String[]{id});
     }
+
+    public TaskRecord queryTaskRecord(String id){
+        Cursor cursor =  query(null,"worktasklist_id = ?", new String[]{id},null);
+        if(cursor.moveToPosition(0)){
+            TaskRecord task = TaskRecord.fromCursor(cursor);
+            return  task;
+        }
+        return null;
+    }
+
+    public void updateSyncTask(String id){
+        Cursor cursor =  query(null,"worktasklist_id = ?", new String[]{id},null);
+        if(cursor.moveToPosition(0)){
+            TaskRecord task = TaskRecord.fromCursor(cursor);
+            task.setSync("true");
+            task.setWorktasklist_status("已完成");
+            ContentValues values = cupboard().withEntity(TaskRecord.class).toContentValues(task);
+            update(values, "worktasklist_id = ?", new String[]{id});
+        }
+    }
+
     public void replace(List<TaskRecord> listData){
         delete(null, null);
         bulkInsert(listData);
@@ -78,7 +99,7 @@ public class TaskDataHelper extends BaseDataHelper implements DBInterface<TaskRe
     @Override
     public CursorLoader getCursorLoader() {
         return new CursorLoader(getContext(), getContentUri(), null, "worktasklist_status!=? and sync=?",new String[]{"已完成","true"}, null);
-//        return new CursorLoader(getContext(), getContentUri(), null, null, null, null);
+//       return new CursorLoader(getContext(), getContentUri(), null, null, null, null);
     }
 
     public CursorLoader getDetailCursorLoader() {

@@ -14,11 +14,13 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -75,6 +77,12 @@ public class MainDrawlayoutActivity extends BaseActivity {
                 editor.commit();
                 progressDialog.dismiss();
                 setPersonINfo();
+            }else if(msg.what == -1){
+                progressDialog.dismiss();
+                Toast toast = Toast.makeText(MainDrawlayoutActivity.this,
+                        "网络未连接", Toast.LENGTH_SHORT);
+                toast.setGravity(Gravity.CENTER, 0, 0);
+                toast.show();
             }else{
                 progressDialog.dismiss();
                 dataFragment.updateData();
@@ -196,8 +204,11 @@ public class MainDrawlayoutActivity extends BaseActivity {
                 new Thread(){
                     @Override
                     public void run() {
-                        HttpClient.getInstance().getFieldInfo(name);
-                        mHandler.sendEmptyMessage(2);
+                        if(HttpClient.getInstance().getFieldInfo(name)){
+                            mHandler.sendEmptyMessage(2);
+                        }else{
+                            mHandler.sendEmptyMessage(-1);
+                        }
                     }}.start();
             }if(item.getItemId()==R.id.action_update_single){
                 updateALLDB();
@@ -232,50 +243,55 @@ public class MainDrawlayoutActivity extends BaseActivity {
 
             @Override
             public void run() {
-                HttpClient.getInstance().getAllInfo(name);
-                //保存地块信息至数据库
-                FieldDataHelper fieldDataHelper = new FieldDataHelper(MainDrawlayoutActivity.this);
-                if(HttpClient.getInstance().fieldList!=null)
-                    fieldDataHelper.replace(HttpClient.getInstance().fieldList);
+                if(HttpClient.getInstance().getAllInfo(name))
+                {
+                    //保存地块信息至数据库
+                    FieldDataHelper fieldDataHelper = new FieldDataHelper(MainDrawlayoutActivity.this);
+                    if(HttpClient.getInstance().fieldList!=null)
+                        fieldDataHelper.replace(HttpClient.getInstance().fieldList);
 
-                PlantSpeciesDataHelper plantSpeciesDataHelper = new PlantSpeciesDataHelper(MainDrawlayoutActivity.this);
-                if(HttpClient.getInstance().planterList!=null)
-                    plantSpeciesDataHelper.repalceInfo(HttpClient.getInstance().planterList);
+                    PlantSpeciesDataHelper plantSpeciesDataHelper = new PlantSpeciesDataHelper(MainDrawlayoutActivity.this);
+                    if(HttpClient.getInstance().planterList!=null)
+                        plantSpeciesDataHelper.repalceInfo(HttpClient.getInstance().planterList);
 
-                FertilizerUsageDataHelper fertilizerUsageDataHelper = new FertilizerUsageDataHelper(MainDrawlayoutActivity.this);
-                if(HttpClient.getInstance().fertiList!=null)
-                    fertilizerUsageDataHelper.repalceInfo(HttpClient.getInstance().fertiList);
+                    FertilizerUsageDataHelper fertilizerUsageDataHelper = new FertilizerUsageDataHelper(MainDrawlayoutActivity.this);
+                    if(HttpClient.getInstance().fertiList!=null)
+                        fertilizerUsageDataHelper.repalceInfo(HttpClient.getInstance().fertiList);
 
-                PersticidesUsageDataHelper persticidesUsageDataHelper = new PersticidesUsageDataHelper(MainDrawlayoutActivity.this);
-                if(HttpClient.getInstance().preventionList!=null)
-                    persticidesUsageDataHelper.repalceInfo(HttpClient.getInstance().preventionList);
+                    PersticidesUsageDataHelper persticidesUsageDataHelper = new PersticidesUsageDataHelper(MainDrawlayoutActivity.this);
+                    if(HttpClient.getInstance().preventionList!=null)
+                        persticidesUsageDataHelper.repalceInfo(HttpClient.getInstance().preventionList);
 
-                PickingDataHelper pickingDataHelper = new PickingDataHelper(MainDrawlayoutActivity.this);
-                if(HttpClient.getInstance().pickList!=null)
-                    pickingDataHelper.repalceInfo(HttpClient.getInstance().pickList);
+                    PickingDataHelper pickingDataHelper = new PickingDataHelper(MainDrawlayoutActivity.this);
+                    if(HttpClient.getInstance().pickList!=null)
+                        pickingDataHelper.repalceInfo(HttpClient.getInstance().pickList);
 
-                OtherInfoDataHelper otherInfoDataHelper = new OtherInfoDataHelper(MainDrawlayoutActivity.this);
-                if(HttpClient.getInstance().otherList!=null)
-                    otherInfoDataHelper.repalceInfo(HttpClient.getInstance().otherList);
+                    OtherInfoDataHelper otherInfoDataHelper = new OtherInfoDataHelper(MainDrawlayoutActivity.this);
+                    if(HttpClient.getInstance().otherList!=null)
+                        otherInfoDataHelper.repalceInfo(HttpClient.getInstance().otherList);
 
-                StockDataHelper stockDataHelper = new StockDataHelper(MainDrawlayoutActivity.this);
-                if(HttpClient.getInstance().seedStockList!=null)
-                    stockDataHelper.replace(HttpClient.getInstance().seedStockList);
-                if(HttpClient.getInstance().fStockList!=null)
-                    stockDataHelper.bulkInsert(HttpClient.getInstance().fStockList);
-                if(HttpClient.getInstance().pStcokList!=null)
-                 stockDataHelper.bulkInsert(HttpClient.getInstance().pStcokList);
+                    StockDataHelper stockDataHelper = new StockDataHelper(MainDrawlayoutActivity.this);
+                    if(HttpClient.getInstance().seedStockList!=null)
+                        stockDataHelper.replace(HttpClient.getInstance().seedStockList);
+                    if(HttpClient.getInstance().fStockList!=null)
+                        stockDataHelper.bulkInsert(HttpClient.getInstance().fStockList);
+                    if(HttpClient.getInstance().pStcokList!=null)
+                        stockDataHelper.bulkInsert(HttpClient.getInstance().pStcokList);
 
-                StockDetailDataHelper stockDetailDataHelper = new StockDetailDataHelper(MainDrawlayoutActivity.this);
-                if(HttpClient.getInstance().enterstockList!=null)
-                    stockDetailDataHelper.replace(HttpClient.getInstance().enterstockList);
-                if(HttpClient.getInstance().outstockList!=null)
-                    stockDetailDataHelper.bulkInsert(HttpClient.getInstance().outstockList);
-                //保存雇员信息sp中
-                EmployeeInfo employeeInfo = HttpClient.getInstance().employeeInfo;
-                if(employeeInfo!=null)
-                    employeeInfoModel.setEmployeeInfo(employeeInfo);
-                mHandler.sendEmptyMessage(1);
+                    StockDetailDataHelper stockDetailDataHelper = new StockDetailDataHelper(MainDrawlayoutActivity.this);
+                    if(HttpClient.getInstance().enterstockList!=null)
+                        stockDetailDataHelper.replace(HttpClient.getInstance().enterstockList);
+                    if(HttpClient.getInstance().outstockList!=null)
+                        stockDetailDataHelper.bulkInsert(HttpClient.getInstance().outstockList);
+                    //保存雇员信息sp中
+                    EmployeeInfo employeeInfo = HttpClient.getInstance().employeeInfo;
+                    if(employeeInfo!=null)
+                        employeeInfoModel.setEmployeeInfo(employeeInfo);
+                    mHandler.sendEmptyMessage(1);
+                }else {
+                    mHandler.sendEmptyMessage(-1);
+                }
+
             }}.start();
     }
 

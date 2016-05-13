@@ -25,6 +25,7 @@ public class PickRecord {
     private String local_plant_id;
     private Long _id;
     private String local_plant_table_index;
+    private String task_id;
 
     public static PickRecord fromCursor(Cursor cursor) {
         PickRecord pickRecord= cupboard().withCursor(cursor).get(PickRecord.class);
@@ -167,5 +168,13 @@ public class PickRecord {
 
     public void setLocal_plant_table_index(String local_plant_table_index) {
         this.local_plant_table_index = local_plant_table_index;
+    }
+
+    public String getTask_id() {
+        return task_id;
+    }
+
+    public void setTask_id(String task_id) {
+        this.task_id = task_id;
     }
 }

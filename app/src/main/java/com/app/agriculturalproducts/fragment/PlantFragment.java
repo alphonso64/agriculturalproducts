@@ -31,14 +31,18 @@ import com.app.agriculturalproducts.bean.FieldInfo;
 import com.app.agriculturalproducts.bean.PersonalStock;
 import com.app.agriculturalproducts.bean.PlantSpecies;
 import com.app.agriculturalproducts.bean.PlanterRecord;
+import com.app.agriculturalproducts.bean.PreventionRecord;
 import com.app.agriculturalproducts.bean.Task;
+import com.app.agriculturalproducts.bean.TaskRecord;
 import com.app.agriculturalproducts.db.FieldDataHelper;
 import com.app.agriculturalproducts.db.PlantSpeciesDataHelper;
 import com.app.agriculturalproducts.db.StockDataHelper;
+import com.app.agriculturalproducts.db.TaskDataHelper;
 import com.app.agriculturalproducts.http.HttpClient;
 import com.app.agriculturalproducts.model.EmployeeInfoModel;
 import com.app.agriculturalproducts.util.EditTextUtil;
 import com.app.agriculturalproducts.util.InputType;
+import com.app.agriculturalproducts.util.TaskRecordUtil;
 import com.litesuits.http.listener.HttpListener;
 import com.litesuits.http.response.Response;
 
@@ -61,6 +65,7 @@ import butterknife.OnClick;
  */
 public class PlantFragment extends BaseUploadFragment {
     private FieldDataHelper fieldDataHelper;
+    private TaskDataHelper taskDataHelper;
     private PlantSpeciesDataHelper plantSpeciesDataHelper;
 
     @Bind(R.id.date_img)
@@ -107,25 +112,36 @@ public class PlantFragment extends BaseUploadFragment {
             return InputType.INPUT_SAVE_ALREADY;
         }
         if (!isEmpty()) {
-            PlanterRecord planterRecord = new PlanterRecord();
-            planterRecord.setEmployee_name(plot_info_text.getText().toString());
-            planterRecord.setField_name(field_text.getText().toString());
-            planterRecord.setPlantrecord_specifications(spec_text.getText().toString());
-            planterRecord.setPlantrecord_breed(species_text.getText().toString());
-            planterRecord.setPlantrecord_plant_date(date_text.getText().toString());
-            planterRecord.setPlantrecord_seed_name(seed_text.getText().toString());
-            planterRecord.setPlantrecord_seed_number(num_text.getText().toString());
-            planterRecord.setPlantrecord_seed_source(source_text.getText().toString());
-            planterRecord.setSaved("no");
-            planterRecord.setField_plant_area(plant_area.getText().toString());
-            planterRecord.setLocal_field_id(field.getField_id());
-            planterRecord.setLocal_stock_id(personalStock.getPersonalstock_id());
-            plantSpeciesDataHelper.insert_(planterRecord);
+            String taskID = "null";
+            if(object != null) {
+                TaskRecord task = (TaskRecord)object;
+                TaskRecordUtil.recordLocalDoneTask(getActivity(), taskDataHelper, task);
+                taskID = task.getWorktasklist_id();
+            }
+            saveInfo(taskID);
             flag = true;
             disableWidget();
             return InputType.INPUT_SAVE_OK;
         }
         return InputType.INPUT_EMPTY;
+    }
+
+    private void saveInfo(String taskID){
+        PlanterRecord planterRecord = new PlanterRecord();
+        planterRecord.setEmployee_name(plot_info_text.getText().toString());
+        planterRecord.setField_name(field_text.getText().toString());
+        planterRecord.setPlantrecord_specifications(spec_text.getText().toString());
+        planterRecord.setPlantrecord_breed(species_text.getText().toString());
+        planterRecord.setPlantrecord_plant_date(date_text.getText().toString());
+        planterRecord.setPlantrecord_seed_name(seed_text.getText().toString());
+        planterRecord.setPlantrecord_seed_number(num_text.getText().toString());
+        planterRecord.setPlantrecord_seed_source(source_text.getText().toString());
+        planterRecord.setSaved("no");
+        planterRecord.setField_plant_area(plant_area.getText().toString());
+        planterRecord.setLocal_field_id(field.getField_id());
+        planterRecord.setLocal_stock_id(personalStock.getPersonalstock_id());
+        planterRecord.setTask_id(taskID);
+        plantSpeciesDataHelper.insert_(planterRecord);
     }
 
     private void disableWidget() {
@@ -165,6 +181,7 @@ public class PlantFragment extends BaseUploadFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         fieldDataHelper = new FieldDataHelper(getActivity().getApplicationContext());
+        taskDataHelper = new TaskDataHelper(getActivity().getApplicationContext());
         plantSpeciesDataHelper = new PlantSpeciesDataHelper(getActivity().getApplicationContext());
         cursor = fieldDataHelper.getCursor();
         adapter = new SimpleCursorAdapter(getActivity(),

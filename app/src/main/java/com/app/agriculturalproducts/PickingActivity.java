@@ -3,6 +3,7 @@ package com.app.agriculturalproducts;
 import android.os.Bundle;
 
 import com.app.agriculturalproducts.bean.Task;
+import com.app.agriculturalproducts.bean.TaskRecord;
 import com.app.agriculturalproducts.fragment.FertilizerFragment;
 import com.app.agriculturalproducts.fragment.FertilizerHistoryFragment;
 import com.app.agriculturalproducts.fragment.PickingFragment;
@@ -27,7 +28,7 @@ public class PickingActivity extends BaseUploadActivity {
         editFragment = new PickingFragment();
         dataFragment = new PickingHistoryFragment();
         currentFragment = editFragment;
-        Task task = (Task)getIntent().getSerializableExtra("task");
+        TaskRecord task = (TaskRecord)getIntent().getSerializableExtra("task");
         if(task!=null){
             editFragment.object = task;
         }

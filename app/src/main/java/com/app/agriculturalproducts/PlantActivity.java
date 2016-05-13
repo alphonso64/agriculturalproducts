@@ -3,6 +3,7 @@ package com.app.agriculturalproducts;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.app.agriculturalproducts.bean.TaskRecord;
 import com.app.agriculturalproducts.fragment.DataFragment;
 import com.app.agriculturalproducts.fragment.FertilizerFragment;
 import com.app.agriculturalproducts.fragment.FertilizerHistoryFragment;
@@ -27,6 +28,10 @@ public class PlantActivity extends BaseUploadActivity {
         editFragment = new PlantFragment();
         dataFragment = new PlantHistoryFragment();
         currentFragment = editFragment;
+        TaskRecord task = (TaskRecord)getIntent().getSerializableExtra("task");
+        if(task!=null){
+            editFragment.object = task;
+        }
         getSupportFragmentManager().beginTransaction().add(R.id.frame_view,editFragment).commit();
 
     }

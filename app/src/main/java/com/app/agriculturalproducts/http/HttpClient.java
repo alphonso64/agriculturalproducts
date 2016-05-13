@@ -99,12 +99,12 @@ public class HttpClient {
                 .setMethod(HttpMethods.Post).setHttpBody(new StringBody(object.toString())).setHttpListener(listener));
     }
 
-    public void getStockInfo(String name){
+    public boolean getStockInfo(String name){
         JSONObject object = new JSONObject();
         try {
             object.put("userinfo_username", name);
         } catch (JSONException e) {
-            return;
+            return false;
         }
         LinkedHashMap<String, String> header = new LinkedHashMap<>();
         header.put("contentType", "utf-8");
@@ -112,35 +112,39 @@ public class HttpClient {
         StringRequest stringRequest = new StringRequest(Configure.GET_EMPLOYEE_BY_USERNAME_URL).setHeaders(header)
                 .setMethod(HttpMethods.Post).setHttpBody(new StringBody(object.toString()));
 
-        stringRequest.setUri(Configure.GET_SEED_PERSONALSTOCK_BY_USERNAME_URL);
-        Response<String> result = liteHttp.execute(stringRequest);
-        seedStockList = parsePersonalStock(result.getResult(),0);
-        for (int i = 0; i < seedStockList.size(); i++) {
-            seedStockList.get(i).printfInfo();
-        }
-        // Log.e("testcc", result.getResult());
+        try {
+            stringRequest.setUri(Configure.GET_SEED_PERSONALSTOCK_BY_USERNAME_URL);
+            Response<String> result = liteHttp.execute(stringRequest);
+            seedStockList = parsePersonalStock(result.getResult(),0);
 
-        stringRequest.setUri(Configure.GET_FERTILIZER_PERSONALSTOCK_BY_USERNAME_URL);
-        result = liteHttp.execute(stringRequest);
-        fStockList = parsePersonalStock(result.getResult(), 1);
-        for (int i = 0; i < fStockList.size(); i++) {
-            fStockList.get(i).printfInfo();
-        }
+            stringRequest.setUri(Configure.GET_FERTILIZER_PERSONALSTOCK_BY_USERNAME_URL);
+            result = liteHttp.execute(stringRequest);
+            fStockList = parsePersonalStock(result.getResult(), 1);
 
-        stringRequest.setUri(Configure.GET_PESTICIDE_PERSONALSTOCK_BY_USERNAME_URL);
-        result = liteHttp.execute(stringRequest);
-        pStcokList = parsePersonalStock(result.getResult(), 2);
-        for (int i = 0; i < pStcokList.size(); i++) {
-            pStcokList.get(i).printfInfo();
+            stringRequest.setUri(Configure.GET_PESTICIDE_PERSONALSTOCK_BY_USERNAME_URL);
+            result = liteHttp.execute(stringRequest);
+            pStcokList = parsePersonalStock(result.getResult(), 2);
+            return true;
+        } catch (Exception e) {
+            return false;
         }
+//        for (int i = 0; i < fStockList.size(); i++) {
+//            fStockList.get(i).printfInfo();
+//        }
+//        for (int i = 0; i < pStcokList.size(); i++) {
+//            pStcokList.get(i).printfInfo();
+//        }
+//        for (int i = 0; i < seedStockList.size(); i++) {
+//            seedStockList.get(i).printfInfo();
+//        }
     }
 
-    public void getStockDetailInfo(String name){
+    public boolean getStockDetailInfo(String name){
         JSONObject object = new JSONObject();
         try {
             object.put("userinfo_username", name);
         } catch (JSONException e) {
-            return;
+            return false;
         }
         LinkedHashMap<String, String> header = new LinkedHashMap<>();
         header.put("contentType", "utf-8");
@@ -148,27 +152,34 @@ public class HttpClient {
         StringRequest stringRequest = new StringRequest(Configure.GET_EMPLOYEE_BY_USERNAME_URL).setHeaders(header)
                 .setMethod(HttpMethods.Post).setHttpBody(new StringBody(object.toString()));
 
-        stringRequest.setUri(Configure.GET_ENTERPERSONALSTOCKDETAIL_BY_USERNAME_URL);
-        Response<String> result = liteHttp.execute(stringRequest);
-        enterstockList = parsePersonalStockDetail(result.getResult(), 0);
-        for (int i = 0; i < enterstockList.size(); i++) {
-            enterstockList.get(i).printfInfo();
-        }
 
-        stringRequest.setUri(Configure.GET_OUTPERSONALSTOCKDETAIL_BY_USERNAME_URL);
-        result = liteHttp.execute(stringRequest);
-        outstockList= parsePersonalStockDetail(result.getResult(), 1);
-        for (int i = 0; i < outstockList.size(); i++) {
-            outstockList.get(i).printfInfo();
+
+        try {
+            stringRequest.setUri(Configure.GET_ENTERPERSONALSTOCKDETAIL_BY_USERNAME_URL);
+            Response<String> result = liteHttp.execute(stringRequest);
+            enterstockList = parsePersonalStockDetail(result.getResult(), 0);
+
+            stringRequest.setUri(Configure.GET_OUTPERSONALSTOCKDETAIL_BY_USERNAME_URL);
+            result = liteHttp.execute(stringRequest);
+            outstockList= parsePersonalStockDetail(result.getResult(), 1);
+            return true;
+        } catch (Exception e) {
+            return false;
         }
+//        for (int i = 0; i < enterstockList.size(); i++) {
+//            enterstockList.get(i).printfInfo();
+//        }
+//        for (int i = 0; i < outstockList.size(); i++) {
+//            outstockList.get(i).printfInfo();
+//        }
     }
 
-    public void getFieldInfo(String name){
+    public boolean getFieldInfo(String name){
         JSONObject object = new JSONObject();
         try {
             object.put("userinfo_username", name);
         } catch (JSONException e) {
-            return;
+            return false;
         }
         LinkedHashMap<String, String> header = new LinkedHashMap<>();
         header.put("contentType", "utf-8");
@@ -176,8 +187,14 @@ public class HttpClient {
         StringRequest stringRequest = new StringRequest(Configure.GET_FIELD_BY_USERNAME_URL).setHeaders(header)
                 .setMethod(HttpMethods.Post).setHttpBody(new StringBody(object.toString()));
 
-        Response<String> result = liteHttp.execute(stringRequest);
-        fieldList = parseField(result.getResult());
+        try {
+            Response<String> result = liteHttp.execute(stringRequest);
+            fieldList = parseField(result.getResult());
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+
     }
 
     public int getTaskInfo(String name,HashMap<String,String> map)
@@ -206,12 +223,12 @@ public class HttpClient {
     }
 
 
-    public void getAllInfo(String name) {
+    public boolean getAllInfo(String name) {
         JSONObject object = new JSONObject();
         try {
             object.put("userinfo_username", name);
         } catch (JSONException e) {
-            return;
+            return false;
         }
         LinkedHashMap<String, String> header = new LinkedHashMap<>();
         header.put("contentType", "utf-8");
@@ -219,91 +236,93 @@ public class HttpClient {
         StringRequest stringRequest = new StringRequest(Configure.GET_EMPLOYEE_BY_USERNAME_URL).setHeaders(header)
                 .setMethod(HttpMethods.Post).setHttpBody(new StringBody(object.toString()));
 
-        Response<String> result = liteHttp.execute(stringRequest);
-        employeeInfo = parseEmployeeInfo(result.getResult());
+        try {
+            Response<String> result = liteHttp.execute(stringRequest);
+            employeeInfo = parseEmployeeInfo(result.getResult());
 //        Log.e("testcc", result.getResult());
 //        employeeInfo.printfInfo();
 
-        stringRequest.setUri(Configure.GET_FIELD_BY_USERNAME_URL);
-        result = liteHttp.execute(stringRequest);
-        fieldList = parseField(result.getResult());
-        Log.e("testcc", result.getResult() + fieldList.size());
+            stringRequest.setUri(Configure.GET_FIELD_BY_USERNAME_URL);
+            result = liteHttp.execute(stringRequest);
+            fieldList = parseField(result.getResult());
+            Log.e("testcc", result.getResult() + fieldList.size());
 //        for(int i=0;i<fieldList.size();i++){
 //            fieldList.get(i).printfInfo();
 //        }
 
-        stringRequest.setUri(Configure.GET_PLANTRECORD_BY_USERNAME_URL);
-        result = liteHttp.execute(stringRequest);
-        planterList = parsePlant(result.getResult());
-        Log.e("testcc", result.getResult()+planterList.size());
+            stringRequest.setUri(Configure.GET_PLANTRECORD_BY_USERNAME_URL);
+            result = liteHttp.execute(stringRequest);
+            planterList = parsePlant(result.getResult());
+            Log.e("testcc", result.getResult()+planterList.size());
 //        for(int i=0;i<planterList.size();i++){
 //            planterList.get(i).printfInfo();
 //        }
 
-        stringRequest.setUri(Configure.GET_FERTILIZERECORD_BY_USERNAME_URL);
-        result = liteHttp.execute(stringRequest);
-        fertiList = parseFertilizer(result.getResult());
+            stringRequest.setUri(Configure.GET_FERTILIZERECORD_BY_USERNAME_URL);
+            result = liteHttp.execute(stringRequest);
+            fertiList = parseFertilizer(result.getResult());
 //        Log.e("testcc", result.getResult()+fertiList.size());
 //        for(int i=0;i<fertiList.size();i++){
 //            fertiList.get(i).printfInfo();
 //        }
 
 
-        stringRequest.setUri(Configure.GET_PREVENTIONRECORD_BY_USERNAME_URL);
-        result = liteHttp.execute(stringRequest);
-        preventionList = parsePrevention(result.getResult());
+            stringRequest.setUri(Configure.GET_PREVENTIONRECORD_BY_USERNAME_URL);
+            result = liteHttp.execute(stringRequest);
+            preventionList = parsePrevention(result.getResult());
 //        Log.e("testcc", result.getResult()+preventionList.size());
 //        for(int i=0;i<preventionList.size();i++){
 //            preventionList.get(i).printfInfo();
 //        }
 
-        stringRequest.setUri(Configure.GET_PICKRECORD_BY_USERNAME_URL);
-        result = liteHttp.execute(stringRequest);
-        pickList = parsePick(result.getResult());
+            stringRequest.setUri(Configure.GET_PICKRECORD_BY_USERNAME_URL);
+            result = liteHttp.execute(stringRequest);
+            pickList = parsePick(result.getResult());
 //        Log.e("testcc", result.getResult()+pickList.size());
 //        for(int i=0;i<pickList.size();i++){
 //            pickList.get(i).printfInfo();
 //        }
 
-        stringRequest.setUri(Configure.GET_OTHERRECORD_BY_USERNAME_URL);
-        result = liteHttp.execute(stringRequest);
-        otherList = parseOther(result.getResult());
-        //Log.e("testcc", result.getResult());
+            stringRequest.setUri(Configure.GET_OTHERRECORD_BY_USERNAME_URL);
+            result = liteHttp.execute(stringRequest);
+            otherList = parseOther(result.getResult());
+            //Log.e("testcc", result.getResult());
 
-        stringRequest.setUri(Configure.GET_ENTERPERSONALSTOCKDETAIL_BY_USERNAME_URL);
-        result = liteHttp.execute(stringRequest);
-        enterstockList = parsePersonalStockDetail(result.getResult(),0);
+            stringRequest.setUri(Configure.GET_ENTERPERSONALSTOCKDETAIL_BY_USERNAME_URL);
+            result = liteHttp.execute(stringRequest);
+            enterstockList = parsePersonalStockDetail(result.getResult(),0);
 //        Log.e("testcc", result.getResult());
 //        for (int i = 0; i < stockList.size(); i++) {
 //            stockList.get(i).printfInfo();
 //        }
-        stringRequest.setUri(Configure.GET_OUTPERSONALSTOCKDETAIL_BY_USERNAME_URL);
-        result = liteHttp.execute(stringRequest);
-        outstockList = parsePersonalStockDetail(result.getResult(),1);
+            stringRequest.setUri(Configure.GET_OUTPERSONALSTOCKDETAIL_BY_USERNAME_URL);
+            result = liteHttp.execute(stringRequest);
+            outstockList = parsePersonalStockDetail(result.getResult(),1);
 
-        stringRequest.setUri(Configure.GET_SEED_PERSONALSTOCK_BY_USERNAME_URL);
-        result = liteHttp.execute(stringRequest);
-        seedStockList = parsePersonalStock(result.getResult(),0);
+            stringRequest.setUri(Configure.GET_SEED_PERSONALSTOCK_BY_USERNAME_URL);
+            result = liteHttp.execute(stringRequest);
+            seedStockList = parsePersonalStock(result.getResult(),0);
 //        for (int i = 0; i < seedStockList.size(); i++) {
 //            seedStockList.get(i).printfInfo();
 //        }
-        Log.e("testcc", result.getResult());
 
-        stringRequest.setUri(Configure.GET_FERTILIZER_PERSONALSTOCK_BY_USERNAME_URL);
-        result = liteHttp.execute(stringRequest);
-        fStockList = parsePersonalStock(result.getResult(),1);
+            stringRequest.setUri(Configure.GET_FERTILIZER_PERSONALSTOCK_BY_USERNAME_URL);
+            result = liteHttp.execute(stringRequest);
+            fStockList = parsePersonalStock(result.getResult(),1);
 //        for (int i = 0; i < fStockList.size(); i++) {
 //            fStockList.get(i).printfInfo();
 //        }
-        Log.e("testcc", result.getResult());
 
-        stringRequest.setUri(Configure.GET_PESTICIDE_PERSONALSTOCK_BY_USERNAME_URL);
-        result = liteHttp.execute(stringRequest);
-        pStcokList = parsePersonalStock(result.getResult(),2);
+            stringRequest.setUri(Configure.GET_PESTICIDE_PERSONALSTOCK_BY_USERNAME_URL);
+            result = liteHttp.execute(stringRequest);
+            pStcokList = parsePersonalStock(result.getResult(),2);
 //        for (int i = 0; i < pStcokList.size(); i++) {
 //            pStcokList.get(i).printfInfo();
 //        }
-        Log.e("testcc", result.getResult());
+            return true;
+        }catch (Exception e) {
+            return false;
+        }
     }
 
     public EmployeeInfo parseEmployeeInfo(String val) {

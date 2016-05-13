@@ -2,6 +2,7 @@ package com.app.agriculturalproducts;
 
 import android.os.Bundle;
 
+import com.app.agriculturalproducts.bean.TaskRecord;
 import com.app.agriculturalproducts.fragment.OtherInfoFragment;
 import com.app.agriculturalproducts.fragment.OtherInfoHistoryFragment;
 import com.app.agriculturalproducts.fragment.PickingFragment;
@@ -26,6 +27,10 @@ public class OtherInfoActivity extends BaseUploadActivity {
         editFragment = new OtherInfoFragment();
         dataFragment = new OtherInfoHistoryFragment();
         currentFragment = editFragment;
+        TaskRecord task = (TaskRecord)getIntent().getSerializableExtra("task");
+        if(task!=null){
+            editFragment.object = task;
+        }
         getSupportFragmentManager().beginTransaction().add(R.id.frame_view,editFragment).commit();
 
     }

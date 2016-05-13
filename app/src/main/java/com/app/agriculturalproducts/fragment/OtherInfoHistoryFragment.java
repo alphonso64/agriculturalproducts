@@ -25,7 +25,9 @@ import com.app.agriculturalproducts.bean.PickRecord;
 import com.app.agriculturalproducts.db.OtherInfoDataHelper;
 import com.app.agriculturalproducts.db.PickingDataHelper;
 import com.app.agriculturalproducts.db.PlantSpeciesDataHelper;
+import com.app.agriculturalproducts.db.TaskDataHelper;
 import com.app.agriculturalproducts.http.HttpClient;
+import com.app.agriculturalproducts.util.TaskRecordUtil;
 import com.litesuits.http.listener.HttpListener;
 import com.litesuits.http.response.Response;
 
@@ -139,11 +141,21 @@ public class OtherInfoHistoryFragment extends Fragment implements LoaderManager.
                                         otherRecord.setSaved("yes");
                                         ContentValues values = cupboard().withEntity(OtherRecord.class).toContentValues(otherRecord);
                                         mDataHelper.updateByID(values, String.valueOf(otherRecord.get_id()));
+
+                                        String taskID = otherRecord.getTask_id();
+                                        if(!taskID.equals("null")){
+                                            TaskRecordUtil.removeLocalDoneTask(getActivity(), new TaskDataHelper(getActivity().getApplicationContext()), taskID);
+                                        }
+
                                         new MaterialDialog.Builder(getActivity())
                                                 .title("上传成功！")
                                                 .positiveText("好的")
                                                 .show();
                                     } else {
+                                        String taskID = otherRecord.getTask_id();
+                                        if(!taskID.equals("null")){
+                                            TaskRecordUtil.removeLocalUnDoneTask(getActivity(),new TaskDataHelper(getActivity().getApplicationContext()),taskID);
+                                        }
                                         String res = jsonObject.getString("return_msg");
                                         new MaterialDialog.Builder(getActivity())
                                                 .title(res)

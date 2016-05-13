@@ -31,6 +31,7 @@ import com.app.agriculturalproducts.bean.Picking;
 import com.app.agriculturalproducts.bean.PlantSpecies;
 import com.app.agriculturalproducts.bean.PlanterRecord;
 import com.app.agriculturalproducts.bean.Task;
+import com.app.agriculturalproducts.bean.TaskRecord;
 import com.app.agriculturalproducts.db.FieldDataHelper;
 import com.app.agriculturalproducts.db.PersticidesUsageDataHelper;
 import com.app.agriculturalproducts.db.PickingDataHelper;
@@ -41,6 +42,7 @@ import com.app.agriculturalproducts.model.EmployeeInfoModel;
 import com.app.agriculturalproducts.model.UserInfoModel;
 import com.app.agriculturalproducts.util.EditTextUtil;
 import com.app.agriculturalproducts.util.InputType;
+import com.app.agriculturalproducts.util.TaskRecordUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -106,29 +108,22 @@ public class PickingFragment extends BaseUploadFragment {
         if(flag){
             return InputType.INPUT_SAVE_ALREADY;
         }
-        if(object == null){
-            if(!isEmpty()){
-                saveInfo();
-                flag = true;
-                disableWidget();
-                return InputType.INPUT_SAVE_OK;
+        if (!isEmpty()) {
+            String taskID = "null";
+            if(object != null) {
+                TaskRecord task = (TaskRecord)object;
+                TaskRecordUtil.recordLocalDoneTask(getActivity(), taskDataHelper, task);
+                taskID = task.getWorktasklist_id();
             }
-        }else{
-            if(!isEmpty_()){
-                saveInfo();
-                flag = true;
-                disableWidget();
-                Task task = (Task)object;
-                task.setIsDone("true");
-                ContentValues values = cupboard().withEntity(Task.class).toContentValues(task);
-                taskDataHelper.updateTask(values, String.valueOf(task.get_id()));
-                return InputType.INPUT_SAVE_OK;
-            }
+            saveInfo(taskID);
+            flag = true;
+            disableWidget();
+            return InputType.INPUT_SAVE_OK;
         }
         return InputType.INPUT_EMPTY;
     }
 
-    private void saveInfo(){
+    private void saveInfo(String taskID){
         PickRecord picking = new PickRecord();
         picking.setPickrecord_date(date_text.getText().toString());
         picking.setPickrecord_number(num_text.getText().toString());
@@ -143,6 +138,7 @@ public class PickingFragment extends BaseUploadFragment {
         picking.setSaved("no");
         picking.setLocal_plant_id(planterRecord.getPlantrecord_id());
         picking.setLocal_plant_table_index(String.valueOf(planterRecord.get_id()));
+        picking.setTask_id(taskID);
         pickingDataHelper.insert_(picking);
     }
 

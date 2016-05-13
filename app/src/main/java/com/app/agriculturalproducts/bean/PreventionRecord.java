@@ -31,6 +31,7 @@ public class PreventionRecord {
     private String local_plant_id;
     private String local_plant_table_index;
     private Long _id;
+    private String task_id;
 
 
     public static PreventionRecord fromCursor(Cursor cursor) {
@@ -224,6 +225,14 @@ public class PreventionRecord {
 
     public void setLocal_plant_table_index(String local_plant_table_index) {
         this.local_plant_table_index = local_plant_table_index;
+    }
+
+    public String getTask_id() {
+        return task_id;
+    }
+
+    public void setTask_id(String task_id) {
+        this.task_id = task_id;
     }
 
 //    public void printfInfo(){

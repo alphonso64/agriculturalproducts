@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.app.agriculturalproducts.bean.Task;
+import com.app.agriculturalproducts.bean.TaskRecord;
 import com.app.agriculturalproducts.fragment.FertilizerFragment;
 import com.app.agriculturalproducts.fragment.FertilizerHistoryFragment;
 import com.app.agriculturalproducts.fragment.PerticidesFragment;
@@ -28,7 +29,7 @@ public class FertilizerActivity extends BaseUploadActivity {
         editFragment = new FertilizerFragment();
         dataFragment = new FertilizerHistoryFragment();
         currentFragment = editFragment;
-        Task task = (Task)getIntent().getSerializableExtra("task");
+        TaskRecord task = (TaskRecord)getIntent().getSerializableExtra("task");
         if(task!=null){
             editFragment.object = task;
         }

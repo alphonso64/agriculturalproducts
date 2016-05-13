@@ -30,7 +30,9 @@ import com.app.agriculturalproducts.db.OtherInfoDataHelper;
 import com.app.agriculturalproducts.db.PersticidesUsageDataHelper;
 import com.app.agriculturalproducts.db.PickingDataHelper;
 import com.app.agriculturalproducts.db.PlantSpeciesDataHelper;
+import com.app.agriculturalproducts.db.TaskDataHelper;
 import com.app.agriculturalproducts.http.HttpClient;
+import com.app.agriculturalproducts.util.TaskRecordUtil;
 import com.litesuits.http.listener.HttpListener;
 import com.litesuits.http.response.Response;
 
@@ -101,11 +103,10 @@ public class PlantHistoryFragment extends Fragment implements LoaderManager.Load
         otherInfoDataHelper.updatePlantIDByID(pid,id);
     }
 
-    private void checkResult(PlanterRecord planterRecord,String s){
+    private boolean checkResult(PlanterRecord planterRecord,String s){
         try {
             JSONObject jsonObject = new JSONObject(s);
             String val = jsonObject.getString("return_code");
-            Log.e("testcc", "upload:"+s);
             if(val.equals("success")){
                 JSONArray array = jsonObject.getJSONArray("data");
                 for (int i = 0; i < array.length(); i++) {
@@ -121,6 +122,7 @@ public class PlantHistoryFragment extends Fragment implements LoaderManager.Load
                         .title("上传成功！")
                         .positiveText("好的")
                         .show();
+                return true;
             }else{
                 planterRecord.setSaved("err");
                 ContentValues values = cupboard().withEntity(PlanterRecord.class).toContentValues(planterRecord);
@@ -130,10 +132,12 @@ public class PlantHistoryFragment extends Fragment implements LoaderManager.Load
                         .title(res)
                         .positiveText("好的")
                         .show();
+                return  false;
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        return false;
     }
 
     private OnAdpaterItemClickListener itemClickListener =new  OnAdpaterItemClickListener() {
@@ -141,6 +145,7 @@ public class PlantHistoryFragment extends Fragment implements LoaderManager.Load
         public void onItemClick(Object obj, int p) {
             final PlanterRecord planterRecord =  (PlanterRecord) obj;
             String saved = planterRecord.getSaved();
+
             if(saved.equals("no")){
                 new MaterialDialog.Builder(getActivity())
                         .title("上传种植信息?")
@@ -151,7 +156,17 @@ public class PlantHistoryFragment extends Fragment implements LoaderManager.Load
                         HttpClient.getInstance().uploadPlant(new HttpListener<String>() {
                             @Override
                             public void onSuccess(String s, Response<String> response) {
-                                checkResult(planterRecord,s);
+                                if(checkResult(planterRecord,s)){
+                                    String taskID = planterRecord.getTask_id();
+                                    if(!taskID.equals("null")){
+                                        TaskRecordUtil.removeLocalDoneTask(getActivity(),new TaskDataHelper(getActivity().getApplicationContext()),taskID);
+                                    }
+                                }else{
+                                    String taskID = planterRecord.getTask_id();
+                                    if(!taskID.equals("null")){
+                                        TaskRecordUtil.removeLocalUnDoneTask(getActivity(),new TaskDataHelper(getActivity().getApplicationContext()),taskID);
+                                    }
+                                }
                             }
                         },planterRecord);
                     }

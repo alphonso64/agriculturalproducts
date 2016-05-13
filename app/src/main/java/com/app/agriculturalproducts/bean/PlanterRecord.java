@@ -23,6 +23,7 @@ public class PlanterRecord {
     private String saved;
     private String local_stock_id;
     private String local_field_id;
+    private String task_id;
 
     public void printfInfo(){
         Log.e("testcc", "plantrecord_id" + ":" + plantrecord_id
@@ -148,5 +149,13 @@ public class PlanterRecord {
 
     public void setField_plant_area(String field_plant_area) {
         this.field_plant_area = field_plant_area;
+    }
+
+    public String getTask_id() {
+        return task_id;
+    }
+
+    public void setTask_id(String task_id) {
+        this.task_id = task_id;
     }
 }

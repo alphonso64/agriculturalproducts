@@ -31,15 +31,18 @@ import com.app.agriculturalproducts.bean.PlantSpecies;
 import com.app.agriculturalproducts.bean.PlanterRecord;
 import com.app.agriculturalproducts.bean.PreventionRecord;
 import com.app.agriculturalproducts.bean.Task;
+import com.app.agriculturalproducts.bean.TaskRecord;
 import com.app.agriculturalproducts.db.FieldDataHelper;
 import com.app.agriculturalproducts.db.PersticidesUsageDataHelper;
 import com.app.agriculturalproducts.db.PlantSpeciesDataHelper;
 import com.app.agriculturalproducts.db.StockDataHelper;
 import com.app.agriculturalproducts.db.TaskDataHelper;
 import com.app.agriculturalproducts.model.EmployeeInfoModel;
+import com.app.agriculturalproducts.model.UnuploadTaskModel;
 import com.app.agriculturalproducts.model.UserInfoModel;
 import com.app.agriculturalproducts.util.EditTextUtil;
 import com.app.agriculturalproducts.util.InputType;
+import com.app.agriculturalproducts.util.TaskRecordUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -120,31 +123,24 @@ public class PerticidesFragment extends BaseUploadFragment {
         if(flag){
             return InputType.INPUT_SAVE_ALREADY;
         }
-        if(object == null){
-            if(!isEmpty() ){
-                saveInfo();
-                flag = true;
-                disableWidget();
-                return InputType.INPUT_SAVE_OK;
+        if(!isEmpty()){
+            String taskID = "null";
+            if(object != null) {
+                TaskRecord task = (TaskRecord)object;
+                TaskRecordUtil.recordLocalDoneTask(getActivity(),taskDataHelper,task);
+                taskID = task.getWorktasklist_id();
             }
-        }else{
-            if(!isEmpty()){
-                saveInfo();
-                flag = true;
-                disableWidget();
-//                Task task = (Task)object;
-//                task.setIsDone("true");
-//                ContentValues values = cupboard().withEntity(Task.class).toContentValues(task);
-//                taskDataHelper.updateTask(values, String.valueOf(task.get_id()));
-                return InputType.INPUT_SAVE_OK;
-            }
+            saveInfo(taskID);
+            flag = true;
+            disableWidget();
+            return InputType.INPUT_SAVE_OK;
         }
+
         return InputType.INPUT_EMPTY;
     }
 
-    private void saveInfo(){
+    private void saveInfo(String taskID){
         PreventionRecord preventionRecord = new PreventionRecord();
-
         preventionRecord.setPreventionrecord_medicine_name(perticides_text.getText().toString());
         preventionRecord.setPreventionrecord_date(date_text.getText().toString());
         preventionRecord.setPreventionrecord_range(area_text.getText().toString());
@@ -165,7 +161,8 @@ public class PerticidesFragment extends BaseUploadFragment {
         preventionRecord.setLocal_plant_id(planterRecord.getPlantrecord_id());
         preventionRecord.setLocal_stock_id(personalStock.getPersonalstock_id());
         preventionRecord.setSaved("no");
-        preventionRecord.printfInfo();
+        preventionRecord.setTask_id(taskID);
+//        preventionRecord.printfInfo();
         persticidesUsageDataHelper.insert_(preventionRecord);
     }
 

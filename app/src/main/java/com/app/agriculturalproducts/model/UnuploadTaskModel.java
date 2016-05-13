@@ -58,4 +58,30 @@ public class UnuploadTaskModel {
             editor.commit();
         }
     }
+
+    public void removeUnuploadTask(String  id) {
+        SharedPreferences sp = context.getSharedPreferences(InputType.loginInfoDB,
+                Context.MODE_PRIVATE);
+        String name = sp.getString("name", null);
+        if(name != null){
+            String path = name+"__"+InputType.unUploadDB;
+            SharedPreferences prefs = context.getSharedPreferences(path, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.remove(id);
+            editor.commit();
+        }
+    }
+
+    public void clear() {
+        SharedPreferences sp = context.getSharedPreferences(InputType.loginInfoDB,
+                Context.MODE_PRIVATE);
+        String name = sp.getString("name", null);
+        if(name != null){
+            String path = name+"__"+InputType.unUploadDB;
+            SharedPreferences prefs = context.getSharedPreferences(path, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.clear();
+            editor.commit();
+        }
+    }
 }

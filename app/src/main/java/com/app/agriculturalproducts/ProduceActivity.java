@@ -17,6 +17,7 @@ import com.app.agriculturalproducts.adapter.TaskCursorAdapter;
 import com.app.agriculturalproducts.adapter.TaskDetailCursorAdapter;
 import com.app.agriculturalproducts.db.TaskDataHelper;
 import com.app.agriculturalproducts.util.InputType;
+import com.app.agriculturalproducts.util.TaskRecordUtil;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -91,6 +92,9 @@ public class ProduceActivity extends BaseActivity implements LoaderManager.Loade
                 item.setChecked(true);
             }else if(item.getItemId()==R.id.action_unDone){
                 getSupportLoaderManager().restartLoader(UNDONE_CMD,null,ProduceActivity.this);
+                item.setChecked(true);
+            }else if(item.getItemId()==R.id.action_reset){
+                TaskRecordUtil.cleatLocalList(ProduceActivity.this);
                 item.setChecked(true);
             }
             return true;

@@ -27,8 +27,10 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.app.agriculturalproducts.FertilizerActivity;
+import com.app.agriculturalproducts.OtherInfoActivity;
 import com.app.agriculturalproducts.PesticidesActivity;
 import com.app.agriculturalproducts.PickingActivity;
+import com.app.agriculturalproducts.PlantActivity;
 import com.app.agriculturalproducts.R;
 import com.app.agriculturalproducts.adapter.BasicIconRecyclerAdapter;
 import com.app.agriculturalproducts.adapter.OnAdpaterItemClickListener;
@@ -166,14 +168,8 @@ public class WorkFragment extends Fragment implements LoaderManager.LoaderCallba
         @Override
         public void onItemClick(Object obj, int p) {
             final TaskRecord taskRecord = (TaskRecord)obj;
-            if(taskRecord.getWorktask_type().equals("农药使用")){
-                taskRecord.setWorktasklist_status("已查看");
-                HttpClient.getInstance().uploadTask(null, taskRecord);
-            }
-
-            UnuploadTaskModel taskModel = new UnuploadTaskModel(getActivity());
-            taskModel.setUnuploadTask(taskRecord);
-
+            taskRecord.setWorktasklist_status("已查看");
+            HttpClient.getInstance().uploadTask(null, taskRecord);
             new MaterialDialog.Builder(getActivity())
                     .title(taskRecord.getWorktask_name())
                     .content(taskRecord.getWorktask_content())
@@ -182,30 +178,36 @@ public class WorkFragment extends Fragment implements LoaderManager.LoaderCallba
                 @Override
                 public void onClick(MaterialDialog dialog, DialogAction which) {
                     if(taskRecord.getWorktask_type().equals("农药使用")){
-
-                        UnuploadTaskModel taskModel = new UnuploadTaskModel(getActivity());
-                        taskModel.removeUnuploadTask(taskRecord);
-
                         Intent intent = new Intent(getActivity(), PesticidesActivity.class);
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("task", taskRecord);
                         intent.putExtras(bundle);
                         startActivity(intent);
+                    }else  if(taskRecord.getWorktask_type().equals("种植录入")){
+                        Intent intent = new Intent(getActivity(), PlantActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("task", taskRecord);
+                        intent.putExtras(bundle);
+                        startActivity(intent);
+                    }else  if(taskRecord.getWorktask_type().equals("肥料施用")){
+                        Intent intent = new Intent(getActivity(), FertilizerActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("task", taskRecord);
+                        intent.putExtras(bundle);
+                        startActivity(intent);
+                    }else  if(taskRecord.getWorktask_type().equals("采摘记录")){
+                        Intent intent = new Intent(getActivity(), PickingActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("task", taskRecord);
+                        intent.putExtras(bundle);
+                        startActivity(intent);
+                    }else  if(taskRecord.getWorktask_type().equals("其他记录")){
+                        Intent intent = new Intent(getActivity(), OtherInfoActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("task", taskRecord);
+                        intent.putExtras(bundle);
+                        startActivity(intent);
                     }
-//                    if(task.getTitle().equals("化肥任务")){
-//                        Intent intent = new Intent(getActivity(), FertilizerActivity.class);
-//                        Bundle bundle = new Bundle();
-//                        bundle.putSerializable("task", task);
-//                        intent.putExtras(bundle);
-//                        startActivity(intent);
-//                    }
-//                    if(task.getTitle().equals("采摘任务")){
-//                        Intent intent = new Intent(getActivity(), PickingActivity.class);
-//                        Bundle bundle = new Bundle();
-//                        bundle.putSerializable("task", task);
-//                        intent.putExtras(bundle);
-//                        startActivity(intent);
-//                    }
                 }
             }).show();
 

@@ -26,7 +26,9 @@ import com.app.agriculturalproducts.bean.PlanterRecord;
 import com.app.agriculturalproducts.db.FertilizerUsageDataHelper;
 import com.app.agriculturalproducts.db.PersticidesUsageDataHelper;
 import com.app.agriculturalproducts.db.PlantSpeciesDataHelper;
+import com.app.agriculturalproducts.db.TaskDataHelper;
 import com.app.agriculturalproducts.http.HttpClient;
+import com.app.agriculturalproducts.util.TaskRecordUtil;
 import com.litesuits.http.listener.HttpListener;
 import com.litesuits.http.response.Response;
 
@@ -145,6 +147,12 @@ public class FertilizerHistoryFragment extends Fragment implements LoaderManager
                                         fertilizerRecord.setSaved("yes");
                                         ContentValues values = cupboard().withEntity(FertilizerRecord.class).toContentValues(fertilizerRecord);
                                         mDataHelper.updateByID(values, String.valueOf(fertilizerRecord.get_id()));
+
+                                        String taskID = fertilizerRecord.getTask_id();
+                                        if(!taskID.equals("null")){
+                                            TaskRecordUtil.removeLocalDoneTask(getActivity(), new TaskDataHelper(getActivity().getApplicationContext()), taskID);
+                                        }
+
                                         new MaterialDialog.Builder(getActivity())
                                                 .title("上传成功！")
                                                 .positiveText("好的")
@@ -153,6 +161,12 @@ public class FertilizerHistoryFragment extends Fragment implements LoaderManager
                                         fertilizerRecord.setSaved("err");
                                         ContentValues values = cupboard().withEntity(FertilizerRecord.class).toContentValues(fertilizerRecord);
                                         mDataHelper.updateByID(values, String.valueOf(fertilizerRecord.get_id()));
+
+                                        String taskID = fertilizerRecord.getTask_id();
+                                        if(!taskID.equals("null")){
+                                            TaskRecordUtil.removeLocalUnDoneTask(getActivity(),new TaskDataHelper(getActivity().getApplicationContext()),taskID);
+                                        }
+
                                         String res = jsonObject.getString("return_msg");
                                         new MaterialDialog.Builder(getActivity())
                                                 .title(res)

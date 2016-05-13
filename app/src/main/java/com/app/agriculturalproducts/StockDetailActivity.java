@@ -14,8 +14,10 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.app.agriculturalproducts.adapter.StockCursorAdapter;
 import com.app.agriculturalproducts.adapter.StockDetailCursorAdapter;
@@ -62,6 +64,12 @@ public class StockDetailActivity extends BaseActivity implements LoaderManager.L
         @Override
         public void handleMessage(Message msg) {
             progressDialog.dismiss();
+            if(msg.what == -1){
+                Toast toast = Toast.makeText(StockDetailActivity.this,
+                        "网络未连接", Toast.LENGTH_SHORT);
+                toast.setGravity(Gravity.CENTER, 0, 0);
+                toast.show();
+            }
         }
     };
 
@@ -199,12 +207,15 @@ public class StockDetailActivity extends BaseActivity implements LoaderManager.L
                 new Thread() {
                     @Override
                     public void run() {
-                        HttpClient.getInstance().getStockDetailInfo(name);
-                        ArrayList<PersonalStockDetail> ls = new ArrayList<PersonalStockDetail>();
-                        ls.addAll(HttpClient.getInstance().enterstockList);
-                        ls.addAll(HttpClient.getInstance().outstockList);
-                        mDataHelper.replace(ls);
-                        mHandler.sendEmptyMessage(1);
+                        if(HttpClient.getInstance().getStockDetailInfo(name)){
+                            ArrayList<PersonalStockDetail> ls = new ArrayList<PersonalStockDetail>();
+                            ls.addAll(HttpClient.getInstance().enterstockList);
+                            ls.addAll(HttpClient.getInstance().outstockList);
+                            mDataHelper.replace(ls);
+                            mHandler.sendEmptyMessage(1);
+                        }else{
+                            mHandler.sendEmptyMessage(-1);
+                        }
                     }
                 }.start();
             }

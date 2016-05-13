@@ -31,7 +31,9 @@ import com.app.agriculturalproducts.bean.Task;
 import com.app.agriculturalproducts.db.FertilizerUsageDataHelper;
 import com.app.agriculturalproducts.db.PersticidesUsageDataHelper;
 import com.app.agriculturalproducts.db.PlantSpeciesDataHelper;
+import com.app.agriculturalproducts.db.TaskDataHelper;
 import com.app.agriculturalproducts.http.HttpClient;
+import com.app.agriculturalproducts.util.TaskRecordUtil;
 import com.app.agriculturalproducts.view.NoScrollGridLayoutManager;
 import com.litesuits.http.listener.HttpListener;
 import com.litesuits.http.request.StringRequest;
@@ -146,6 +148,12 @@ public class PerticidesHistoryFragment extends Fragment implements LoaderManager
                                         preventionRecord.setSaved("yes");
                                         ContentValues values = cupboard().withEntity(PreventionRecord.class).toContentValues(preventionRecord);
                                         mDataHelper.updateByID(values, String.valueOf(preventionRecord.get_id()));
+
+                                        String taskID = preventionRecord.getTask_id();
+                                        if(!taskID.equals("null")){
+                                            TaskRecordUtil.removeLocalDoneTask(getActivity(), new TaskDataHelper(getActivity().getApplicationContext()), taskID);
+                                        }
+
                                         new MaterialDialog.Builder(getActivity())
                                                 .title("上传成功！")
                                                 .positiveText("好的")
@@ -154,6 +162,12 @@ public class PerticidesHistoryFragment extends Fragment implements LoaderManager
                                         preventionRecord.setSaved("err");
                                         ContentValues values = cupboard().withEntity(PreventionRecord.class).toContentValues(preventionRecord);
                                         mDataHelper.updateByID(values, String.valueOf(preventionRecord.get_id()));
+
+                                        String taskID = preventionRecord.getTask_id();
+                                        if(!taskID.equals("null")){
+                                            TaskRecordUtil.removeLocalUnDoneTask(getActivity(),new TaskDataHelper(getActivity().getApplicationContext()),taskID);
+                                        }
+
                                         String res = jsonObject.getString("return_msg");
                                         new MaterialDialog.Builder(getActivity())
                                                 .title(res)

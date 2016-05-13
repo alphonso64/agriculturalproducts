@@ -31,6 +31,7 @@ import com.app.agriculturalproducts.bean.PersticidesUsage;
 import com.app.agriculturalproducts.bean.PlantSpecies;
 import com.app.agriculturalproducts.bean.PlanterRecord;
 import com.app.agriculturalproducts.bean.Task;
+import com.app.agriculturalproducts.bean.TaskRecord;
 import com.app.agriculturalproducts.db.FertilizerUsageDataHelper;
 import com.app.agriculturalproducts.db.FieldDataHelper;
 import com.app.agriculturalproducts.db.PersticidesUsageDataHelper;
@@ -41,6 +42,7 @@ import com.app.agriculturalproducts.model.EmployeeInfoModel;
 import com.app.agriculturalproducts.model.UserInfoModel;
 import com.app.agriculturalproducts.util.EditTextUtil;
 import com.app.agriculturalproducts.util.InputType;
+import com.app.agriculturalproducts.util.TaskRecordUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -111,29 +113,22 @@ public class FertilizerFragment extends BaseUploadFragment {
         if(flag){
             return InputType.INPUT_SAVE_ALREADY;
         }
-        if(object == null){
-            if(!isEmpty() ){
-                saveInfo();
-                flag = true;
-                disableWidget();
-                return InputType.INPUT_SAVE_OK;
+        if (!isEmpty()) {
+            String taskID = "null";
+            if(object != null) {
+                TaskRecord task = (TaskRecord)object;
+                TaskRecordUtil.recordLocalDoneTask(getActivity(), taskDataHelper, task);
+                taskID = task.getWorktasklist_id();
             }
-        }else{
-//            if(!isEmpty_()){
-//                saveInfo();
-//                flag = true;
-//                disableWidget();
-//                Task task = (Task)object;
-//                task.setIsDone("true");
-//                ContentValues values = cupboard().withEntity(Task.class).toContentValues(task);
-//                taskDataHelper.updateTask(values, String.valueOf(task.get_id()));
-//                return InputType.INPUT_SAVE_OK;
-//            }
+            saveInfo(taskID);
+            flag = true;
+            disableWidget();
+            return InputType.INPUT_SAVE_OK;
         }
         return InputType.INPUT_EMPTY;
     }
 
-    private void saveInfo(){
+    private void saveInfo(String taskID){
         FertilizerRecord fertilizerRecord = new FertilizerRecord();
         fertilizerRecord.setFertilizerecord_date(date_text.getText().toString());
         fertilizerRecord.setFertilizerecord_name(name_text.getText().toString());
@@ -152,6 +147,7 @@ public class FertilizerFragment extends BaseUploadFragment {
         fertilizerRecord.setLocal_plant_table_index(String.valueOf(planterRecord.get_id()));
         fertilizerRecord.setLocal_stock_id(personalStock.getPersonalstock_id());
         fertilizerRecord.setSaved("no");
+        fertilizerRecord.setTask_id(taskID);
         Log.e("testcc", "save:" + planterRecord.getPlantrecord_id());
         fertilizerUsageDataHelper.insert_(fertilizerRecord);
     }

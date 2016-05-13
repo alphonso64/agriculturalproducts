@@ -15,8 +15,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -59,6 +61,12 @@ public class StockActivity extends BaseActivity implements LoaderManager.LoaderC
         @Override
         public void handleMessage(Message msg) {
             progressDialog.dismiss();
+            if(msg.what == -1){
+                Toast toast = Toast.makeText(StockActivity.this,
+                        "网络未连接", Toast.LENGTH_SHORT);
+                toast.setGravity(Gravity.CENTER, 0, 0);
+                toast.show();
+            }
         }
     };
 
@@ -132,13 +140,17 @@ public class StockActivity extends BaseActivity implements LoaderManager.LoaderC
                 new Thread(){
                     @Override
                     public void run() {
-                        HttpClient.getInstance().getStockInfo(name);
-                        ArrayList<PersonalStock> ls = new ArrayList<PersonalStock>();
-                        ls.addAll(HttpClient.getInstance().seedStockList);
-                        ls.addAll(HttpClient.getInstance().fStockList);
-                        ls.addAll(HttpClient.getInstance().pStcokList);
-                        mDataHelper.replace(ls);
-                        mHandler.sendEmptyMessage(1);
+                        if(HttpClient.getInstance().getStockInfo(name)){
+                            ArrayList<PersonalStock> ls = new ArrayList<PersonalStock>();
+                            ls.addAll(HttpClient.getInstance().seedStockList);
+                            ls.addAll(HttpClient.getInstance().fStockList);
+                            ls.addAll(HttpClient.getInstance().pStcokList);
+                            mDataHelper.replace(ls);
+                            mHandler.sendEmptyMessage(1);
+                        }else{
+                            mHandler.sendEmptyMessage(-1);
+                        }
+
                     }}.start();
             }else if(item.getItemId() == R.id.action_all_info){
                 getSupportLoaderManager().restartLoader(ALL_CMD, null, StockActivity.this);

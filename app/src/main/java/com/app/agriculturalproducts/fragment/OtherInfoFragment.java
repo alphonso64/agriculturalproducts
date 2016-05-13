@@ -29,13 +29,16 @@ import com.app.agriculturalproducts.bean.OtherRecord;
 import com.app.agriculturalproducts.bean.PickRecord;
 import com.app.agriculturalproducts.bean.PlantSpecies;
 import com.app.agriculturalproducts.bean.PlanterRecord;
+import com.app.agriculturalproducts.bean.TaskRecord;
 import com.app.agriculturalproducts.db.FieldDataHelper;
 import com.app.agriculturalproducts.db.OtherInfoDataHelper;
 import com.app.agriculturalproducts.db.PlantSpeciesDataHelper;
+import com.app.agriculturalproducts.db.TaskDataHelper;
 import com.app.agriculturalproducts.model.EmployeeInfoModel;
 import com.app.agriculturalproducts.model.UserInfoModel;
 import com.app.agriculturalproducts.util.EditTextUtil;
 import com.app.agriculturalproducts.util.InputType;
+import com.app.agriculturalproducts.util.TaskRecordUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -90,8 +93,14 @@ public class OtherInfoFragment extends BaseUploadFragment {
         if(flag){
             return InputType.INPUT_SAVE_ALREADY;
         }
-        if(!isEmpty() ){
-            saveInfo();
+        if (!isEmpty()) {
+            String taskID = "null";
+            if(object != null) {
+                TaskRecord task = (TaskRecord)object;
+                TaskRecordUtil.recordLocalDoneTask(getActivity(), new TaskDataHelper(getActivity()), task);
+                taskID = task.getWorktasklist_id();
+            }
+            saveInfo(taskID);
             flag = true;
             disableWidget();
             return InputType.INPUT_SAVE_OK;
@@ -99,7 +108,7 @@ public class OtherInfoFragment extends BaseUploadFragment {
         return InputType.INPUT_EMPTY;
     }
 
-    private void saveInfo(){
+    private void saveInfo(String taskID){
         OtherRecord otherRecord = new OtherRecord();
         otherRecord.setOtherrecord_situation(situation_text.getText().toString());
         otherRecord.setOtherrecord_date(date_text.getText().toString());
@@ -113,6 +122,7 @@ public class OtherInfoFragment extends BaseUploadFragment {
         otherRecord.setLocal_plant_table_index(String.valueOf(planterRecord.get_id()));
         otherRecord.setSaved("no");
         otherRecord.setLocal_plant_id(planterRecord.getPlantrecord_id());
+        otherRecord.setTask_id(taskID);
         otherInfoDataHelper.insert_(otherRecord);
     }
 

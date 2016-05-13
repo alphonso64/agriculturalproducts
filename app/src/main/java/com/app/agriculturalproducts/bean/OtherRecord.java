@@ -21,6 +21,7 @@ public class OtherRecord {
     private String local_plant_id;
     private Long _id;
     private String local_plant_table_index;
+    private String task_id;
 
     public static OtherRecord fromCursor(Cursor cursor) {
         OtherRecord otherRecord= cupboard().withCursor(cursor).get(OtherRecord.class);
@@ -129,5 +130,13 @@ public class OtherRecord {
 
     public void setLocal_plant_table_index(String local_plant_table_index) {
         this.local_plant_table_index = local_plant_table_index;
+    }
+
+    public String getTask_id() {
+        return task_id;
+    }
+
+    public void setTask_id(String task_id) {
+        this.task_id = task_id;
     }
 }
