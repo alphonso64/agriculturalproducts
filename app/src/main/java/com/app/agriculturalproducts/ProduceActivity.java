@@ -93,9 +93,6 @@ public class ProduceActivity extends BaseActivity implements LoaderManager.Loade
             }else if(item.getItemId()==R.id.action_unDone){
                 getSupportLoaderManager().restartLoader(UNDONE_CMD,null,ProduceActivity.this);
                 item.setChecked(true);
-            }else if(item.getItemId()==R.id.action_reset){
-                TaskRecordUtil.cleatLocalList(ProduceActivity.this);
-                item.setChecked(true);
             }
             return true;
         }
