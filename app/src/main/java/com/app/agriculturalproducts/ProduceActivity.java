@@ -1,5 +1,6 @@
 package com.app.agriculturalproducts;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
@@ -12,10 +13,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.app.agriculturalproducts.adapter.OnAdpaterItemClickListener;
 import com.app.agriculturalproducts.adapter.TaskCursorAdapter;
 import com.app.agriculturalproducts.adapter.TaskDetailCursorAdapter;
+import com.app.agriculturalproducts.bean.TaskRecord;
 import com.app.agriculturalproducts.db.TaskDataHelper;
+import com.app.agriculturalproducts.http.HttpClient;
 import com.app.agriculturalproducts.util.InputType;
 import com.app.agriculturalproducts.util.TaskRecordUtil;
 
@@ -43,6 +48,7 @@ public class ProduceActivity extends BaseActivity implements LoaderManager.Loade
         mDataHelper = new TaskDataHelper(getApplicationContext());
         mTaskRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mAdapter = new TaskDetailCursorAdapter(this);
+        mAdapter.setOnItemClickListener(task_adpaterItemClickListener);
         mTaskRecyclerView.setAdapter(mAdapter);
         getSupportLoaderManager().initLoader(0, null, ProduceActivity.this);
         tooblbar.setOnMenuItemClickListener(itemClick);
@@ -95,6 +101,37 @@ public class ProduceActivity extends BaseActivity implements LoaderManager.Loade
                 item.setChecked(true);
             }
             return true;
+        }
+    };
+
+    private OnAdpaterItemClickListener task_adpaterItemClickListener =new  OnAdpaterItemClickListener() {
+        @Override
+        public void onItemClick(Object obj, int p) {
+            final TaskRecord taskRecord = (TaskRecord)obj;
+            if(taskRecord.getWorktasklist_status().equals("未查看")){
+                taskRecord.setWorktasklist_status("已查看");
+                HttpClient.getInstance().uploadTask(null, taskRecord);
+            }else if(taskRecord.getWorktasklist_status().equals("已查看")){
+                new MaterialDialog.Builder(ProduceActivity.this)
+                        .title("确定接受任务")
+                        .content(taskRecord.getWorktask_content())
+                        .positiveText("确定")
+                        .negativeText("取消").onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(MaterialDialog dialog, DialogAction which) {
+                    }
+                }).show();
+            }else if(taskRecord.getWorktasklist_status().equals("已完成")){
+                new MaterialDialog.Builder(ProduceActivity.this)
+                        .title("查看任务详情")
+                        .content(taskRecord.getWorktask_content())
+                        .positiveText("确定")
+                        .negativeText("取消").onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(MaterialDialog dialog, DialogAction which) {
+                    }
+                }).show();
+            }
         }
     };
 

@@ -171,43 +171,52 @@ public class WorkFragment extends Fragment implements LoaderManager.LoaderCallba
             taskRecord.setWorktasklist_status("已查看");
             HttpClient.getInstance().uploadTask(null, taskRecord);
             new MaterialDialog.Builder(getActivity())
-                    .title(taskRecord.getWorktask_name())
+                    .title("确定接受任务")
                     .content(taskRecord.getWorktask_content())
-                    .positiveText("接受")
-                    .negativeText("暂不").onPositive(new MaterialDialog.SingleButtonCallback() {
+                    .positiveText("确定")
+                    .negativeText("取消").onPositive(new MaterialDialog.SingleButtonCallback() {
                 @Override
                 public void onClick(MaterialDialog dialog, DialogAction which) {
-                    if(taskRecord.getWorktask_type().equals("农药使用")){
-                        Intent intent = new Intent(getActivity(), PesticidesActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable("task", taskRecord);
-                        intent.putExtras(bundle);
-                        startActivity(intent);
-                    }else  if(taskRecord.getWorktask_type().equals("种植录入")){
-                        Intent intent = new Intent(getActivity(), PlantActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable("task", taskRecord);
-                        intent.putExtras(bundle);
-                        startActivity(intent);
-                    }else  if(taskRecord.getWorktask_type().equals("肥料施用")){
-                        Intent intent = new Intent(getActivity(), FertilizerActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable("task", taskRecord);
-                        intent.putExtras(bundle);
-                        startActivity(intent);
-                    }else  if(taskRecord.getWorktask_type().equals("采摘记录")){
-                        Intent intent = new Intent(getActivity(), PickingActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable("task", taskRecord);
-                        intent.putExtras(bundle);
-                        startActivity(intent);
-                    }else  if(taskRecord.getWorktask_type().equals("其他记录")){
-                        Intent intent = new Intent(getActivity(), OtherInfoActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable("task", taskRecord);
-                        intent.putExtras(bundle);
-                        startActivity(intent);
-                    }
+
+                    new MaterialDialog.Builder(getActivity())
+                            .title("选择任务方式")
+                            .positiveText("提交新任务")
+                            .negativeText("选择已完成任务").onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(MaterialDialog dialog, DialogAction which) {
+                            if(taskRecord.getWorktask_type().equals("农药使用")){
+                                Intent intent = new Intent(getActivity(), PesticidesActivity.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putSerializable("task", taskRecord);
+                                intent.putExtras(bundle);
+                                startActivity(intent);
+                            }else  if(taskRecord.getWorktask_type().equals("种植录入")){
+                                Intent intent = new Intent(getActivity(), PlantActivity.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putSerializable("task", taskRecord);
+                                intent.putExtras(bundle);
+                                startActivity(intent);
+                            }else  if(taskRecord.getWorktask_type().equals("肥料施用")){
+                                Intent intent = new Intent(getActivity(), FertilizerActivity.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putSerializable("task", taskRecord);
+                                intent.putExtras(bundle);
+                                startActivity(intent);
+                            }else  if(taskRecord.getWorktask_type().equals("采摘记录")){
+                                Intent intent = new Intent(getActivity(), PickingActivity.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putSerializable("task", taskRecord);
+                                intent.putExtras(bundle);
+                                startActivity(intent);
+                            }else  if(taskRecord.getWorktask_type().equals("其他记录")){
+                                Intent intent = new Intent(getActivity(), OtherInfoActivity.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putSerializable("task", taskRecord);
+                                intent.putExtras(bundle);
+                                startActivity(intent);
+                            }
+                        }
+                    }).show();
                 }
             }).show();
 
