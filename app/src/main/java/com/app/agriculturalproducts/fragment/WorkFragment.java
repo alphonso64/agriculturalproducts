@@ -32,6 +32,7 @@ import com.app.agriculturalproducts.PesticidesActivity;
 import com.app.agriculturalproducts.PickingActivity;
 import com.app.agriculturalproducts.PlantActivity;
 import com.app.agriculturalproducts.R;
+import com.app.agriculturalproducts.TaskDoneSelectActivity;
 import com.app.agriculturalproducts.adapter.BasicIconRecyclerAdapter;
 import com.app.agriculturalproducts.adapter.OnAdpaterItemClickListener;
 import com.app.agriculturalproducts.adapter.TaskCursorAdapter;
@@ -179,9 +180,18 @@ public class WorkFragment extends Fragment implements LoaderManager.LoaderCallba
                 public void onClick(MaterialDialog dialog, DialogAction which) {
 
                     new MaterialDialog.Builder(getActivity())
-                            .title("选择任务方式")
-                            .positiveText("提交新任务")
-                            .negativeText("选择已完成任务").onPositive(new MaterialDialog.SingleButtonCallback() {
+                            .title("提交任务方式")
+                            .positiveText("提交新任务").onNegative(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(MaterialDialog dialog, DialogAction which) {
+
+                            Intent intent = new Intent(getActivity(), TaskDoneSelectActivity.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("task", taskRecord);
+                            intent.putExtras(bundle);
+                            startActivity(intent);
+                        }
+                    }) .negativeText("提交已完成任务").onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(MaterialDialog dialog, DialogAction which) {
                             if(taskRecord.getWorktask_type().equals("农药使用")){

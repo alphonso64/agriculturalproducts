@@ -114,6 +114,8 @@
         </activity>
         <activity android:name=".StockActivity" >
         </activity>
+        <activity android:name=".TaskDoneSelectActivity" >
+        </activity>
     </application>
 
 </manifest>

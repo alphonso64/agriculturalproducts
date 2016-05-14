@@ -82,4 +82,8 @@ public class PickingDataHelper extends BaseDataHelper implements DBInterface<Pic
         return new CursorLoader(getContext(), getContentUri(), null, null, null, "saved asc");
     }
 
+    public CursorLoader getCursorLoaderTask() {
+        return new CursorLoader(getContext(), getContentUri(), null, "task_id = ? ", new String[]{"null"}, null);
+    }
+
 }

@@ -61,7 +61,6 @@ public class PersticidesUsageDataHelper extends BaseDataHelper implements DBInte
     }
 
     public void insert_(PreventionRecord data){
-        Log.e("tetstbb", "insert_");
         ContentValues values = cupboard().withEntity(PreventionRecord.class).toContentValues(data);
         insert(values);
     }
@@ -83,6 +82,10 @@ public class PersticidesUsageDataHelper extends BaseDataHelper implements DBInte
     @Override
     public CursorLoader getCursorLoader() {
         return new CursorLoader(getContext(), getContentUri(), null, null, null, "saved asc");
+    }
+
+    public CursorLoader getCursorLoaderTask() {
+        return new CursorLoader(getContext(), getContentUri(), null, "task_id = ? ", new String[]{"null"}, null);
     }
 
 }

@@ -119,6 +119,54 @@ public class ProduceActivity extends BaseActivity implements LoaderManager.Loade
                         .negativeText("取消").onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(MaterialDialog dialog, DialogAction which) {
+                            new MaterialDialog.Builder(ProduceActivity.this)
+                                    .title("提交任务方式")
+                                    .positiveText("提交新任务").onNegative(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(MaterialDialog dialog, DialogAction which) {
+
+                                    Intent intent = new Intent(ProduceActivity.this, TaskDoneSelectActivity.class);
+                                    Bundle bundle = new Bundle();
+                                    bundle.putSerializable("task", taskRecord);
+                                    intent.putExtras(bundle);
+                                    startActivity(intent);
+                                }
+                            }) .negativeText("提交已完成任务").onPositive(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(MaterialDialog dialog, DialogAction which) {
+                                    if(taskRecord.getWorktask_type().equals("农药使用")){
+                                        Intent intent = new Intent(ProduceActivity.this, PesticidesActivity.class);
+                                        Bundle bundle = new Bundle();
+                                        bundle.putSerializable("task", taskRecord);
+                                        intent.putExtras(bundle);
+                                        startActivity(intent);
+                                    }else  if(taskRecord.getWorktask_type().equals("种植录入")){
+                                        Intent intent = new Intent(ProduceActivity.this, PlantActivity.class);
+                                        Bundle bundle = new Bundle();
+                                        bundle.putSerializable("task", taskRecord);
+                                        intent.putExtras(bundle);
+                                        startActivity(intent);
+                                    }else  if(taskRecord.getWorktask_type().equals("肥料施用")){
+                                        Intent intent = new Intent(ProduceActivity.this, FertilizerActivity.class);
+                                        Bundle bundle = new Bundle();
+                                        bundle.putSerializable("task", taskRecord);
+                                        intent.putExtras(bundle);
+                                        startActivity(intent);
+                                    }else  if(taskRecord.getWorktask_type().equals("采摘记录")){
+                                        Intent intent = new Intent(ProduceActivity.this, PickingActivity.class);
+                                        Bundle bundle = new Bundle();
+                                        bundle.putSerializable("task", taskRecord);
+                                        intent.putExtras(bundle);
+                                        startActivity(intent);
+                                    }else  if(taskRecord.getWorktask_type().equals("其他记录")){
+                                        Intent intent = new Intent(ProduceActivity.this, OtherInfoActivity.class);
+                                        Bundle bundle = new Bundle();
+                                        bundle.putSerializable("task", taskRecord);
+                                        intent.putExtras(bundle);
+                                        startActivity(intent);
+                                    }
+                                }
+                            }).show();
                     }
                 }).show();
             }else if(taskRecord.getWorktasklist_status().equals("已完成")){

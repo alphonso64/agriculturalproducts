@@ -81,4 +81,8 @@ public class FertilizerUsageDataHelper extends BaseDataHelper implements DBInter
         return new CursorLoader(getContext(), getContentUri(), null, null, null, "saved asc");
     }
 
+    public CursorLoader getCursorLoaderTask() {
+        return new CursorLoader(getContext(), getContentUri(), null, "task_id = ? ", new String[]{"null"}, null);
+    }
+
 }
