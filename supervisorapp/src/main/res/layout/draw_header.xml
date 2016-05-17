@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorAccent"
+    android:orientation="vertical">
+
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="20dp"
+        android:paddingTop="10dp"
+        android:id="@+id/headerImgView"
+        android:src="@drawable/ic_add_white_24dp"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="56dp"
+        android:orientation="vertical"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="16dp"
+        android:gravity="center_vertical">
+        <TextView
+            android:id="@+id/headNameText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:text="alphonso"
+            android:textColor="@android:color/white" />
+        <TextView
+            android:id="@+id/headCOOPText"
+            android:layout_marginTop="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:text="alphonso64@126.com"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
+
+
+</LinearLayout>

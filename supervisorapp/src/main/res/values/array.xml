@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="titles">
+        <item>执法检查</item>
+        <item>隐患检查</item>
+        <item>企业信息</item>
+        <item>知识库</item>
+        <item>消息通知</item>
+        <item>数据统计</item>
+    </string-array>
+
+    <string-array name="icons">
+        <item>icon_aa</item>
+        <item>icon_ac</item>
+        <item>icon_ab</item>
+        <item>icon_ad</item>
+        <item>icon_ae</item>
+        <item>icon_af</item>
+    </string-array>
+
+    <string-array name="class_name">
+        <item>com.app.supervisorapp.MessageActivity</item>
+        <item>com.app.supervisorapp.MessageActivity</item>
+        <item>com.app.supervisorapp.MessageActivity</item>
+        <item>com.app.supervisorapp.MessageActivity</item>
+        <item>com.app.supervisorapp.MessageActivity</item>
+        <item>com.app.supervisorapp.MessageActivity</item>
+    </string-array>
+</resources>
