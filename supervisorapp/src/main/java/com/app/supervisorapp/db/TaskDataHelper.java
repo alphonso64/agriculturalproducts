@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.v4.content.CursorLoader;
+import android.util.Log;
 
 
 import com.app.supervisorapp.bean.TaskRecord;
@@ -54,6 +55,7 @@ public class TaskDataHelper extends BaseDataHelper implements DBInterface<TaskRe
     }
 
     public void insert_(TaskRecord data){
+        Log.e("testcc","insert_");
         ContentValues values = cupboard().withEntity(TaskRecord.class).toContentValues(data);
         insert(values);
     }

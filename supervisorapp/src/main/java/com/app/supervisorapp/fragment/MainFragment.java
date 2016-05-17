@@ -73,7 +73,7 @@ public class MainFragment  extends Fragment implements LoaderManager.LoaderCallb
         mTaskRecyclerView.setAdapter(mAdapter);
 
 ////
-        update_btn.setOnClickListener(update_onclickListner);
+//        update_btn.setOnClickListener(update_onclickListner);
 ////        more_btn.setVisibility(View.INVISIBLE);
         mDataHelper = new TaskDataHelper(getActivity().getApplicationContext());
     }
@@ -134,6 +134,7 @@ public class MainFragment  extends Fragment implements LoaderManager.LoaderCallb
         for(MyIcon ai:mDatas){
             if(title.equals(ai.getTitle())){
                 Intent intent = new Intent(getActivity(), Class.forName(ai.getClassName()));
+                intent.putExtra("title",ai.getTitle());
                 startActivity(intent);
             }
         }

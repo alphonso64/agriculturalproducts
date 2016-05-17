@@ -102,6 +102,7 @@ public class DataProvider extends ContentProvider {
 
     @Override
     public Uri insert(Uri uri, ContentValues values) {
+        Log.e("etstcc","prvider");
         synchronized (obj) {
             SQLiteDatabase db = getDBHelper().getWritableDatabase();
             long rowId = 0;
