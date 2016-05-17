@@ -112,16 +112,17 @@ public class ProduceActivity extends BaseActivity implements LoaderManager.Loade
                 taskRecord.setWorktasklist_status("已查看");
                 HttpClient.getInstance().uploadTask(null, taskRecord);
             }else if(taskRecord.getWorktasklist_status().equals("已查看")){
-                new MaterialDialog.Builder(ProduceActivity.this)
-                        .title("确定接受任务")
-                        .content(taskRecord.getWorktask_content())
-                        .positiveText("确定")
-                        .negativeText("取消").onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(MaterialDialog dialog, DialogAction which) {
+                if(taskRecord.getSync().equals("true")){
+                    new MaterialDialog.Builder(ProduceActivity.this)
+                            .title("确定接受任务")
+                            .content(taskRecord.getWorktask_content())
+                            .positiveText("确定")
+                            .negativeText("取消").onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(MaterialDialog dialog, DialogAction which) {
                             new MaterialDialog.Builder(ProduceActivity.this)
                                     .title("提交任务方式")
-                                    .positiveText("提交新任务").onNegative(new MaterialDialog.SingleButtonCallback() {
+                                    .positiveText("提交新记录").onNegative(new MaterialDialog.SingleButtonCallback() {
                                 @Override
                                 public void onClick(MaterialDialog dialog, DialogAction which) {
 
@@ -131,7 +132,7 @@ public class ProduceActivity extends BaseActivity implements LoaderManager.Loade
                                     intent.putExtras(bundle);
                                     startActivity(intent);
                                 }
-                            }) .negativeText("提交已完成任务").onPositive(new MaterialDialog.SingleButtonCallback() {
+                            }) .negativeText("提交已完成记录").onPositive(new MaterialDialog.SingleButtonCallback() {
                                 @Override
                                 public void onClick(MaterialDialog dialog, DialogAction which) {
                                     if(taskRecord.getWorktask_type().equals("农药使用")){
@@ -167,18 +168,19 @@ public class ProduceActivity extends BaseActivity implements LoaderManager.Loade
                                     }
                                 }
                             }).show();
-                    }
-                }).show();
+                        }
+                    }).show();
+                }
             }else if(taskRecord.getWorktasklist_status().equals("已完成")){
-                new MaterialDialog.Builder(ProduceActivity.this)
-                        .title("查看任务详情")
-                        .content(taskRecord.getWorktask_content())
-                        .positiveText("确定")
-                        .negativeText("取消").onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(MaterialDialog dialog, DialogAction which) {
-                    }
-                }).show();
+//                new MaterialDialog.Builder(ProduceActivity.this)
+//                        .title("查看任务详情")
+//                        .content(taskRecord.getWorktask_content())
+//                        .positiveText("确定")
+//                        .negativeText("取消").onPositive(new MaterialDialog.SingleButtonCallback() {
+//                    @Override
+//                    public void onClick(MaterialDialog dialog, DialogAction which) {
+//                    }
+//                }).show();
             }
         }
     };

@@ -85,7 +85,7 @@ public class PersticidesUsageDataHelper extends BaseDataHelper implements DBInte
     }
 
     public CursorLoader getCursorLoaderTask() {
-        return new CursorLoader(getContext(), getContentUri(), null, "task_id = ? ", new String[]{"null"}, null);
+        return new CursorLoader(getContext(), getContentUri(), null, "task_id = ? and saved = ?", new String[]{"null","no"}, null);
     }
 
 }

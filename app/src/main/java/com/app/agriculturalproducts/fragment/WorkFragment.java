@@ -181,7 +181,7 @@ public class WorkFragment extends Fragment implements LoaderManager.LoaderCallba
 
                     new MaterialDialog.Builder(getActivity())
                             .title("提交任务方式")
-                            .positiveText("提交新任务").onNegative(new MaterialDialog.SingleButtonCallback() {
+                            .positiveText("提交新记录").onNegative(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(MaterialDialog dialog, DialogAction which) {
 
@@ -191,7 +191,7 @@ public class WorkFragment extends Fragment implements LoaderManager.LoaderCallba
                             intent.putExtras(bundle);
                             startActivity(intent);
                         }
-                    }) .negativeText("提交已完成任务").onPositive(new MaterialDialog.SingleButtonCallback() {
+                    }) .negativeText("提交已完成记录").onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(MaterialDialog dialog, DialogAction which) {
                             if(taskRecord.getWorktask_type().equals("农药使用")){

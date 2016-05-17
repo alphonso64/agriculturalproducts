@@ -96,7 +96,7 @@ public class PlantSpeciesDataHelper extends BaseDataHelper implements DBInterfac
     }
 
     public CursorLoader getCursorLoaderTask() {
-        return new CursorLoader(getContext(), getContentUri(), null, "task_id = ? or task_id is null", new String[]{"null"}, null);
+        return new CursorLoader(getContext(), getContentUri(), null, "task_id = ? and saved = ?", new String[]{"null","no"}, null);
     }
 
 }

@@ -82,7 +82,7 @@ public class OtherInfoDataHelper extends BaseDataHelper implements DBInterface<O
     }
 
     public CursorLoader getCursorLoaderTask() {
-        return new CursorLoader(getContext(), getContentUri(), null, "task_id = ? ", new String[]{"null"}, null);
+        return new CursorLoader(getContext(), getContentUri(), null, "task_id = ? and saved = ?", new String[]{"null","no"}, null);
     }
 
 }

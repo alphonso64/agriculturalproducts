@@ -32,22 +32,16 @@ import butterknife.ButterKnife;
 public class TaskDoneSelectActivity extends BaseActivity {
     @Bind(R.id.toolbar)
     Toolbar toolbar;
-    private String taskType;
     TaskUnDoneSelectFragment currentFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
-        setToolBar(toolbar,"提交已完成任务");
+        setToolBar(toolbar,"提交已完成记录");
         TaskRecord task = (TaskRecord)getIntent().getSerializableExtra("task");
-        if(task!=null){
-            taskType = task.getWorktask_type();
-        }else {
-            taskType = "null";
-        }
         currentFragment = new TaskUnDoneSelectFragment();
-        currentFragment.setTaskType(taskType);
+        currentFragment.setTaskType(task);
         getSupportFragmentManager().beginTransaction().add(R.id.taskDone_frame_view,currentFragment).commit();
     }
     @Override

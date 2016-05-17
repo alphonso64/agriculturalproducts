@@ -32,6 +32,7 @@ import com.app.agriculturalproducts.db.PickingDataHelper;
 import com.app.agriculturalproducts.db.PlantSpeciesDataHelper;
 import com.app.agriculturalproducts.db.TaskDataHelper;
 import com.app.agriculturalproducts.http.HttpClient;
+import com.app.agriculturalproducts.util.ResultCheck;
 import com.app.agriculturalproducts.util.TaskRecordUtil;
 import com.litesuits.http.listener.HttpListener;
 import com.litesuits.http.response.Response;
@@ -92,17 +93,6 @@ public class PlantHistoryFragment extends Fragment implements LoaderManager.Load
         ButterKnife.unbind(this);
     }
 
-    private void savedPlantIDtoDB(String pid,String id){
-        FertilizerUsageDataHelper fertilizerUsageDataHelper = new FertilizerUsageDataHelper(getActivity());
-        fertilizerUsageDataHelper.updatePlantIDByID(pid,id);
-        PersticidesUsageDataHelper persticidesUsageDataHelper = new PersticidesUsageDataHelper(getActivity());
-        persticidesUsageDataHelper.updatePlantIDByID(pid,id);
-        PickingDataHelper pickingDataHelper = new PickingDataHelper(getActivity());
-        pickingDataHelper.updatePlantIDByID(pid,id);
-        OtherInfoDataHelper otherInfoDataHelper = new OtherInfoDataHelper(getActivity());
-        otherInfoDataHelper.updatePlantIDByID(pid,id);
-    }
-
     private boolean checkResult(PlanterRecord planterRecord,String s){
         try {
             JSONObject jsonObject = new JSONObject(s);
@@ -114,7 +104,7 @@ public class PlantHistoryFragment extends Fragment implements LoaderManager.Load
                     String id = jobject.getString("plantrecord_id");
                     planterRecord.setPlantrecord_id(id);
                 }
-                savedPlantIDtoDB(planterRecord.getPlantrecord_id(),String.valueOf(planterRecord.get_id()));
+                ResultCheck.savedPlantIDtoDB(planterRecord.getPlantrecord_id(),String.valueOf(planterRecord.get_id()),getActivity());
                 planterRecord.setSaved("yes");
                 ContentValues values = cupboard().withEntity(PlanterRecord.class).toContentValues(planterRecord);
                 mDataHelper.updateByID(values, String.valueOf(planterRecord.get_id()));
