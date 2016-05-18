@@ -17,6 +17,20 @@ public class BaseActivity extends AppCompatActivity {
         return R.layout.activity_main;
     }
 
+    protected void initToolBar(Toolbar toolbar,String title){
+        toolbar.setTitle(title);
+        setSupportActionBar(toolbar);//toolbar支持
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        onBackPressed();
+                    }
+                }
+        );
+    }
+
     protected void setToolBar(Toolbar toolbar,String title){
         if(title != null){
             toolbar.setTitle(title);

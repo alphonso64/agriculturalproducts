@@ -19,7 +19,7 @@
     </string-array>
 
     <string-array name="class_name">
-        <item>com.app.supervisorapp.MessageActivity</item>
+        <item>com.app.supervisorapp.SupervisorActivity</item>
         <item>com.app.supervisorapp.MessageActivity</item>
         <item>com.app.supervisorapp.MessageActivity</item>
         <item>com.app.supervisorapp.MessageActivity</item>

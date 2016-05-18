@@ -53,12 +53,16 @@
         </activity>
         <activity android:name=".MessageActivity" >
         </activity>
+
         <provider
             android:name=".db.DataProvider"
             android:authorities="com.app.supervisorapp"
             android:enabled="true"
             android:exported="false" >
         </provider>
+
+        <activity android:name=".SupervisorActivity" >
+        </activity>
     </application>
 
 </manifest>
