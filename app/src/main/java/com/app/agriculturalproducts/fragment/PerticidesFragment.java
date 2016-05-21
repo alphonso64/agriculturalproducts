@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.CursorAdapter;
 import android.support.v4.widget.SimpleCursorAdapter;
+import android.text.InputFilter;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,6 +43,7 @@ import com.app.agriculturalproducts.model.UnuploadTaskModel;
 import com.app.agriculturalproducts.model.UserInfoModel;
 import com.app.agriculturalproducts.util.EditTextUtil;
 import com.app.agriculturalproducts.util.InputType;
+import com.app.agriculturalproducts.util.Lengthfilter;
 import com.app.agriculturalproducts.util.TaskRecordUtil;
 
 import java.text.SimpleDateFormat;
@@ -231,7 +233,8 @@ public class PerticidesFragment extends BaseUploadFragment {
         fieldImg.setOnClickListener(fieldClickListener);
         dateImg.setOnClickListener(dateClickListener);
         checkInputType();
-
+        area_text.setFilters(new InputFilter[]{new Lengthfilter()});
+        num_text.setFilters(new InputFilter[]{new Lengthfilter()});
         EmployeeInfoModel employeeInfoModel = new EmployeeInfoModel(getActivity());
         EmployeeInfo employeeInfo = employeeInfoModel.getEmployeeInfo();
         member_text.setText(employeeInfo.getMember_name());

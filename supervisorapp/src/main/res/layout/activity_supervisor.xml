@@ -4,8 +4,202 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:weightSum="1"
     android:background="@color/lightGray">
     <include layout="@layout/include_toolbar"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/deepGray"
+        >
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:id="@+id/editText"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:padding="5dp"
+            android:hint="搜索"
+            android:gravity="center"
+            android:background="@drawable/editext_backgroud"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:paddingLeft="10dp">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="40dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.2"
+                android:layout_gravity="center_vertical"
+                android:text="基本信息"
+                android:textSize="13sp"
+                android:gravity="center"
+                android:textColor="#454545"/>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="4"
+                android:layout_height="match_parent">
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:gravity="left|top"
+                    android:padding="5dp"
+                    android:textSize="15sp"
+                    android:maxLength="100"
+                    android:id="@+id/s_info_text"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/editext_backgroud"
+                    android:layout_weight="1"
+                    android:singleLine="true"
+                    android:layout_marginRight="10dp"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="40dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.2"
+                android:layout_gravity="center_vertical"
+                android:text="安全生产信息"
+                android:textSize="13sp"
+                android:gravity="center"
+                android:textColor="#454545"/>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="4"
+                android:layout_height="match_parent">
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:gravity="left|top"
+                    android:padding="5dp"
+                    android:textSize="15sp"
+                    android:maxLength="100"
+                    android:id="@+id/s_safe_text"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/editext_backgroud"
+                    android:layout_weight="1"
+                    android:singleLine="true"
+                    android:layout_marginRight="10dp"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="40dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.2"
+                android:layout_gravity="center_vertical"
+                android:text="安全信息"
+                android:textSize="13sp"
+                android:gravity="center"
+                android:textColor="#454545"/>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="4"
+                android:layout_height="match_parent">
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:gravity="left|top"
+                    android:padding="5dp"
+                    android:textSize="15sp"
+                    android:maxLength="100"
+                    android:id="@+id/s_safe_info_text"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/editext_backgroud"
+                    android:layout_weight="1"
+                    android:singleLine="true"
+                    android:layout_marginRight="10dp"/>
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/white"
+        android:layout_marginTop="10dp">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="15dp"
+            android:background="@color/white"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            >
+            <TextView
+                android:id="@+id/infobar_title_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="执法检查记录"
+                android:textSize="13sp"
+                android:layout_centerVertical="true"
+                android:background="@drawable/shape_layout_bottom"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="100dp"
+                android:paddingBottom="3dp"/>
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/white"
+        android:layout_marginTop="10dp">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="15dp"
+            android:background="@color/white"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            >
+            <TextView
+                android:id="@+id/infobar_title_2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="隐患检查记录"
+                android:textSize="13sp"
+                android:layout_centerVertical="true"
+                android:background="@drawable/shape_layout_bottom"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="100dp"
+                android:paddingBottom="3dp"/>
+        </RelativeLayout>
+
+    </LinearLayout>
 
 </LinearLayout>

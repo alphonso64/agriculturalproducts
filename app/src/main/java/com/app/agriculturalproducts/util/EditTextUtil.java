@@ -1,5 +1,7 @@
 package com.app.agriculturalproducts.util;
 
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.widget.EditText;
 
@@ -207,8 +209,5 @@ public class EditTextUtil {
         }
         return flag;
     }
-
-
-
 
 }

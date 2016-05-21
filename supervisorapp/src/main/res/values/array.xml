@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="titles">
+        <item>企业信息</item>
         <item>执法检查</item>
         <item>隐患检查</item>
-        <item>企业信息</item>
         <item>知识库</item>
+        <item>特征库</item>
+        <item>视频查看</item>
         <item>消息通知</item>
         <item>数据统计</item>
     </string-array>
@@ -16,10 +18,14 @@
         <item>icon_ad</item>
         <item>icon_ae</item>
         <item>icon_af</item>
+        <item>icon_ah</item>
+        <item>icon_ag</item>
     </string-array>
 
     <string-array name="class_name">
         <item>com.app.supervisorapp.SupervisorActivity</item>
+        <item>com.app.supervisorapp.MessageActivity</item>
+        <item>com.app.supervisorapp.MessageActivity</item>
         <item>com.app.supervisorapp.MessageActivity</item>
         <item>com.app.supervisorapp.MessageActivity</item>
         <item>com.app.supervisorapp.MessageActivity</item>

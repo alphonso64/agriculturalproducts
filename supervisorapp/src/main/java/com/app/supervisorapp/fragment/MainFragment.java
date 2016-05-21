@@ -62,19 +62,16 @@ public class MainFragment  extends Fragment implements LoaderManager.LoaderCallb
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mRecyclerView.setLayoutManager(new NoScrollGridLayoutManager(getActivity(), 3));
+        mRecyclerView.setLayoutManager(new NoScrollGridLayoutManager(getActivity(), 4));
         BasicIconRecyclerAdapter ba = new BasicIconRecyclerAdapter(mDatas,getActivity());
         ba.setOnItemClickListener(icon_adpaterItemClickListener);
         mRecyclerView.setAdapter(ba);
 //
         mTaskRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mAdapter = new TaskCursorAdapter(getActivity());
-//        mAdapter.setOnItemClickListener(task_adpaterItemClickListener);
         mTaskRecyclerView.setAdapter(mAdapter);
 
-////
-//        update_btn.setOnClickListener(update_onclickListner);
-////        more_btn.setVisibility(View.INVISIBLE);
+        update_btn.setOnClickListener(update_onclickListner);
         mDataHelper = new TaskDataHelper(getActivity().getApplicationContext());
     }
 
@@ -83,9 +80,9 @@ public class MainFragment  extends Fragment implements LoaderManager.LoaderCallb
         public void onClick(View v) {
             TaskRecord task = new TaskRecord();
             task.setWorktask_type("农药使用");
-            task.setWorktask_name("name");
-            task.setWorktask_content("content");
-            task.setWorktask_publish_date("xx-xx-xx-xx");
+            task.setWorktask_name("消息通知");
+            task.setWorktask_content("xxxxxxxxxxxxxxxxxxxxxx");
+            task.setWorktask_publish_date("yy-hh-mm-ss");
             mDataHelper.insert_(task);
         }
     };

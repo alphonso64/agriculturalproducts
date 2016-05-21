@@ -325,7 +325,7 @@
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="30dp"
                         android:maxLength="30"
-                        android:inputType="number"
+                        android:inputType="numberDecimal"
                         android:background="@drawable/editext_backgroud"
                         android:gravity="left|top"
                         android:padding="5dp"
@@ -361,7 +361,7 @@
                         android:background="@drawable/editext_backgroud"
                         android:gravity="left|top"
                         android:maxLength="15"
-                        android:inputType="number"
+                        android:inputType="numberDecimal"
                         android:padding="5dp"
                         android:singleLine="true"
                         android:textSize="15sp" />

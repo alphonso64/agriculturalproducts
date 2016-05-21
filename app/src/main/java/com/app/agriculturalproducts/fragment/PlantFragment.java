@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.CursorAdapter;
 import android.support.v4.widget.SimpleCursorAdapter;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -42,6 +44,7 @@ import com.app.agriculturalproducts.http.HttpClient;
 import com.app.agriculturalproducts.model.EmployeeInfoModel;
 import com.app.agriculturalproducts.util.EditTextUtil;
 import com.app.agriculturalproducts.util.InputType;
+import com.app.agriculturalproducts.util.Lengthfilter;
 import com.app.agriculturalproducts.util.TaskRecordUtil;
 import com.litesuits.http.listener.HttpListener;
 import com.litesuits.http.response.Response;
@@ -190,6 +193,9 @@ public class PlantFragment extends BaseUploadFragment {
                 new int[]{android.R.id.text1}, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
         fieldImg.setOnClickListener(fieldClickListener);
         dateImg.setOnClickListener(dateClickListener);
+
+        plant_area.setFilters(new InputFilter[]{new Lengthfilter()});
+        num_text.setFilters(new InputFilter[]{new Lengthfilter()});
 
         EmployeeInfoModel employeeInfoModel = new EmployeeInfoModel(getActivity());
         plot_info_text.setText(employeeInfoModel.getEmployeeInfo().getEmployee_name());

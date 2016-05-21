@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.CursorAdapter;
 import android.support.v4.widget.SimpleCursorAdapter;
+import android.text.InputFilter;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -42,6 +43,7 @@ import com.app.agriculturalproducts.model.EmployeeInfoModel;
 import com.app.agriculturalproducts.model.UserInfoModel;
 import com.app.agriculturalproducts.util.EditTextUtil;
 import com.app.agriculturalproducts.util.InputType;
+import com.app.agriculturalproducts.util.Lengthfilter;
 import com.app.agriculturalproducts.util.TaskRecordUtil;
 
 import java.text.SimpleDateFormat;
@@ -212,7 +214,8 @@ public class FertilizerFragment extends BaseUploadFragment {
         fieldImg.setOnClickListener(fieldClickListener);
         dateImg.setOnClickListener(dateClickListener);
         checkInputType();
-
+        area_text.setFilters(new InputFilter[]{new Lengthfilter()});
+        num_text.setFilters(new InputFilter[]{new Lengthfilter()});
         EmployeeInfoModel employeeInfoModel = new EmployeeInfoModel(getActivity());
         employee_text.setText(employeeInfoModel.getEmployeeInfo().getEmployee_name());
         member_text.setText(employeeInfoModel.getEmployeeInfo().getMember_name());
