@@ -145,7 +145,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
-                    android:text="种子来源" />
+                    android:text="种植品类" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -230,6 +230,46 @@
                         android:padding="5dp"
                         android:singleLine="true"
                         android:textSize="15sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:text="种植类型" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="4">
+
+                    <TextView
+                        android:id="@+id/recored_type_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/text_backgroud"
+                        android:gravity="left|top"
+                        android:padding="5dp"
+                        android:singleLine="true"
+                        android:textSize="15sp" />
+
+                    <ImageView
+                        android:id="@+id/type_img"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="6dp"
+                        android:src="@drawable/ic_view_list_white_24dp" />
                 </LinearLayout>
             </LinearLayout>
 

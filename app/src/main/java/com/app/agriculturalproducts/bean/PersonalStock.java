@@ -22,6 +22,7 @@ public class PersonalStock {
     private String personalstock_goods_type;
     private String personalstock_goods_name;
     private String spec;
+    private String range;
     private String producer;
     private String employee_name;
     private String member_name;
@@ -36,7 +37,7 @@ public class PersonalStock {
                 + " " + "personalstock_goods_type" + ":" + personalstock_goods_type + " " + "personalstock_goods_name" + ":" + personalstock_goods_name
                 + " " + "spec" + ":" + spec + " " + "producer" + ":" + producer
                 + " " + "employee_name" + ":" + employee_name + " " + "member_name" + ":" + member_name
-                + " " + "type" + ":" + type);
+                + " " + "type" + ":" + type + " " + "range" + ":" + range);
     }
 
     public static PersonalStock fromCursor(Cursor cursor) {
@@ -147,5 +148,13 @@ public class PersonalStock {
 
     public void setSafe_spacing(String safe_spacing) {
         this.safe_spacing = safe_spacing;
+    }
+
+    public String getRange() {
+        return range;
+    }
+
+    public void setRange(String range) {
+        this.range = range;
     }
 }

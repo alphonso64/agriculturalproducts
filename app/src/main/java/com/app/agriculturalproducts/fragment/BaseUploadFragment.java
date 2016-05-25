@@ -42,4 +42,11 @@ public class BaseUploadFragment extends Fragment implements Upload {
         }
     }
 
+    public void saveOK(){
+        new MaterialDialog.Builder(getActivity())
+                .title("保存成功！")
+                .positiveText("好的")
+                .show();
+    }
+
 }

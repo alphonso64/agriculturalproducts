@@ -32,4 +32,11 @@
         <item>com.app.agriculturalproducts.StockActivity</item>
         <item>com.app.agriculturalproducts.StockDetailActivity</item>
     </string-array>
+
+    <string-array name="plant_type">
+        <item>普通农产品</item>
+        <item>无公害农产品</item>
+        <item>绿色农产品</item>
+        <item>有机农产</item>
+    </string-array>
 </resources>

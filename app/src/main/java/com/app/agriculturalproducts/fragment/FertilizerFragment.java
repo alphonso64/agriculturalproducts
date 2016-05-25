@@ -3,6 +3,7 @@ package com.app.agriculturalproducts.fragment;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -21,8 +22,15 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.app.agriculturalproducts.FertilizerActivity;
+import com.app.agriculturalproducts.OtherInfoActivity;
+import com.app.agriculturalproducts.PesticidesActivity;
+import com.app.agriculturalproducts.PickingActivity;
+import com.app.agriculturalproducts.PlantActivity;
 import com.app.agriculturalproducts.R;
+import com.app.agriculturalproducts.TaskDoneSelectActivity;
 import com.app.agriculturalproducts.bean.FertilizerRecord;
 import com.app.agriculturalproducts.bean.FertilizerUsage;
 import com.app.agriculturalproducts.bean.Field;
@@ -93,6 +101,8 @@ public class FertilizerFragment extends BaseUploadFragment {
     TextView method_text;
     @Bind(R.id.f_plant_area_text)
     TextView plant_area_text;
+    @Bind(R.id.f_plant_type_text)
+    TextView plant_type_text;
 
     @Bind(R.id.f_num_text)
     EditText num_text;
@@ -110,6 +120,8 @@ public class FertilizerFragment extends BaseUploadFragment {
     PersonalStock personalStock;
     PlanterRecord planterRecord;
     Calendar calendar;
+    String plant_type;
+    String fertilizer_type;
     @Override
     public int save() {
         if(flag){
@@ -122,12 +134,57 @@ public class FertilizerFragment extends BaseUploadFragment {
                 TaskRecordUtil.recordLocalDoneTask(getActivity(), taskDataHelper, task);
                 taskID = task.getWorktasklist_id();
             }
-            saveInfo(taskID);
-            flag = true;
-            disableWidget();
-            return InputType.INPUT_SAVE_OK;
+            if(checkPlantType()){
+                saveInfo(taskID);
+                flag = true;
+                disableWidget();
+                return InputType.INPUT_SAVE_OK;
+            }else{
+                String content = "你选择的品类是"+plant_type+",选择的化肥适用范围是"+fertilizer_type+"!";
+                final String finalTaskID = taskID;
+                new MaterialDialog.Builder(getActivity())
+                        .title("确定录入数据?").content(content)
+                        .positiveText("确定").onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(MaterialDialog dialog, DialogAction which) {
+                    }
+                }) .negativeText("取消").onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(MaterialDialog dialog, DialogAction which) {
+                        saveInfo(finalTaskID);
+                        flag = true;
+                        disableWidget();
+                        saveOK();
+                    }
+                }).show();
+                return -2;
+            }
         }
         return InputType.INPUT_EMPTY;
+    }
+
+    private boolean checkPlantType(){
+        int val = 0;
+        if(plant_type!=null && fertilizer_type !=null){
+            if(plant_type.equals(fertilizer_type)) {
+                return true;
+            }else{
+                if(plant_type.equals("有机农产品")){
+                    return false;
+                }else if(plant_type.equals("普通农产品")){
+                    return  true;
+                }else if(plant_type.equals("无公害农产品")){
+                    if(fertilizer_type.equals("普通农产品")){
+                        return false;
+                    }
+                }else if(plant_type.equals("绿色农产品")){
+                    if(!fertilizer_type.equals("有机农产品")){
+                        return false;
+                    }
+                }
+            }
+        }
+        return  true;
     }
 
     private void saveInfo(String taskID){
@@ -260,9 +317,9 @@ public class FertilizerFragment extends BaseUploadFragment {
                     field_area_text.setText(field.getField_area());
                     cursor_inner_a = new PlantSpeciesDataHelper(getActivity()).getCursorByFiledID(field.getField_id());
                     ListAdapter adapter_inner = new SimpleCursorAdapter(getActivity(),
-                            android.R.layout.simple_list_item_2,
-                            cursor_inner_a, new String[]{"plantrecord_breed","plantrecord_plant_date"},
-                            new int[]{android.R.id.text1,android.R.id.text2}, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
+                            R.layout.plant_item,
+                            cursor_inner_a, new String[]{"plantrecord_breed","plantrecord_plant_date","plantrecord_type"},
+                            new int[]{R.id.plant_title_1,R.id.plant_title_3,R.id.plant_title_2}, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
                     dialog_inner = new MaterialDialog.Builder(getActivity()).title("品种选择").adapter(adapter_inner, new MaterialDialog.ListCallback() {
                         @Override
                         public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
@@ -270,17 +327,19 @@ public class FertilizerFragment extends BaseUploadFragment {
                             planterRecord = PlanterRecord.fromCursor(cursor_inner_a);
                             species_text.setText(planterRecord.getPlantrecord_breed());
                             plant_area_text.setText(planterRecord.getField_plant_area());
+                            plant_type = planterRecord.getPlantrecord_type();
+                            plant_type_text.setText(plant_type);
                             cursor_inner_b = new StockDataHelper(getActivity()).getCursorFertilizer();
-
                             ListAdapter adapter_inner = new SimpleCursorAdapter(getActivity(),
-                                    android.R.layout.simple_list_item_1,
-                                    cursor_inner_b, new String[]{"personalstock_goods_name"},
-                                    new int[]{android.R.id.text1}, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
+                                    android.R.layout.simple_list_item_2,
+                                    cursor_inner_b, new String[]{"personalstock_goods_name","range"},
+                                    new int[]{android.R.id.text1,android.R.id.text2}, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
                             dialog = new MaterialDialog.Builder(getActivity()).title("化肥选择").adapter(adapter_inner, new MaterialDialog.ListCallback() {
                                 @Override
                                 public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                                     cursor_inner_b.moveToPosition(which);
                                     personalStock = PersonalStock.fromCursor(cursor_inner_b);
+                                    fertilizer_type = personalStock.getRange();
                                     name_text.setText(personalStock.getPersonalstock_goods_name());
                                     type_text.setText(personalStock.getPersonalstock_goods_type());
                                     spec_text.setText(personalStock.getSpec());
@@ -321,7 +380,6 @@ public class FertilizerFragment extends BaseUploadFragment {
             }
             calendar.set(Calendar.HOUR,hourOfDay);
             calendar.set(Calendar.MINUTE, minute);
-            Log.e("testcc", "calendar.set(Calendar.HOUR,hourOfDay);"+hourOfDay);
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
             Date date=calendar.getTime();
             date_text.setText(format.format(date));

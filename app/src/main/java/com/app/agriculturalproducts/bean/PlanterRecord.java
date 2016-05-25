@@ -13,6 +13,7 @@ public class PlanterRecord {
     private String plantrecord_id;
     private String plantrecord_seed_name;
     private String plantrecord_breed;
+    private String plantrecord_type;
     private String plantrecord_seed_source;
     private String plantrecord_specifications;
     private String plantrecord_seed_number;
@@ -30,7 +31,7 @@ public class PlanterRecord {
                 + " " + "plantrecord_seed_name" + ":" + plantrecord_seed_name + " " + "plantrecord_breed" + ":" + plantrecord_breed
                 + " " + "plantrecord_seed_source" + ":" + plantrecord_seed_source + " " + "plantrecord_specifications" + ":" + plantrecord_specifications
                 + " " + "plantrecord_seed_number" + ":" + plantrecord_seed_number + " " + "plantrecord_plant_date" + ":" + plantrecord_plant_date
-                + " " + "field_name" + ":" + field_name + " " + "employee_name" + ":" + employee_name);
+                + " " + "field_name" + ":" + field_name + " " + "employee_name" + ":" + employee_name+ " plantrecord_type" + ":" + plantrecord_type);
     }
 
     public static PlanterRecord fromCursor(Cursor cursor) {
@@ -157,5 +158,13 @@ public class PlanterRecord {
 
     public void setTask_id(String task_id) {
         this.task_id = task_id;
+    }
+
+    public String getPlantrecord_type() {
+        return plantrecord_type;
+    }
+
+    public void setPlantrecord_type(String plantrecord_type) {
+        this.plantrecord_type = plantrecord_type;
     }
 }

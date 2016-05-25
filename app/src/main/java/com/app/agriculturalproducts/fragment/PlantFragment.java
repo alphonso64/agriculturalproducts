@@ -21,6 +21,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -57,7 +58,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -75,6 +78,8 @@ public class PlantFragment extends BaseUploadFragment {
     ImageView dateImg;
     @Bind(R.id.field_img)
     ImageView fieldImg;
+    @Bind(R.id.type_img)
+    ImageView typeImg;
 
     @Bind(R.id.field_area_text)
     TextView plot_area_text;
@@ -92,6 +97,8 @@ public class PlantFragment extends BaseUploadFragment {
     TextView source_text;
     @Bind(R.id.species_text)
     TextView species_text;
+    @Bind(R.id.recored_type_text)
+    TextView recored_type_text;
 
     @Bind(R.id.num_text)
     EditText num_text;
@@ -105,9 +112,12 @@ public class PlantFragment extends BaseUploadFragment {
     Cursor cursor;
     Cursor cursor_inner;
     ListAdapter adapter;
+    SimpleAdapter typeAdapter;
     Field field;
     PersonalStock personalStock;
     Calendar calendar;
+
+    private String[] type_name = { "普通农产品","无公害农产品","绿色农产品","有机农产品" };
 
     @Override
     public int save() {
@@ -139,6 +149,7 @@ public class PlantFragment extends BaseUploadFragment {
         planterRecord.setPlantrecord_seed_name(seed_text.getText().toString());
         planterRecord.setPlantrecord_seed_number(num_text.getText().toString());
         planterRecord.setPlantrecord_seed_source(source_text.getText().toString());
+        planterRecord.setPlantrecord_type(recored_type_text.getText().toString());
         planterRecord.setSaved("no");
         planterRecord.setField_plant_area(plant_area.getText().toString());
         planterRecord.setLocal_field_id(field.getField_id());
@@ -176,7 +187,9 @@ public class PlantFragment extends BaseUploadFragment {
         if (TextUtils.isEmpty(date_text.getText().toString().trim())) {
             return true;
         }
-
+        if (TextUtils.isEmpty(recored_type_text.getText().toString().trim())) {
+            return true;
+        }
         return EditTextUtil.isEditEmpty(ls);
     }
 
@@ -193,6 +206,17 @@ public class PlantFragment extends BaseUploadFragment {
                 new int[]{android.R.id.text1}, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
         fieldImg.setOnClickListener(fieldClickListener);
         dateImg.setOnClickListener(dateClickListener);
+        typeImg.setOnClickListener(plantTypeClickListener);
+
+        List<Map<String, Object>> listems = new ArrayList<Map<String, Object>>();
+        for (int i = 0; i < type_name.length; i++) {
+            Map<String, Object> listem = new HashMap<String, Object>();
+            listem.put("type", type_name[i]);
+            listems.add(listem);
+        }
+        typeAdapter = new SimpleAdapter(getActivity(), listems,
+                android.R.layout.simple_list_item_1, new String[] { "type" },
+                new int[]{android.R.id.text1});
 
         plant_area.setFilters(new InputFilter[]{new Lengthfilter()});
         num_text.setFilters(new InputFilter[]{new Lengthfilter()});
@@ -203,6 +227,20 @@ public class PlantFragment extends BaseUploadFragment {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         date_text.setText(format.format(new Date()));
     }
+
+    View.OnClickListener plantTypeClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            dialog = new MaterialDialog.Builder(getActivity()).title("种植类型选择").adapter(typeAdapter, new MaterialDialog.ListCallback() {
+                @Override
+                public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                    recored_type_text.setText(type_name[which]);
+                    dialog.cancel();
+                }
+            }).alwaysCallSingleChoiceCallback().build();
+            dialog.show();
+        }
+    };
 
     View.OnClickListener fieldClickListener = new View.OnClickListener() {
         @Override
