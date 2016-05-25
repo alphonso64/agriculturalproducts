@@ -99,6 +99,8 @@ public class PlantFragment extends BaseUploadFragment {
     TextView species_text;
     @Bind(R.id.recored_type_text)
     TextView recored_type_text;
+    @Bind(R.id.circle_text)
+    TextView circle_text;
 
     @Bind(R.id.num_text)
     EditText num_text;
@@ -150,6 +152,7 @@ public class PlantFragment extends BaseUploadFragment {
         planterRecord.setPlantrecord_seed_number(num_text.getText().toString());
         planterRecord.setPlantrecord_seed_source(source_text.getText().toString());
         planterRecord.setPlantrecord_type(recored_type_text.getText().toString());
+        planterRecord.setPlantrecord_growth_cycle(circle_text.getText().toString());
         planterRecord.setSaved("no");
         planterRecord.setField_plant_area(plant_area.getText().toString());
         planterRecord.setLocal_field_id(field.getField_id());
@@ -266,6 +269,7 @@ public class PlantFragment extends BaseUploadFragment {
                             source_text.setText(personalStock.getProducer());
                             spec_text.setText(personalStock.getSpec());
                             species_text.setText(personalStock.getBreed());
+                            circle_text.setText(personalStock.getPlantrecord_growth_cycle());
                             dialog_inner.cancel();
                         }
                     }).alwaysCallSingleChoiceCallback().build();

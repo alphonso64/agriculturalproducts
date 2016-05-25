@@ -1,5 +1,6 @@
 package com.app.agriculturalproducts.fragment;
 
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -29,6 +30,7 @@ import com.app.agriculturalproducts.db.PlantSpeciesDataHelper;
 import com.app.agriculturalproducts.db.TaskDataHelper;
 import com.app.agriculturalproducts.http.HttpClient;
 import com.app.agriculturalproducts.util.TaskRecordUtil;
+import com.litesuits.http.exception.HttpException;
 import com.litesuits.http.listener.HttpListener;
 import com.litesuits.http.response.Response;
 
@@ -49,6 +51,7 @@ public class PickingHistoryFragment extends Fragment implements LoaderManager.Lo
     RecyclerView mRecyclerView;
     private PickingDataHelper mDataHelper;
     private PickingCursorAdapter mAdapter;
+    private ProgressDialog progressDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -125,9 +128,16 @@ public class PickingHistoryFragment extends Fragment implements LoaderManager.Lo
                                     .show();
                             return;
                         }
+                        progressDialog = new ProgressDialog(getActivity());
+                        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                        progressDialog.setMessage("数据上传中");
+                        progressDialog.setIndeterminate(false);
+                        progressDialog.setCancelable(true);
+                        progressDialog.show();
                         HttpClient.getInstance().uploadPick(new HttpListener<String>() {
                             @Override
                             public void onSuccess(String s, Response<String> response) {
+                                progressDialog.dismiss();
                                 try {
                                     JSONObject jsonObject = new JSONObject(s);
                                     String val = jsonObject.getString("return_code");
@@ -164,6 +174,13 @@ public class PickingHistoryFragment extends Fragment implements LoaderManager.Lo
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
+                            }
+                            @Override
+                            public void onFailure(HttpException e, Response<String> response) {
+                                progressDialog.dismiss();
+                                new MaterialDialog.Builder(getActivity())
+                                        .title("无法连接网络!")
+                                        .positiveText("好的").show();
                             }
                         }, pickRecord);
                     }

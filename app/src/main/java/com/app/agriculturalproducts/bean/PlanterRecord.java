@@ -25,13 +25,15 @@ public class PlanterRecord {
     private String local_stock_id;
     private String local_field_id;
     private String task_id;
+    private String plantrecord_growth_cycle;
 
     public void printfInfo(){
         Log.e("testcc", "plantrecord_id" + ":" + plantrecord_id
                 + " " + "plantrecord_seed_name" + ":" + plantrecord_seed_name + " " + "plantrecord_breed" + ":" + plantrecord_breed
                 + " " + "plantrecord_seed_source" + ":" + plantrecord_seed_source + " " + "plantrecord_specifications" + ":" + plantrecord_specifications
                 + " " + "plantrecord_seed_number" + ":" + plantrecord_seed_number + " " + "plantrecord_plant_date" + ":" + plantrecord_plant_date
-                + " " + "field_name" + ":" + field_name + " " + "employee_name" + ":" + employee_name+ " plantrecord_type" + ":" + plantrecord_type);
+                + " " + "field_name" + ":" + field_name + " " + "employee_name" + ":" + employee_name+ " plantrecord_type" + ":" + plantrecord_type
+                + " " + "plantrecord_growth_cycle" + ":" + plantrecord_growth_cycle);
     }
 
     public static PlanterRecord fromCursor(Cursor cursor) {
@@ -166,5 +168,13 @@ public class PlanterRecord {
 
     public void setPlantrecord_type(String plantrecord_type) {
         this.plantrecord_type = plantrecord_type;
+    }
+
+    public String getPlantrecord_growth_cycle() {
+        return plantrecord_growth_cycle;
+    }
+
+    public void setPlantrecord_growth_cycle(String plantrecord_growth_cycle) {
+        this.plantrecord_growth_cycle = plantrecord_growth_cycle;
     }
 }

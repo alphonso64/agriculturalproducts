@@ -1,5 +1,6 @@
 package com.app.agriculturalproducts.fragment;
 
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -35,6 +36,7 @@ import com.app.agriculturalproducts.db.TaskDataHelper;
 import com.app.agriculturalproducts.http.HttpClient;
 import com.app.agriculturalproducts.util.TaskRecordUtil;
 import com.app.agriculturalproducts.view.NoScrollGridLayoutManager;
+import com.litesuits.http.exception.HttpException;
 import com.litesuits.http.listener.HttpListener;
 import com.litesuits.http.request.StringRequest;
 import com.litesuits.http.response.Response;
@@ -56,6 +58,8 @@ public class PerticidesHistoryFragment extends Fragment implements LoaderManager
     RecyclerView mRecyclerView;
     private PersticidesUsageDataHelper mDataHelper;
     private PusageCursorAdapter mAdapter;
+    private ProgressDialog progressDialog;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -137,10 +141,16 @@ public class PerticidesHistoryFragment extends Fragment implements LoaderManager
                                     .show();
                             return;
                         }
+                        progressDialog = new ProgressDialog(getActivity());
+                        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                        progressDialog.setMessage("数据上传中");
+                        progressDialog.setIndeterminate(false);
+                        progressDialog.setCancelable(true);
+                        progressDialog.show();
                         HttpClient.getInstance().uploadPrevention(new HttpListener<String>() {
                             @Override
                             public void onSuccess(String s, Response<String> response) {
-                                Log.e("testcc",s);
+                                progressDialog.dismiss();
                                 try {
                                     JSONObject jsonObject = new JSONObject(s);
                                     String val = jsonObject.getString("return_code");
@@ -177,6 +187,13 @@ public class PerticidesHistoryFragment extends Fragment implements LoaderManager
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
+                            }
+                            @Override
+                            public void onFailure(HttpException e, Response<String> response) {
+                                progressDialog.dismiss();
+                                new MaterialDialog.Builder(getActivity())
+                                        .title("无法连接网络!")
+                                        .positiveText("好的").show();
                             }
                         }, preventionRecord);
                     }

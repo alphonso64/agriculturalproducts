@@ -124,20 +124,19 @@ public class HttpClient {
             stringRequest.setUri(Configure.GET_PESTICIDE_PERSONALSTOCK_BY_USERNAME_URL);
             result = liteHttp.execute(stringRequest);
             pStcokList = parsePersonalStock(result.getResult(), 2);
-            for (int i = 0; i < fStockList.size(); i++) {
-                fStockList.get(i).printfInfo();
+            for (int i = 0; i < seedStockList.size(); i++) {
+                 seedStockList.get(i).printfInfo();
             }
-            for (int i = 0; i < pStcokList.size(); i++) {
-                pStcokList.get(i).printfInfo();
-            }
+//            for (int i = 0; i < fStockList.size(); i++) {
+//                fStockList.get(i).printfInfo();
+//            }
+//            for (int i = 0; i < pStcokList.size(); i++) {
+//                pStcokList.get(i).printfInfo();
+//            }
             return true;
         } catch (Exception e) {
             return false;
         }
-
-//        for (int i = 0; i < seedStockList.size(); i++) {
-//            seedStockList.get(i).printfInfo();
-//        }
     }
 
     public boolean getStockDetailInfo(String name){
@@ -246,7 +245,7 @@ public class HttpClient {
             stringRequest.setUri(Configure.GET_FIELD_BY_USERNAME_URL);
             result = liteHttp.execute(stringRequest);
             fieldList = parseField(result.getResult());
-            Log.e("testcc", result.getResult() + fieldList.size());
+//            Log.e("testcc", result.getResult() + fieldList.size());
 //        for(int i=0;i<fieldList.size();i++){
 //            fieldList.get(i).printfInfo();
 //        }
@@ -303,9 +302,9 @@ public class HttpClient {
             stringRequest.setUri(Configure.GET_SEED_PERSONALSTOCK_BY_USERNAME_URL);
             result = liteHttp.execute(stringRequest);
             seedStockList = parsePersonalStock(result.getResult(),0);
-//        for (int i = 0; i < seedStockList.size(); i++) {
-//            seedStockList.get(i).printfInfo();
-//        }
+            for (int i = 0; i < seedStockList.size(); i++) {
+                seedStockList.get(i).printfInfo();
+            }
 
             stringRequest.setUri(Configure.GET_FERTILIZER_PERSONALSTOCK_BY_USERNAME_URL);
             result = liteHttp.execute(stringRequest);
@@ -518,7 +517,6 @@ public class HttpClient {
                 JSONArray array = object.getJSONArray("data");
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject jobject = (JSONObject) array.get(i);
-
                     PlanterRecord plant = new PlanterRecord();
                     String value = (String) jobject.get("plantrecord_id");
                     if (!(value.equals("null") && value != null)) {
@@ -527,6 +525,10 @@ public class HttpClient {
                     value = (String) jobject.get("plantrecord_type");
                     if (!(value.equals("null") && value != null)) {
                         plant.setPlantrecord_type(value);
+                    }
+                    value = (String) jobject.get("plantrecord_growth_cycle");
+                    if (!(value.equals("null") && value != null)) {
+                        plant.setPlantrecord_growth_cycle(value);
                     }
                     value = (String) jobject.get("plantrecord_seed_name");
                     if (!(value.equals("null") && value != null)) {
@@ -909,8 +911,12 @@ public class HttpClient {
                         if (!(value.equals("null") && value != null)) {
                             personalStock.setRange(value);
                         }
+                    }else if(cmd == 0){
+                        value = (String) jobject.get("plantrecord_growth_cycle");
+                        if (!(value.equals("null") && value != null)) {
+                            personalStock.setPlantrecord_growth_cycle(value);
+                        }
                     }
-
                     value = (String) jobject.get("personalstock_num");
                     if (!(value.equals("null") && value != null)) {
                         personalStock.setPersonalstock_num(value);
@@ -1072,7 +1078,8 @@ public class HttpClient {
             object.put("plantrecord_plant_date", planterRecord.getPlantrecord_plant_date());
             object.put("field_id", planterRecord.getLocal_field_id());
             object.put("plantrecord_area",planterRecord.getField_plant_area());
-            Log.e("testcc",object.toString());
+            object.put("plantrecord_growth_cycle",planterRecord.getPlantrecord_growth_cycle());
+            Log.e("testabc",object.toString());
         } catch (JSONException e) {
             return 0;
         }

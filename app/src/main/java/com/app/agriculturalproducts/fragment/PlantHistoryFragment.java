@@ -1,5 +1,6 @@
 package com.app.agriculturalproducts.fragment;
 
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -34,6 +35,7 @@ import com.app.agriculturalproducts.db.TaskDataHelper;
 import com.app.agriculturalproducts.http.HttpClient;
 import com.app.agriculturalproducts.util.ResultCheck;
 import com.app.agriculturalproducts.util.TaskRecordUtil;
+import com.litesuits.http.exception.HttpException;
 import com.litesuits.http.listener.HttpListener;
 import com.litesuits.http.response.Response;
 
@@ -55,6 +57,7 @@ public class PlantHistoryFragment extends Fragment implements LoaderManager.Load
     RecyclerView mRecyclerView;
     private PlantSpeciesDataHelper mDataHelper;
     private PlantCursorAdapter mAdapter;
+    private ProgressDialog progressDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -143,9 +146,16 @@ public class PlantHistoryFragment extends Fragment implements LoaderManager.Load
                         .negativeText("否").onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(MaterialDialog dialog, DialogAction which) {
+                        progressDialog = new ProgressDialog(getActivity());
+                        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                        progressDialog.setMessage("数据上传中");
+                        progressDialog.setIndeterminate(false);
+                        progressDialog.setCancelable(true);
+                        progressDialog.show();
                         HttpClient.getInstance().uploadPlant(new HttpListener<String>() {
                             @Override
                             public void onSuccess(String s, Response<String> response) {
+                                progressDialog.dismiss();
                                 if(checkResult(planterRecord,s)){
                                     String taskID = planterRecord.getTask_id();
                                     if(!taskID.equals("null")){
@@ -157,6 +167,13 @@ public class PlantHistoryFragment extends Fragment implements LoaderManager.Load
                                         TaskRecordUtil.removeLocalUnDoneTask(getActivity(),new TaskDataHelper(getActivity().getApplicationContext()),taskID);
                                     }
                                 }
+                            }
+                            @Override
+                            public void onFailure(HttpException e, Response<String> response) {
+                                progressDialog.dismiss();
+                                new MaterialDialog.Builder(getActivity())
+                                        .title("无法连接网络!")
+                                        .positiveText("好的").show();
                             }
                         },planterRecord);
                     }

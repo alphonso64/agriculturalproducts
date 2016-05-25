@@ -30,6 +30,7 @@ public class PersonalStock {
     private String breed;
     private String method;
     private String safe_spacing;
+    private String plantrecord_growth_cycle;
 
     public void printfInfo(){
         Log.e("testcc", "personalstock_id" + ":" + personalstock_id
@@ -37,7 +38,8 @@ public class PersonalStock {
                 + " " + "personalstock_goods_type" + ":" + personalstock_goods_type + " " + "personalstock_goods_name" + ":" + personalstock_goods_name
                 + " " + "spec" + ":" + spec + " " + "producer" + ":" + producer
                 + " " + "employee_name" + ":" + employee_name + " " + "member_name" + ":" + member_name
-                + " " + "type" + ":" + type + " " + "range" + ":" + range);
+                + " " + "type" + ":" + type + " " + "range" + ":" + range
+                + " " + "plantrecord_growth_cycle" + ":" + plantrecord_growth_cycle);
     }
 
     public static PersonalStock fromCursor(Cursor cursor) {
@@ -156,5 +158,13 @@ public class PersonalStock {
 
     public void setRange(String range) {
         this.range = range;
+    }
+
+    public String getPlantrecord_growth_cycle() {
+        return plantrecord_growth_cycle;
+    }
+
+    public void setPlantrecord_growth_cycle(String plantrecord_growth_cycle) {
+        this.plantrecord_growth_cycle = plantrecord_growth_cycle;
     }
 }
