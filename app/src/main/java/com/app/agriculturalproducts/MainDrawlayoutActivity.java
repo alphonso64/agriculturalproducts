@@ -204,7 +204,7 @@ public class MainDrawlayoutActivity extends BaseActivity {
                 new Thread(){
                     @Override
                     public void run() {
-                        if(HttpClient.getInstance().getFieldInfo(name)){
+                        if(HttpClient.getInstance(MainDrawlayoutActivity.this).getFieldInfo(name)){
                             mHandler.sendEmptyMessage(2);
                         }else{
                             mHandler.sendEmptyMessage(-1);
@@ -243,48 +243,48 @@ public class MainDrawlayoutActivity extends BaseActivity {
 
             @Override
             public void run() {
-                if(HttpClient.getInstance().getAllInfo(name))
+                if(HttpClient.getInstance(MainDrawlayoutActivity.this).getAllInfo(name))
                 {
                     //保存地块信息至数据库
                     FieldDataHelper fieldDataHelper = new FieldDataHelper(MainDrawlayoutActivity.this);
-                    if(HttpClient.getInstance().fieldList!=null)
-                        fieldDataHelper.replace(HttpClient.getInstance().fieldList);
+                    if(HttpClient.getInstance(MainDrawlayoutActivity.this).fieldList!=null)
+                        fieldDataHelper.replace(HttpClient.getInstance(MainDrawlayoutActivity.this).fieldList);
 
                     PlantSpeciesDataHelper plantSpeciesDataHelper = new PlantSpeciesDataHelper(MainDrawlayoutActivity.this);
-                    if(HttpClient.getInstance().planterList!=null)
-                        plantSpeciesDataHelper.repalceInfo(HttpClient.getInstance().planterList);
+                    if(HttpClient.getInstance(MainDrawlayoutActivity.this).planterList!=null)
+                        plantSpeciesDataHelper.repalceInfo(HttpClient.getInstance(MainDrawlayoutActivity.this).planterList);
 
                     FertilizerUsageDataHelper fertilizerUsageDataHelper = new FertilizerUsageDataHelper(MainDrawlayoutActivity.this);
-                    if(HttpClient.getInstance().fertiList!=null)
-                        fertilizerUsageDataHelper.repalceInfo(HttpClient.getInstance().fertiList);
+                    if(HttpClient.getInstance(MainDrawlayoutActivity.this).fertiList!=null)
+                        fertilizerUsageDataHelper.repalceInfo(HttpClient.getInstance(MainDrawlayoutActivity.this).fertiList);
 
                     PersticidesUsageDataHelper persticidesUsageDataHelper = new PersticidesUsageDataHelper(MainDrawlayoutActivity.this);
-                    if(HttpClient.getInstance().preventionList!=null)
-                        persticidesUsageDataHelper.repalceInfo(HttpClient.getInstance().preventionList);
+                    if(HttpClient.getInstance(MainDrawlayoutActivity.this).preventionList!=null)
+                        persticidesUsageDataHelper.repalceInfo(HttpClient.getInstance(MainDrawlayoutActivity.this).preventionList);
 
                     PickingDataHelper pickingDataHelper = new PickingDataHelper(MainDrawlayoutActivity.this);
-                    if(HttpClient.getInstance().pickList!=null)
-                        pickingDataHelper.repalceInfo(HttpClient.getInstance().pickList);
+                    if(HttpClient.getInstance(MainDrawlayoutActivity.this).pickList!=null)
+                        pickingDataHelper.repalceInfo(HttpClient.getInstance(MainDrawlayoutActivity.this).pickList);
 
                     OtherInfoDataHelper otherInfoDataHelper = new OtherInfoDataHelper(MainDrawlayoutActivity.this);
-                    if(HttpClient.getInstance().otherList!=null)
-                        otherInfoDataHelper.repalceInfo(HttpClient.getInstance().otherList);
+                    if(HttpClient.getInstance(MainDrawlayoutActivity.this).otherList!=null)
+                        otherInfoDataHelper.repalceInfo(HttpClient.getInstance(MainDrawlayoutActivity.this).otherList);
 
                     StockDataHelper stockDataHelper = new StockDataHelper(MainDrawlayoutActivity.this);
-                    if(HttpClient.getInstance().seedStockList!=null)
-                        stockDataHelper.replace(HttpClient.getInstance().seedStockList);
-                    if(HttpClient.getInstance().fStockList!=null)
-                        stockDataHelper.bulkInsert(HttpClient.getInstance().fStockList);
-                    if(HttpClient.getInstance().pStcokList!=null)
-                        stockDataHelper.bulkInsert(HttpClient.getInstance().pStcokList);
+                    if(HttpClient.getInstance(MainDrawlayoutActivity.this).seedStockList!=null)
+                        stockDataHelper.replace(HttpClient.getInstance(MainDrawlayoutActivity.this).seedStockList);
+                    if(HttpClient.getInstance(MainDrawlayoutActivity.this).fStockList!=null)
+                        stockDataHelper.bulkInsert(HttpClient.getInstance(MainDrawlayoutActivity.this).fStockList);
+                    if(HttpClient.getInstance(MainDrawlayoutActivity.this).pStcokList!=null)
+                        stockDataHelper.bulkInsert(HttpClient.getInstance(MainDrawlayoutActivity.this).pStcokList);
 
                     StockDetailDataHelper stockDetailDataHelper = new StockDetailDataHelper(MainDrawlayoutActivity.this);
-                    if(HttpClient.getInstance().enterstockList!=null)
-                        stockDetailDataHelper.replace(HttpClient.getInstance().enterstockList);
-                    if(HttpClient.getInstance().outstockList!=null)
-                        stockDetailDataHelper.bulkInsert(HttpClient.getInstance().outstockList);
+                    if(HttpClient.getInstance(MainDrawlayoutActivity.this).enterstockList!=null)
+                        stockDetailDataHelper.replace(HttpClient.getInstance(MainDrawlayoutActivity.this).enterstockList);
+                    if(HttpClient.getInstance(MainDrawlayoutActivity.this).outstockList!=null)
+                        stockDetailDataHelper.bulkInsert(HttpClient.getInstance(MainDrawlayoutActivity.this).outstockList);
                     //保存雇员信息sp中
-                    EmployeeInfo employeeInfo = HttpClient.getInstance().employeeInfo;
+                    EmployeeInfo employeeInfo = HttpClient.getInstance(MainDrawlayoutActivity.this).employeeInfo;
                     if(employeeInfo!=null)
                         employeeInfoModel.setEmployeeInfo(employeeInfo);
                     mHandler.sendEmptyMessage(1);

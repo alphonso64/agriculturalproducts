@@ -134,7 +134,7 @@ public class PickingHistoryFragment extends Fragment implements LoaderManager.Lo
                         progressDialog.setIndeterminate(false);
                         progressDialog.setCancelable(true);
                         progressDialog.show();
-                        HttpClient.getInstance().uploadPick(new HttpListener<String>() {
+                        HttpClient.getInstance(getContext()).uploadPick(new HttpListener<String>() {
                             @Override
                             public void onSuccess(String s, Response<String> response) {
                                 progressDialog.dismiss();

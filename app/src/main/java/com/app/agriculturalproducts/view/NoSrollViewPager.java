@@ -37,8 +37,6 @@ public class NoSrollViewPager extends ViewPager {
     public void setPagingEnabled(boolean enabled) {
         this.enabled = enabled;
     }
-    
-    
-    
+
 }
 

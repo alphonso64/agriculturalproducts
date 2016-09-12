@@ -2,15 +2,19 @@ package com.app.agriculturalproducts;
 
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -19,6 +23,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.app.agriculturalproducts.bean.PersonalStockDetail;
 import com.app.agriculturalproducts.db.DataProvider;
 import com.app.agriculturalproducts.http.HttpClient;
 import com.app.agriculturalproducts.util.InputType;
@@ -28,6 +33,8 @@ import com.litesuits.http.response.Response;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -51,6 +58,11 @@ public class LoginActivity extends AppCompatActivity {
         checkLogin();
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar.setTitle("登录");
+        setSupportActionBar(mToolbar);
+        mToolbar.setOnMenuItemClickListener(itemClick);
 
         lyLayout.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -81,6 +93,12 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_setting_single, menu);
+        return true;
+    }
+
     private void checkLogin() {
         SharedPreferences sp = getSharedPreferences(InputType.loginInfoDB,
                 Activity.MODE_PRIVATE);
@@ -90,6 +108,21 @@ public class LoginActivity extends AppCompatActivity {
             finish();
         }
     }
+
+    private void jump() {
+        Intent intent = new Intent(this, SettingActivity.class);
+        startActivity(intent);
+    }
+
+    private Toolbar.OnMenuItemClickListener itemClick = new Toolbar.OnMenuItemClickListener() {
+        @Override
+        public boolean onMenuItemClick(MenuItem item) {
+            if (item.getItemId() == R.id.action_settting_single) {
+                jump();
+            }
+            return true;
+        }
+    };
 
     @OnClick(R.id.loginbutton)
     void login(){
@@ -147,10 +180,13 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(HttpException e, Response<String> response) {
-
+                Toast toast = Toast.makeText(getApplicationContext(),
+                        "网络连接错误", Toast.LENGTH_SHORT);
+                toast.setGravity(Gravity.CENTER, 0, 0);
+                toast.show();
             }
         };
-        HttpClient.getInstance().checkLogin(listener,name,pwd);
+        HttpClient.getInstance(LoginActivity.this).checkLogin(listener,name,pwd);
 
 //        ed.putString("isLogin",InputType.INPUT_CHECK_OK);
 //        ed.commit();

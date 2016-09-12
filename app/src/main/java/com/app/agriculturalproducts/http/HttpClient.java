@@ -1,5 +1,8 @@
 package com.app.agriculturalproducts.http;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.app.agriculturalproducts.app.AppApplication;
@@ -14,6 +17,7 @@ import com.app.agriculturalproducts.bean.PlanterRecord;
 import com.app.agriculturalproducts.bean.PreventionRecord;
 import com.app.agriculturalproducts.bean.TaskRecord;
 import com.app.agriculturalproducts.util.Configure;
+import com.app.agriculturalproducts.util.InputType;
 import com.litesuits.http.HttpConfig;
 import com.litesuits.http.LiteHttp;
 import com.litesuits.http.exception.HttpException;
@@ -37,6 +41,7 @@ import java.util.List;
  */
 public class HttpClient {
     private LiteHttp liteHttp;
+    private String serverIP;
     private static HttpClient single = null;
     public EmployeeInfo employeeInfo;
     public List<Field> fieldList;
@@ -53,19 +58,26 @@ public class HttpClient {
     public List<TaskRecord> taskList;
     //public List
 
-    private HttpClient() {
+    private HttpClient(Context ctx) {
 
 //        HttpConfig config = new HttpConfig(AppApplication.getContext()) // configuration quickly
 //                .setDetectNetwork(true);
         liteHttp = LiteHttp.newApacheHttpClient(null);
-
+        SharedPreferences sp = ctx.getSharedPreferences(InputType.loginInfoDB,
+                Activity.MODE_PRIVATE);
+        serverIP = sp.getString("serverIP","cdjytgs.kmdns.net:8081");
+        serverIP = "http://"+serverIP+"/";
     }
 
-    public static HttpClient getInstance() {
+    public static HttpClient getInstance(Context ctx) {
         if (single == null) {
-            single = new HttpClient();
+            single = new HttpClient(ctx);
         }
         return single;
+    }
+
+    public void resetIP(String val){
+        serverIP = "http://"+val+"/";
     }
 
     public void checkLogin(HttpListener<String> listener, String name, String pwd) {
@@ -80,7 +92,8 @@ public class HttpClient {
         LinkedHashMap<String, String> header = new LinkedHashMap<>();
         header.put("contentType", "utf-8");
         header.put("Content-type", "application/x-java-serialized-object");
-        liteHttp.executeAsync(new StringRequest(Configure.LOGIN_URL).setHeaders(header)
+        Log.e("testcc","URL:"+Configure.getLOGIN_URL(serverIP));
+        liteHttp.executeAsync(new StringRequest(Configure.getLOGIN_URL(serverIP)).setHeaders(header)
                 .setMethod(HttpMethods.Post).setHttpBody(new StringBody(object.toString())).setHttpListener(listener));
     }
 
@@ -109,19 +122,19 @@ public class HttpClient {
         LinkedHashMap<String, String> header = new LinkedHashMap<>();
         header.put("contentType", "utf-8");
         header.put("Content-type", "application/x-java-serialized-object");
-        StringRequest stringRequest = new StringRequest(Configure.GET_EMPLOYEE_BY_USERNAME_URL).setHeaders(header)
+        StringRequest stringRequest = new StringRequest(Configure.GET_EMPLOYEE_BY_USERNAME_URL(serverIP)).setHeaders(header)
                 .setMethod(HttpMethods.Post).setHttpBody(new StringBody(object.toString()));
 
         try {
-            stringRequest.setUri(Configure.GET_SEED_PERSONALSTOCK_BY_USERNAME_URL);
+            stringRequest.setUri(Configure.GET_SEED_PERSONALSTOCK_BY_USERNAME_URL(serverIP));
             Response<String> result = liteHttp.execute(stringRequest);
             seedStockList = parsePersonalStock(result.getResult(),0);
 
-            stringRequest.setUri(Configure.GET_FERTILIZER_PERSONALSTOCK_BY_USERNAME_URL);
+            stringRequest.setUri(Configure.GET_FERTILIZER_PERSONALSTOCK_BY_USERNAME_URL(serverIP));
             result = liteHttp.execute(stringRequest);
             fStockList = parsePersonalStock(result.getResult(), 1);
 
-            stringRequest.setUri(Configure.GET_PESTICIDE_PERSONALSTOCK_BY_USERNAME_URL);
+            stringRequest.setUri(Configure.GET_PESTICIDE_PERSONALSTOCK_BY_USERNAME_URL(serverIP));
             result = liteHttp.execute(stringRequest);
             pStcokList = parsePersonalStock(result.getResult(), 2);
             for (int i = 0; i < seedStockList.size(); i++) {
@@ -149,17 +162,17 @@ public class HttpClient {
         LinkedHashMap<String, String> header = new LinkedHashMap<>();
         header.put("contentType", "utf-8");
         header.put("Content-type", "application/x-java-serialized-object");
-        StringRequest stringRequest = new StringRequest(Configure.GET_EMPLOYEE_BY_USERNAME_URL).setHeaders(header)
+        StringRequest stringRequest = new StringRequest(Configure.GET_EMPLOYEE_BY_USERNAME_URL(serverIP)).setHeaders(header)
                 .setMethod(HttpMethods.Post).setHttpBody(new StringBody(object.toString()));
 
 
 
         try {
-            stringRequest.setUri(Configure.GET_ENTERPERSONALSTOCKDETAIL_BY_USERNAME_URL);
+            stringRequest.setUri(Configure.GET_ENTERPERSONALSTOCKDETAIL_BY_USERNAME_URL(serverIP));
             Response<String> result = liteHttp.execute(stringRequest);
             enterstockList = parsePersonalStockDetail(result.getResult(), 0);
 
-            stringRequest.setUri(Configure.GET_OUTPERSONALSTOCKDETAIL_BY_USERNAME_URL);
+            stringRequest.setUri(Configure.GET_OUTPERSONALSTOCKDETAIL_BY_USERNAME_URL(serverIP));
             result = liteHttp.execute(stringRequest);
             outstockList= parsePersonalStockDetail(result.getResult(), 1);
             return true;
@@ -184,7 +197,7 @@ public class HttpClient {
         LinkedHashMap<String, String> header = new LinkedHashMap<>();
         header.put("contentType", "utf-8");
         header.put("Content-type", "application/x-java-serialized-object");
-        StringRequest stringRequest = new StringRequest(Configure.GET_FIELD_BY_USERNAME_URL).setHeaders(header)
+        StringRequest stringRequest = new StringRequest(Configure.GET_FIELD_BY_USERNAME_URL(serverIP)).setHeaders(header)
                 .setMethod(HttpMethods.Post).setHttpBody(new StringBody(object.toString()));
 
         try {
@@ -208,7 +221,7 @@ public class HttpClient {
         LinkedHashMap<String, String> header = new LinkedHashMap<>();
         header.put("contentType", "utf-8");
         header.put("Content-type", "application/x-java-serialized-object");
-        StringRequest stringRequest = new StringRequest(Configure.GET_WORKTASK_BY_USERNAME_URL).setHeaders(header)
+        StringRequest stringRequest = new StringRequest(Configure.GET_WORKTASK_BY_USERNAME_URL(serverIP)).setHeaders(header)
                 .setMethod(HttpMethods.Post).setHttpBody(new StringBody(object.toString()));
         try {
             Response<String> result = liteHttp.execute(stringRequest);
@@ -233,7 +246,7 @@ public class HttpClient {
         LinkedHashMap<String, String> header = new LinkedHashMap<>();
         header.put("contentType", "utf-8");
         header.put("Content-type", "application/x-java-serialized-object");
-        StringRequest stringRequest = new StringRequest(Configure.GET_EMPLOYEE_BY_USERNAME_URL).setHeaders(header)
+        StringRequest stringRequest = new StringRequest(Configure.GET_EMPLOYEE_BY_USERNAME_URL(serverIP)).setHeaders(header)
                 .setMethod(HttpMethods.Post).setHttpBody(new StringBody(object.toString()));
 
         try {
@@ -242,7 +255,7 @@ public class HttpClient {
 //        Log.e("testcc", result.getResult());
 //        employeeInfo.printfInfo();
 
-            stringRequest.setUri(Configure.GET_FIELD_BY_USERNAME_URL);
+            stringRequest.setUri(Configure.GET_FIELD_BY_USERNAME_URL(serverIP));
             result = liteHttp.execute(stringRequest);
             fieldList = parseField(result.getResult());
 //            Log.e("testcc", result.getResult() + fieldList.size());
@@ -250,7 +263,7 @@ public class HttpClient {
 //            fieldList.get(i).printfInfo();
 //        }
 
-            stringRequest.setUri(Configure.GET_PLANTRECORD_BY_USERNAME_URL);
+            stringRequest.setUri(Configure.GET_PLANTRECORD_BY_USERNAME_URL(serverIP));
             result = liteHttp.execute(stringRequest);
             planterList = parsePlant(result.getResult());
 //            Log.e("testcc", result.getResult()+planterList.size());
@@ -258,7 +271,7 @@ public class HttpClient {
                 planterList.get(i).printfInfo();
             }
 
-            stringRequest.setUri(Configure.GET_FERTILIZERECORD_BY_USERNAME_URL);
+            stringRequest.setUri(Configure.GET_FERTILIZERECORD_BY_USERNAME_URL(serverIP));
             result = liteHttp.execute(stringRequest);
             fertiList = parseFertilizer(result.getResult());
 //        Log.e("testcc", result.getResult()+fertiList.size());
@@ -267,7 +280,7 @@ public class HttpClient {
 //        }
 
 
-            stringRequest.setUri(Configure.GET_PREVENTIONRECORD_BY_USERNAME_URL);
+            stringRequest.setUri(Configure.GET_PREVENTIONRECORD_BY_USERNAME_URL(serverIP));
             result = liteHttp.execute(stringRequest);
             preventionList = parsePrevention(result.getResult());
 //        Log.e("testcc", result.getResult()+preventionList.size());
@@ -275,7 +288,7 @@ public class HttpClient {
 //            preventionList.get(i).printfInfo();
 //        }
 
-            stringRequest.setUri(Configure.GET_PICKRECORD_BY_USERNAME_URL);
+            stringRequest.setUri(Configure.GET_PICKRECORD_BY_USERNAME_URL(serverIP));
             result = liteHttp.execute(stringRequest);
             pickList = parsePick(result.getResult());
 //        Log.e("testcc", result.getResult()+pickList.size());
@@ -283,37 +296,37 @@ public class HttpClient {
 //            pickList.get(i).printfInfo();
 //        }
 
-            stringRequest.setUri(Configure.GET_OTHERRECORD_BY_USERNAME_URL);
+            stringRequest.setUri(Configure.GET_OTHERRECORD_BY_USERNAME_URL(serverIP));
             result = liteHttp.execute(stringRequest);
             otherList = parseOther(result.getResult());
             //Log.e("testcc", result.getResult());
 
-            stringRequest.setUri(Configure.GET_ENTERPERSONALSTOCKDETAIL_BY_USERNAME_URL);
+            stringRequest.setUri(Configure.GET_ENTERPERSONALSTOCKDETAIL_BY_USERNAME_URL(serverIP));
             result = liteHttp.execute(stringRequest);
             enterstockList = parsePersonalStockDetail(result.getResult(),0);
 //        Log.e("testcc", result.getResult());
 //        for (int i = 0; i < stockList.size(); i++) {
 //            stockList.get(i).printfInfo();
 //        }
-            stringRequest.setUri(Configure.GET_OUTPERSONALSTOCKDETAIL_BY_USERNAME_URL);
+            stringRequest.setUri(Configure.GET_OUTPERSONALSTOCKDETAIL_BY_USERNAME_URL(serverIP));
             result = liteHttp.execute(stringRequest);
             outstockList = parsePersonalStockDetail(result.getResult(),1);
 
-            stringRequest.setUri(Configure.GET_SEED_PERSONALSTOCK_BY_USERNAME_URL);
+            stringRequest.setUri(Configure.GET_SEED_PERSONALSTOCK_BY_USERNAME_URL(serverIP));
             result = liteHttp.execute(stringRequest);
             seedStockList = parsePersonalStock(result.getResult(),0);
             for (int i = 0; i < seedStockList.size(); i++) {
                 seedStockList.get(i).printfInfo();
             }
 
-            stringRequest.setUri(Configure.GET_FERTILIZER_PERSONALSTOCK_BY_USERNAME_URL);
+            stringRequest.setUri(Configure.GET_FERTILIZER_PERSONALSTOCK_BY_USERNAME_URL(serverIP));
             result = liteHttp.execute(stringRequest);
             fStockList = parsePersonalStock(result.getResult(),1);
 //        for (int i = 0; i < fStockList.size(); i++) {
 //            fStockList.get(i).printfInfo();
 //        }
 
-            stringRequest.setUri(Configure.GET_PESTICIDE_PERSONALSTOCK_BY_USERNAME_URL);
+            stringRequest.setUri(Configure.GET_PESTICIDE_PERSONALSTOCK_BY_USERNAME_URL(serverIP));
             result = liteHttp.execute(stringRequest);
             pStcokList = parsePersonalStock(result.getResult(),2);
 //        for (int i = 0; i < pStcokList.size(); i++) {
@@ -1086,7 +1099,7 @@ public class HttpClient {
         LinkedHashMap<String, String> header = new LinkedHashMap<>();
         header.put("contentType", "utf-8");
         header.put("Content-type", "application/x-java-serialized-object");
-        StringRequest stringRequest = new StringRequest(Configure.ADD_PLANTRECORD_URL).setHeaders(header)
+        StringRequest stringRequest = new StringRequest(Configure.ADD_PLANTRECORD_URL(serverIP)).setHeaders(header)
                 .setMethod(HttpMethods.Post).setHttpBody(new StringBody(object.toString()));
         stringRequest.setHttpListener(listener);
         liteHttp.executeAsync(stringRequest);
@@ -1113,7 +1126,7 @@ public class HttpClient {
         LinkedHashMap<String, String> header = new LinkedHashMap<>();
         header.put("contentType", "utf-8");
         header.put("Content-type", "application/x-java-serialized-object");
-        StringRequest stringRequest = new StringRequest(Configure.ADD_FERTILIZERECORD_URL).setHeaders(header)
+        StringRequest stringRequest = new StringRequest(Configure.ADD_FERTILIZERECORD_URL(serverIP)).setHeaders(header)
                 .setMethod(HttpMethods.Post).setHttpBody(new StringBody(object.toString()));
         stringRequest.setHttpListener(listener);
         liteHttp.executeAsync(stringRequest);
@@ -1143,7 +1156,7 @@ public class HttpClient {
         LinkedHashMap<String, String> header = new LinkedHashMap<>();
         header.put("contentType", "utf-8");
         header.put("Content-type", "application/x-java-serialized-object");
-        StringRequest stringRequest = new StringRequest(Configure.ADD_PREVENTIONRECORD_URL ).setHeaders(header)
+        StringRequest stringRequest = new StringRequest(Configure.ADD_PREVENTIONRECORD_URL (serverIP)).setHeaders(header)
                 .setMethod(HttpMethods.Post).setHttpBody(new StringBody(object.toString()));
         stringRequest.setHttpListener(listener);
         liteHttp.executeAsync(stringRequest);
@@ -1164,7 +1177,7 @@ public class HttpClient {
         LinkedHashMap<String, String> header = new LinkedHashMap<>();
         header.put("contentType", "utf-8");
         header.put("Content-type", "application/x-java-serialized-object");
-        StringRequest stringRequest = new StringRequest(Configure.ADD_PICKRECORD_URL).setHeaders(header)
+        StringRequest stringRequest = new StringRequest(Configure.ADD_PICKRECORD_URL(serverIP)).setHeaders(header)
                 .setMethod(HttpMethods.Post).setHttpBody(new StringBody(object.toString()));
         stringRequest.setHttpListener(listener);
         liteHttp.executeAsync(stringRequest);
@@ -1187,7 +1200,7 @@ public class HttpClient {
         LinkedHashMap<String, String> header = new LinkedHashMap<>();
         header.put("contentType", "utf-8");
         header.put("Content-type", "application/x-java-serialized-object");
-        StringRequest stringRequest = new StringRequest(Configure.ADD_OTHERRECORD_URL).setHeaders(header)
+        StringRequest stringRequest = new StringRequest(Configure.ADD_OTHERRECORD_URL(serverIP)).setHeaders(header)
                 .setMethod(HttpMethods.Post).setHttpBody(new StringBody(object.toString()));
         stringRequest.setHttpListener(listener);
         liteHttp.executeAsync(stringRequest);
@@ -1206,7 +1219,7 @@ public class HttpClient {
         LinkedHashMap<String, String> header = new LinkedHashMap<>();
         header.put("contentType", "utf-8");
         header.put("Content-type", "application/x-java-serialized-object");
-        StringRequest stringRequest = new StringRequest(Configure.UPDATE_WORKTASKLIST_STATUS_URL).setHeaders(header)
+        StringRequest stringRequest = new StringRequest(Configure.UPDATE_WORKTASKLIST_STATUS_URL(serverIP)).setHeaders(header)
                 .setMethod(HttpMethods.Post).setHttpBody(new StringBody(object.toString()));
         stringRequest.setHttpListener(listener);
         liteHttp.executeAsync(stringRequest);

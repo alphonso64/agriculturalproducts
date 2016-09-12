@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.app.agriculturalproducts" >
+    package="com.app.agriculturalproducts">
 
     <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" >
-    </uses-permission>
+    <uses-permission android:name="android.permission.WAKE_LOCK"></uses-permission>
     <!-- SDK1.5需要android.permission.GET_TASKS权限判断本程序是否为当前运行的应用? -->
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
@@ -41,61 +40,51 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="pEmb6jGAgd5fG4NvXPZVlEXT" />
 
         <activity
             android:name=".MainActivity"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".TaskActivity"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait"></activity>
 
         <provider
             android:name=".db.DataProvider"
             android:authorities="com.app.agriculturalproducts"
             android:enabled="true"
-            android:exported="false" >
-        </provider>
+            android:exported="false"></provider>
 
         <activity
             android:name=".PesticidesActivity"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait"></activity>
 
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"
-            android:process=":remote" >
-        </service>
+            android:process=":remote"></service>
 
         <activity
             android:name=".FertilizerActivity"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".PlantActivity"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".PickingActivity"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".OtherInfoActivity"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".SignActivity"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".LoginActivity"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -104,18 +93,13 @@
         </activity>
         <activity
             android:name=".PersonInfoActivity"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity android:name=".MainDrawlayoutActivity" >
-        </activity>
-        <activity android:name=".ProduceActivity" >
-        </activity>
-        <activity android:name=".StockDetailActivity" >
-        </activity>
-        <activity android:name=".StockActivity" >
-        </activity>
-        <activity android:name=".TaskDoneSelectActivity" >
-        </activity>
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".MainDrawlayoutActivity"></activity>
+        <activity android:name=".ProduceActivity"></activity>
+        <activity android:name=".StockDetailActivity"></activity>
+        <activity android:name=".StockActivity"></activity>
+        <activity android:name=".TaskDoneSelectActivity"></activity>
+        <activity android:name=".SettingActivity"></activity>
     </application>
 
 </manifest>

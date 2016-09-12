@@ -152,7 +152,7 @@ public class PlantHistoryFragment extends Fragment implements LoaderManager.Load
                         progressDialog.setIndeterminate(false);
                         progressDialog.setCancelable(true);
                         progressDialog.show();
-                        HttpClient.getInstance().uploadPlant(new HttpListener<String>() {
+                        HttpClient.getInstance(getContext()).uploadPlant(new HttpListener<String>() {
                             @Override
                             public void onSuccess(String s, Response<String> response) {
                                 progressDialog.dismiss();

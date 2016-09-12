@@ -146,7 +146,7 @@ public class FertilizerHistoryFragment extends Fragment implements LoaderManager
                         progressDialog.setIndeterminate(false);
                         progressDialog.setCancelable(true);
                         progressDialog.show();
-                        HttpClient.getInstance().uploadFertilizer(new HttpListener<String>() {
+                        HttpClient.getInstance(getContext()).uploadFertilizer(new HttpListener<String>() {
                             @Override
                             public void onSuccess(String s, Response<String> response) {
                                 progressDialog.dismiss();

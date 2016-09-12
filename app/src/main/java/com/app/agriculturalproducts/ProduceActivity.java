@@ -110,7 +110,7 @@ public class ProduceActivity extends BaseActivity implements LoaderManager.Loade
             final TaskRecord taskRecord = (TaskRecord)obj;
             if(taskRecord.getWorktasklist_status().equals("未查看")){
                 taskRecord.setWorktasklist_status("已查看");
-                HttpClient.getInstance().uploadTask(null, taskRecord);
+                HttpClient.getInstance(ProduceActivity.this).uploadTask(null, taskRecord);
             }else if(taskRecord.getWorktasklist_status().equals("已查看")){
                 if(taskRecord.getSync().equals("true")){
                     new MaterialDialog.Builder(ProduceActivity.this)

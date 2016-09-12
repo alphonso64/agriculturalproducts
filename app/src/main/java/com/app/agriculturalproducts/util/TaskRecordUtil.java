@@ -28,7 +28,7 @@ public class TaskRecordUtil {
     public static void removeLocalDoneTask(final Context ctx, final TaskDataHelper taskDataHelper,String id){
         final TaskRecord task = taskDataHelper.queryTaskRecord(id);
         task.setWorktasklist_status("已完成");
-        HttpClient.getInstance().uploadTask(new HttpListener<String>() {
+        HttpClient.getInstance(ctx).uploadTask(new HttpListener<String>() {
             @Override
             public void onSuccess(String s, Response<String> response) {
                 task.setSync("true");

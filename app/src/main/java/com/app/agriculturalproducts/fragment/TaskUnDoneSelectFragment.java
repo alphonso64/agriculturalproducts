@@ -184,7 +184,7 @@ public class TaskUnDoneSelectFragment extends Fragment implements LoaderManager.
                     .show();
             return;
         }
-        HttpClient.getInstance().uploadOther(new HttpListener<String>() {
+        HttpClient.getInstance(getContext()).uploadOther(new HttpListener<String>() {
             @Override
             public void onSuccess(String s, Response<String> response) {
                 int val = checkResult(s);
@@ -216,7 +216,7 @@ public class TaskUnDoneSelectFragment extends Fragment implements LoaderManager.
                     .show();
             return;
         }
-        HttpClient.getInstance().uploadPick(new HttpListener<String>() {
+        HttpClient.getInstance(getContext()).uploadPick(new HttpListener<String>() {
             @Override
             public void onSuccess(String s, Response<String> response) {
                 int val = checkResult(s);
@@ -248,7 +248,7 @@ public class TaskUnDoneSelectFragment extends Fragment implements LoaderManager.
                     .show();
             return;
         }
-        HttpClient.getInstance().uploadPrevention(new HttpListener<String>() {
+        HttpClient.getInstance(getContext()).uploadPrevention(new HttpListener<String>() {
             @Override
             public void onSuccess(String s, Response<String> response) {
                 int val = checkResult(s);
@@ -280,7 +280,7 @@ public class TaskUnDoneSelectFragment extends Fragment implements LoaderManager.
                     .show();
             return;
         }
-        HttpClient.getInstance().uploadFertilizer(new HttpListener<String>() {
+        HttpClient.getInstance(getContext()).uploadFertilizer(new HttpListener<String>() {
             @Override
             public void onSuccess(String s, Response<String> response) {
                 int val = checkResult(s);
@@ -337,7 +337,7 @@ public class TaskUnDoneSelectFragment extends Fragment implements LoaderManager.
     }
 
     private void plantUpload(final PlanterRecord planterRecord){
-        HttpClient.getInstance().uploadPlant(new HttpListener<String>() {
+        HttpClient.getInstance(getContext()).uploadPlant(new HttpListener<String>() {
             @Override
             public void onSuccess(String s, Response<String> response) {
                 if(checkPlantResult(planterRecord, s) ){

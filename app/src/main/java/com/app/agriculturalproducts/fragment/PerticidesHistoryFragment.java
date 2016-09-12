@@ -147,7 +147,7 @@ public class PerticidesHistoryFragment extends Fragment implements LoaderManager
                         progressDialog.setIndeterminate(false);
                         progressDialog.setCancelable(true);
                         progressDialog.show();
-                        HttpClient.getInstance().uploadPrevention(new HttpListener<String>() {
+                        HttpClient.getInstance(getContext()).uploadPrevention(new HttpListener<String>() {
                             @Override
                             public void onSuccess(String s, Response<String> response) {
                                 progressDialog.dismiss();

@@ -97,7 +97,7 @@ public class WorkFragment extends Fragment implements LoaderManager.LoaderCallba
         @Override
         public void handleMessage(Message msg) {
             if(msg.what==1){
-                mDataHelper.replace(HttpClient.getInstance().taskList);
+                mDataHelper.replace(HttpClient.getInstance(getContext()).taskList);
             }else if(msg.what == -1){
                 Toast toast = Toast.makeText(getActivity(),
                         "网络未连接", Toast.LENGTH_SHORT);
@@ -155,7 +155,7 @@ public class WorkFragment extends Fragment implements LoaderManager.LoaderCallba
             new Thread(){
                 @Override
                 public void run() {
-                    int val = HttpClient.getInstance().getTaskInfo(name,map);
+                    int val = HttpClient.getInstance(getContext()).getTaskInfo(name,map);
                     if(val == -1){
                         mHandler.sendEmptyMessage(-1);
                     }else if(val == 0) {
@@ -170,7 +170,7 @@ public class WorkFragment extends Fragment implements LoaderManager.LoaderCallba
         public void onItemClick(Object obj, int p) {
             final TaskRecord taskRecord = (TaskRecord)obj;
             taskRecord.setWorktasklist_status("已查看");
-            HttpClient.getInstance().uploadTask(null, taskRecord);
+            HttpClient.getInstance(getContext()).uploadTask(null, taskRecord);
             new MaterialDialog.Builder(getActivity())
                     .title("确定接受任务")
                     .content(taskRecord.getWorktask_content())
@@ -259,6 +259,7 @@ public class WorkFragment extends Fragment implements LoaderManager.LoaderCallba
             icon.setClassName(className[i]);
             mDatas.add(i,icon);
         }
+        Log.e("testaa","mDatas:"+mDatas.size());
     }
 
     private void activityJump(String title) throws ClassNotFoundException {

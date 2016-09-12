@@ -26,4 +26,5 @@ public class InputType {
     public static final String UPLOAD_YES = "yes";
     public static final String UPLOAD_NO = "no";
     public static final String UPLOAD_ERR = "err";
+    public static final String DEFAULT_IP = "cdjytgs.kmdns.net:8081";
 }

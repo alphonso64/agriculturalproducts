@@ -140,11 +140,11 @@ public class StockActivity extends BaseActivity implements LoaderManager.LoaderC
                 new Thread(){
                     @Override
                     public void run() {
-                        if(HttpClient.getInstance().getStockInfo(name)){
+                        if(HttpClient.getInstance(StockActivity.this).getStockInfo(name)){
                             ArrayList<PersonalStock> ls = new ArrayList<PersonalStock>();
-                            ls.addAll(HttpClient.getInstance().seedStockList);
-                            ls.addAll(HttpClient.getInstance().fStockList);
-                            ls.addAll(HttpClient.getInstance().pStcokList);
+                            ls.addAll(HttpClient.getInstance(StockActivity.this).seedStockList);
+                            ls.addAll(HttpClient.getInstance(StockActivity.this).fStockList);
+                            ls.addAll(HttpClient.getInstance(StockActivity.this).pStcokList);
                             mDataHelper.replace(ls);
                             mHandler.sendEmptyMessage(1);
                         }else{

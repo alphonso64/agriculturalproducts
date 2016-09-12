@@ -103,7 +103,7 @@ public class DataFragment extends Fragment implements LoaderManager.LoaderCallba
     }
 
     public  void updateData(){
-        mDataHelper.replace(HttpClient.getInstance().fieldList);
+        mDataHelper.replace(HttpClient.getInstance(getContext()).fieldList);
     }
 
 }

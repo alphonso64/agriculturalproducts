@@ -207,10 +207,10 @@ public class StockDetailActivity extends BaseActivity implements LoaderManager.L
                 new Thread() {
                     @Override
                     public void run() {
-                        if(HttpClient.getInstance().getStockDetailInfo(name)){
+                        if(HttpClient.getInstance(StockDetailActivity.this).getStockDetailInfo(name)){
                             ArrayList<PersonalStockDetail> ls = new ArrayList<PersonalStockDetail>();
-                            ls.addAll(HttpClient.getInstance().enterstockList);
-                            ls.addAll(HttpClient.getInstance().outstockList);
+                            ls.addAll(HttpClient.getInstance(StockDetailActivity.this).enterstockList);
+                            ls.addAll(HttpClient.getInstance(StockDetailActivity.this).outstockList);
                             mDataHelper.replace(ls);
                             mHandler.sendEmptyMessage(1);
                         }else{
